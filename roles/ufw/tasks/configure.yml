@@ -1,0 +1,56 @@
+- name: Set default policy to deny all incoming
+  ufw:
+    default: deny
+    direction: incoming
+
+- name: Allow External Access Ports
+  vars:
+    allowed_cidr_range: 192.168.1.0/24
+  ufw:
+    rule: allow
+    src: "{{ allowed_cidr_range }}"
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ ufw_external_ports }}"
+  when: ufw_external_ports is defined
+
+- name: Allow Internal Kubernetes NodePort Range
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ ufw_nodeport_range }}"
+  when: ufw_nodeport_range is defined
+
+- name: Allow Internal Kubernetes Subnet Traffic
+  ufw:
+    rule: allow
+    from: "{{ item.subnet }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ ufw_internal_subnets }}"
+  when: ufw_internal_subnets is defined
+
+- name: Allow Internal Kubernetes Cluster Traffic
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop: "{{ ufw_internal_ports }}"
+  when: ufw_internal_ports is defined
+
+- name: Ensure UFW is restarted
+  service:
+    name: ufw
+    state: restarted
+    enabled: yes
+
+- name: Show UFW Status
+  command: ufw status verbose
+  register: ufw_status
+  changed_when: false
+
+- debug:
+    msg: "{{ ufw_status.stdout_lines }}"

@@ -1,0 +1,11 @@
+# Get Kubernetes Nodes
+- name: Get Kubernetes Nodes
+  kubernetes.core.k8s_info:
+    kubeconfig: "{{ playbook_dir }}/files/kubeconfig.yaml"
+    api_version: v1
+    kind: Node
+  register: k8s_nodes_output
+
+- name: Debug output
+  debug:
+    var: k8s_nodes_output

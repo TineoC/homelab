@@ -1,0 +1,17 @@
+---
+- name: Ensure regular system updates
+  hosts: homelab
+  become: true
+  roles:
+    - apt-maintenance
+    - ntp
+    - ufw
+    - k3s
+
+- name: Configure Kubeconfig
+  hosts: localhost
+  become: true
+  tags:
+    - k8s
+  roles:
+    - configure-kubeconfig

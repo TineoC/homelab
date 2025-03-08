@@ -1,0 +1,21 @@
+# Install required system packages
+- name: Install required system packages
+  package:
+    name:
+      - python3
+      - python3-pip
+      - kubectl
+    state: present
+
+- name: Ensure required Python packages are installed
+  pip:
+    name:
+      - kubernetes
+      - PyYAML
+    state: present
+    executable: pip3 # Ensure using Python 3 pip
+
+- name: Ensure Ansible Galaxy Kubernetes collection is installed
+  ansible.builtin.command:
+    cmd: ansible-galaxy collection install kubernetes.core
+  changed_when: false

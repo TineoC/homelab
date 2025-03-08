@@ -1,0 +1,4 @@
+---
+- import_tasks: update.yml
+- import_tasks: upgrade.yml
+- import_tasks: schedule.yml

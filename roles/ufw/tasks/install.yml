@@ -1,0 +1,9 @@
+# install.yml
+- name: Install UFW if not present
+  apt:
+    name: ufw
+    state: present
+
+- name: Enable UFW
+  ufw:
+    state: enabled

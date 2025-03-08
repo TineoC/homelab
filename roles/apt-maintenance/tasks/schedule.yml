@@ -1,0 +1,30 @@
+---
+- name: Install unattended-upgrades
+  apt:
+    name: unattended-upgrades
+    state: present
+
+- name: Ensure Mail is present
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: "^Unattended-Upgrade::Mail"
+    line: 'Unattended-Upgrade::Mail "{{ email }}";'
+    state: present
+    insertafter: EOF
+
+- name: Ensure report mail always
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: "^Unattended-Upgrade::MailReport"
+    line: 'Unattended-Upgrade::MailReport "{{ when_report_upgrades }}";'
+    state: present
+    insertafter: EOF
+
+- name: Ensure changes are correct with sudo unattended-upgrades --dry-run --debug
+  command: sudo unattended-upgrades --dry-run --debug
+  register: unattended_upgrade_output
+  changed_when: false
+
+- name: Display unattended-upgrades dry-run output
+  debug:
+    var: unattended_upgrade_output.stdout

@@ -1,0 +1,21 @@
+- name: Force Time Synchronization
+  command: chronyc makestep
+  changed_when: false
+
+- name: Restart Chrony Service
+  systemd:
+    name: chronyd
+    state: restarted
+
+- name: Verify Current Date and Time
+  command: date
+  register: current_time
+  changed_when: false
+
+- name: Display Timezone Info
+  debug:
+    msg: "{{ timezone_status.stdout }}"
+
+- name: Display Current Time
+  debug:
+    msg: "{{ current_time.stdout }}"

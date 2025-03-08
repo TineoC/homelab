@@ -1,0 +1,12 @@
+- name: Set Timezone to EST (America/New_York)
+  command: timedatectl set-timezone America/New_York
+  changed_when: false
+
+- name: Verify Timezone
+  command: timedatectl status
+  register: timezone_status
+  changed_when: false
+
+- name: Display Timezone Info
+  debug:
+    msg: "{{ timezone_status.stdout }}"

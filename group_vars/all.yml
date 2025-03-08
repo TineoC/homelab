@@ -1,0 +1,6 @@
+# This file contains all the variables that are used in the playbooks
+
+## This is the email for receiving the reports of the upgrades
+
+email: "christophertineo02@gmail.com"
+when_report_upgrades: "always"
