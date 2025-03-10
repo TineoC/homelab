@@ -7,7 +7,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: argocd/control-plane
+    path: control-plane/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: default
