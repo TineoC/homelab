@@ -7,7 +7,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: control-plane/apps
+    path: apps
   destination:
     name: in-cluster
     namespace: argocd
