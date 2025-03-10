@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: manifests/argocd
+    path: control-plane/manifests/argocd
     helm:
       valueFiles:
       - values.yaml
