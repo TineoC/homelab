@@ -61,4 +61,4 @@
       kubernetes.core.k8s:
         kubeconfig: "{{ kubeconfig }}"
         state: present
-        definition: "{{ lookup('file', '../control-plane/apps/argocd/argocd.app.yaml') }}"
+        definition: "{{ lookup('file', '../control-plane/app.control-plane.yml') }}"

@@ -1,2 +1,0 @@
-- include_tasks: pre-requisites.yml
-- include_tasks: install.yml
