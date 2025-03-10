@@ -1,0 +1,11 @@
+#server:
+  service:
+    type: LoadBalancer
+
+configs:
+  params:
+    server.insecure: true
+
+repoServer:
+  extraArgs:
+  - --insecure
