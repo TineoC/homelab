@@ -4,3 +4,5 @@
 
 email: "christophertineo02@gmail.com"
 when_report_upgrades: "always"
+
+kubeconfig: "{{ playbook_dir }}/files/kubeconfig.yaml"
