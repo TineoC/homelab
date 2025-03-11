@@ -1,14 +1,4 @@
-hosts: &homelabHosts
-- argocd.tineochristopher.com
-
-server:
-  type: LoadBalancer
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: "nginx"
-      cert-manager.io/cluster-issuer: "letsencrypt-prod"
-    hosts: *homelabHosts
-    tls:
-    - secretName: argocd-tls
-      hosts: *homelabHosts
+argo-cd:
+  server:
+    extraArgs:
+    - --insecure
