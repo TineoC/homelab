@@ -4,4 +4,3 @@
     upgrade: dist
     autoremove: yes
     autoclean: yes
-  notify: Restart machine if required

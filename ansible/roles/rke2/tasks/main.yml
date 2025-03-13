@@ -1,0 +1,14 @@
+---
+- name: Include common setup tasks
+  include_tasks: common.yml
+
+- name: Install and configure AppArmor
+  include_tasks: install-apparmor.yml
+
+- name: Set up control plane
+  include_tasks: controlplane.yml
+  when: inventory_hostname in groups['primary_servers']
+
+- name: Set up agent node
+  include_tasks: agent.yml
+  when: inventory_hostname in groups['agent_servers']

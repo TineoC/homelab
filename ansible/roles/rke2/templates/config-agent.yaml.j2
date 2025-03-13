@@ -1,0 +1,18 @@
+# RKE2 Agent Configuration File
+
+# URL of the RKE2 control plane server
+server: "{{ server }}"
+
+# Token used to join the cluster
+token: "{{ token }}"
+
+# Name assigned to this node
+node-name: "{{ node_name }}"
+
+# File permission mode for the generated kubeconfig
+write-kubeconfig-mode: "{{ write_kubeconfig_mode }}"
+
+# Additional configuration options can be added below if necessary.
+# For example:
+# node-labels: "key1=value1,key2=value2"
+# node-taints: "key=value:NoSchedule"

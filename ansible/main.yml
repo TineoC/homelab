@@ -1,28 +1,18 @@
 ---
 - name: Ensure regular system updates
-  hosts: rke2-cluster
+  hosts: rke2_cluster
   become: true
   roles:
     - apt-maintenance
     - ntp
     - ufw
 
-- name: Install rke2
-  hosts: primary-servers
-  become: true
-  roles:
-    - rke2-controlplane
-
-- name: Install rke2
-  hosts: secondary-servers
-  become: true
-  roles:
-    - rke2-agent
-
-- name: Configure Kubeconfig
-  hosts: localhost
+- name: Install RKE2 in both controlplane and agents
+  hosts: rke2_cluster
   become: true
   tags:
     - k8s
+  vars:
+    rke2_version: v1.32.2+rke2r1
   roles:
-    - configure-kubeconfig
+    - rke2

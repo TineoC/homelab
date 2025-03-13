@@ -1,3 +1,0 @@
-- include_tasks: copy-config.yml
-- include_tasks: install.yml
-- include_tasks: adjust-kubeconfig.yml

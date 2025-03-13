@@ -1,5 +1,0 @@
----
-- name: Restart machine if required
-  reboot:
-    msg: "System rebooting due to package upgrade"
-    pre_reboot_delay: 10

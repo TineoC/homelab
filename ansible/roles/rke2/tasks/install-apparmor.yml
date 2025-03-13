@@ -1,0 +1,28 @@
+---
+- name: Install AppArmor and utilities
+  apt:
+    name:
+      - apparmor
+      - apparmor-utils
+      - apparmor-profiles
+      - apparmor-profiles-extra
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Ensure AppArmor service is enabled and running
+  systemd:
+    name: apparmor
+    enabled: yes
+    state: started
+
+- name: Verify AppArmor status
+  command: aa-status
+  register: apparmor_status
+  changed_when: false
+
+- debug:
+    msg: "{{ apparmor_status.stdout_lines }}"
+
+- name: Load default AppArmor profiles
+  command: aa-enforce /etc/apparmor.d/*
+  changed_when: false

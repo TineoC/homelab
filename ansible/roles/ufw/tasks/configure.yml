@@ -1,53 +1,68 @@
-- name: Set default policy to deny all incoming
+- name: Set default UFW policies
   ufw:
-    default: deny
-    direction: incoming
+    direction: "{{ item.direction }}"
+    policy: "{{ item.policy }}"
+  loop:
+    - { direction: "incoming", policy: "deny" }
+    - { direction: "outgoing", policy: "allow" }
+    - { direction: "routed", policy: "deny" }
 
-- name: Allow External Access Ports
-  vars:
-    allowed_cidr_range: 192.168.1.0/24
-  ufw:
-    rule: allow
-    src: "{{ allowed_cidr_range }}"
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-    comment: "{{ item.comment }}"
-  loop: "{{ ufw_external_ports }}"
-  when: ufw_external_ports is defined
-
-- name: Allow Internal Kubernetes NodePort Range
+- name: Allow SSH and external access
   ufw:
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
     comment: "{{ item.comment }}"
-  loop: "{{ ufw_nodeport_range }}"
-  when: ufw_nodeport_range is defined
+  loop:
+    - { port: "22", proto: "tcp", comment: "SSH Access" }
+    - { port: "6443", proto: "tcp", comment: "Kubernetes API Server" }
 
-- name: Allow Internal Kubernetes Subnet Traffic
+- name: Allow RKE2 inbound network rules
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop:
+    - { port: "6443", proto: "tcp", comment: "Kubernetes API Server" }
+    - { port: "9345", proto: "tcp", comment: "RKE2 Supervisor API" }
+    - { port: "10250", proto: "tcp", comment: "Kubelet Metrics" }
+    - { port: "2379:2380", proto: "tcp", comment: "etcd HA Cluster" }
+    - { port: "2381", proto: "tcp", comment: "etcd Metrics Port" }
+    - {
+        port: "30000:32767",
+        proto: "tcp",
+        comment: "Kubernetes NodePort Range",
+      }
+
+- name: Allow Cilium inbound network rules (non-ICMP)
+  ufw:
+    rule: allow
+    port: "{{ item.port }}"
+    proto: "{{ item.proto }}"
+    comment: "{{ item.comment }}"
+  loop:
+    - { port: "4240", proto: "tcp", comment: "Cilium CNI Health Checks" }
+    - { port: "8472", proto: "udp", comment: "Cilium CNI with VXLAN" }
+    - { port: "51871", proto: "udp", comment: "Cilium CNI with WireGuard" }
+
+- name: Allow Cilium ICMP Health Checks via iptables
+  command: iptables -I INPUT -p icmp --icmp-type 8 -j ACCEPT
+
+- name: Allow Internal Kubernetes Network Subnets
   ufw:
     rule: allow
     from: "{{ item.subnet }}"
     comment: "{{ item.comment }}"
-  loop: "{{ ufw_internal_subnets }}"
-  when: ufw_internal_subnets is defined
+  loop:
+    - { subnet: "10.42.0.0/16", comment: "Allow Pods subnet" }
+    - { subnet: "10.43.0.0/16", comment: "Allow Services subnet" }
 
-- name: Allow Internal Kubernetes Cluster Traffic
-  ufw:
-    rule: allow
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-    comment: "{{ item.comment }}"
-  loop: "{{ ufw_internal_ports }}"
-  when: ufw_internal_ports is defined
+- name: Reload UFW
+  command: ufw reload
+  changed_when: false
 
-- name: Ensure UFW is restarted
-  service:
-    name: ufw
-    state: restarted
-    enabled: yes
-
-- name: Show UFW Status
+- name: Verify UFW Status
   command: ufw status verbose
   register: ufw_status
   changed_when: false
