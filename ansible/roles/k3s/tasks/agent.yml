@@ -1,0 +1,26 @@
+- name: Fetch K3s join token from control plane
+  shell: cat /var/lib/rancher/k3s/server/node-token
+  register: k3s_join_token
+  changed_when: false
+  delegate_to: "{{ groups['primary_servers'][0] }}"
+
+- name: Set K3s token fact
+  set_fact:
+    k3s_token: "{{ k3s_join_token.stdout }}"
+
+- name: Download and install K3s agent
+  shell: |
+    curl -sfL https://get.k3s.io | \
+      INSTALL_K3S_VERSION="{{ k3s_version }}" \
+      K3S_NODE_NAME="{{ inventory_hostname }}" \
+      K3S_URL="https://{{ hostvars[groups['primary_servers'][0]].ansible_host }}:6443" \
+      K3S_TOKEN="{{ k3s_token }}" \
+    sh -s -
+  args:
+    creates: /usr/local/bin/k3s
+
+- name: Enable and start K3s agent
+  systemd:
+    name: k3s-agent
+    enabled: yes
+    state: restarted

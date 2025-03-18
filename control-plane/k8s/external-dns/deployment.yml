@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: external-dns
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      serviceAccountName: external-dns
+      containers:
+        - name: external-dns
+          image: k8s.gcr.io/external-dns/external-dns:v0.13.0
+          args:
+            - --source=service
+            - --source=ingress
+            - --domain-filter=tineochristopher.com
+            - --provider=cloudflare
+            - --cloudflare-proxied
+            - --cloudflare-api-token-file=/etc/cloudflare/api-token
+            - --policy=sync
+            - --registry=txt
+          volumeMounts:
+            - name: cloudflare-api-token
+              mountPath: /etc/cloudflare
+              readOnly: true
+      volumes:
+        - name: cloudflare-api-token
+          secret:
+            secretName: cloudflare-api-token

@@ -7,47 +7,39 @@
     - { direction: "outgoing", policy: "allow" }
     - { direction: "routed", policy: "deny" }
 
-- name: Allow SSH and external access
+- name: Allow SSH access
   ufw:
     rule: allow
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-    comment: "{{ item.comment }}"
-  loop:
-    - { port: "22", proto: "tcp", comment: "SSH Access" }
-    - { port: "6443", proto: "tcp", comment: "Kubernetes API Server" }
+    port: 22
+    proto: tcp
+    comment: "SSH Access"
 
-- name: Allow RKE2 inbound network rules
+- name: Allow K3s inbound network rules
   ufw:
     rule: allow
     port: "{{ item.port }}"
     proto: "{{ item.proto }}"
     comment: "{{ item.comment }}"
   loop:
-    - { port: "6443", proto: "tcp", comment: "Kubernetes API Server" }
-    - { port: "9345", proto: "tcp", comment: "RKE2 Supervisor API" }
-    - { port: "10250", proto: "tcp", comment: "Kubelet Metrics" }
-    - { port: "2379:2380", proto: "tcp", comment: "etcd HA Cluster" }
-    - { port: "2381", proto: "tcp", comment: "etcd Metrics Port" }
     - {
-        port: "30000:32767",
+        port: "6443",
         proto: "tcp",
-        comment: "Kubernetes NodePort Range",
+        comment: "K3s API Server & Spegel Registry",
       }
-
-- name: Allow Cilium inbound network rules (non-ICMP)
-  ufw:
-    rule: allow
-    port: "{{ item.port }}"
-    proto: "{{ item.proto }}"
-    comment: "{{ item.comment }}"
-  loop:
-    - { port: "4240", proto: "tcp", comment: "Cilium CNI Health Checks" }
-    - { port: "8472", proto: "udp", comment: "Cilium CNI with VXLAN" }
-    - { port: "51871", proto: "udp", comment: "Cilium CNI with WireGuard" }
-
-- name: Allow Cilium ICMP Health Checks via iptables
-  command: iptables -I INPUT -p icmp --icmp-type 8 -j ACCEPT
+    - {
+        port: "2379:2380",
+        proto: "tcp",
+        comment: "etcd HA (if using embedded etcd)",
+      }
+    - { port: "10250", proto: "tcp", comment: "Kubelet Metrics" }
+    - { port: "8472", proto: "udp", comment: "Flannel VXLAN" }
+    - { port: "51820", proto: "udp", comment: "Flannel Wireguard IPv4" }
+    - { port: "51821", proto: "udp", comment: "Flannel Wireguard IPv6" }
+    - {
+        port: "5001",
+        proto: "tcp",
+        comment: "Embedded Distributed Registry (Spegel)",
+      }
 
 - name: Allow Internal Kubernetes Network Subnets
   ufw:
@@ -55,8 +47,8 @@
     from: "{{ item.subnet }}"
     comment: "{{ item.comment }}"
   loop:
-    - { subnet: "10.42.0.0/16", comment: "Allow Pods subnet" }
-    - { subnet: "10.43.0.0/16", comment: "Allow Services subnet" }
+    - { subnet: "10.42.0.0/16", comment: "Pods subnet" }
+    - { subnet: "10.43.0.0/16", comment: "Services subnet" }
 
 - name: Reload UFW
   command: ufw reload

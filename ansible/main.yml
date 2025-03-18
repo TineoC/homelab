@@ -1,18 +1,16 @@
 ---
 - name: Ensure regular system updates
-  hosts: rke2_cluster
+  hosts: cluster
   become: true
   roles:
     - apt-maintenance
     - ntp
     - ufw
 
-- name: Install RKE2 in both controlplane and agents
-  hosts: rke2_cluster
+- name: Install K3s in both controlplane and agents
+  hosts: cluster
   become: true
   tags:
     - k8s
-  vars:
-    rke2_version: v1.32.2+rke2r1
   roles:
-    - rke2
+    - k3s

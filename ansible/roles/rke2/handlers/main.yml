@@ -1,5 +1,0 @@
----
-- name: Restart RKE2 service
-  systemd:
-    name: "{{ 'rke2-server' if inventory_hostname in groups['primary_servers'] else 'rke2-agent' }}"
-    state: restarted
