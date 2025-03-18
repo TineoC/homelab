@@ -1,6 +1,3 @@
-# Ignore packaged charts
-*.tgz
-
 # Ignore temporary files
 *.bak
 *.tmp
