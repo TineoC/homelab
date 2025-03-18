@@ -11,7 +11,7 @@ spec:
     path: control-plane/manifests/argocd
   destination:
     server: https://kubernetes.default.svc
-    namespace: guestbook
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
