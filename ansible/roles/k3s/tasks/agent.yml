@@ -8,7 +8,7 @@
   set_fact:
     k3s_token: "{{ k3s_join_token.stdout }}"
 
-- name: Download and install K3s agent
+- name: Download and install K3s agent {{ k3s_version }}
   shell: |
     curl -sfL https://get.k3s.io | \
       INSTALL_K3S_VERSION="{{ k3s_version }}" \
@@ -16,8 +16,6 @@
       K3S_URL="https://{{ hostvars[groups['primary_servers'][0]].ansible_host }}:6443" \
       K3S_TOKEN="{{ k3s_token }}" \
     sh -s -
-  args:
-    creates: /usr/local/bin/k3s
 
 - name: Enable and start K3s agent
   systemd:
