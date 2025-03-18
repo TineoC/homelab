@@ -1,0 +1,16 @@
+# Ignore packaged charts
+*.tgz
+
+# Ignore temporary files
+*.bak
+*.tmp
+*~
+
+# Ignore editor files and OS-specific files
+.DS_Store
+*.swp
+Thumbs.db
+
+# Ignore version control files
+.git/
+.gitignore

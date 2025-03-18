@@ -1,0 +1,13 @@
+# Ignore build artifacts
+*.tgz
+
+# Ignore dependency directories (if applicable)
+charts/
+
+# Ignore OS and editor files
+.DS_Store
+*.swp
+Thumbs.db
+
+# Ignore local configuration files
+*.env
