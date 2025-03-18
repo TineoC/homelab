@@ -2,7 +2,6 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: control-plane
-  namespace: argocd
 spec:
   project: default
   source:
@@ -11,7 +10,7 @@ spec:
     path: control-plane/applications
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: default
   syncPolicy:
     automated:
       prune: true
