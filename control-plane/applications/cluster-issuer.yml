@@ -9,9 +9,9 @@ spec:
     server: https://kubernetes.default.svc
   source:
     repoURL: https://github.com/TineoC/homelab.git
-    path: ./control-plane/manifests/cluster-issuer
+    path: control-plane/manifests/cluster-issuer
     helm:
-      valuesFile:
+      valueFiles:
         - values.yml
   syncPolicy:
     automated:
