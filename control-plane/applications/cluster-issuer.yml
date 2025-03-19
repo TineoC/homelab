@@ -13,7 +13,7 @@ spec:
     path: control-plane/manifests/cluster-issuer
     helm:
       valueFiles:
-        - values.yml
+        - values.yaml
   syncPolicy:
     automated:
       prune: true
