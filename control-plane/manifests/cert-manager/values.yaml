@@ -1,0 +1,19 @@
+ingressClassName: &commonIngressClassName traefik
+email: &commonEmail christophertineo02@gmail.com
+
+prodIssuer:
+  name: &prodClusterIssuerName letsencrypt-prod
+  ingressClassName: *commonIngressClassName
+  privateKeySecretRef:
+    name: *prodClusterIssuerName
+  email: *commonEmail
+  server: https://acme-v02.api.letsencrypt.org/directory
+
+selfSignedIssuer:
+  name: selfsigned-cluster-issuer
+
+cert-manager:
+  installCRDs: true
+  ingressShim:
+    defaultIssuerName: letsencrypt-prod
+    defaultIssuerKind: ClusterIssuer

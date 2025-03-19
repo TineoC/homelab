@@ -1,0 +1,22 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ .Values.prodIssuer.name }}
+spec:
+  acme:
+    server: {{ .Values.prodIssuer.server }}
+    email: {{ .Values.prodIssuer.email}}
+    privateKeySecretRef: {{ toYaml .Values.prodIssuer.privateKeySecretRef | nindent 6 }}
+    solvers:
+      - http01:
+          ingress:
+            class: {{ .Values.prodIssuer.ingressClassName }}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: {{ .Values.selfSigned.name }}
+spec:
+  selfSigned: {}
+---

@@ -8,17 +8,12 @@ spec:
     namespace: cert-manager
     server: https://kubernetes.default.svc
   source:
-    chart: cert-manager
+    repoURL: https://github.com/TineoC/homelab.git
+    targetRevision: HEAD
+    path: control-plane/manifests/cert-manager
     helm:
-      parameters:
-        - name: installCRDs
-          value: "true"
-      values: |
-        ingressShim:
-          defaultIssuerName: "letsencrypt-prod"
-          defaultIssuerKind: "ClusterIssuer"
-    repoURL: https://charts.jetstack.io
-    targetRevision: v1.17.1
+      valueFiles:
+        - values.yaml
   syncPolicy:
     automated:
       prune: true
