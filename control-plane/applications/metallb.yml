@@ -10,7 +10,7 @@ spec:
     path: ./control-plane/manifests/metal-lb
     helm:
       valueFiles:
-        - values.yml
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system

@@ -10,7 +10,6 @@ service:
 ingress:
   className: traefik
   annotations:
-    # kubernetes.io/tls-acme: "true"
     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
   tls:
     - hosts:

@@ -13,7 +13,7 @@ spec:
     path: control-plane/manifests/nginx-tls-website
     helm:
       valueFiles:
-        - values.yml
+        - values.yaml
   syncPolicy:
     automated:
       prune: true
