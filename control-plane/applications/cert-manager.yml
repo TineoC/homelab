@@ -13,6 +13,10 @@ spec:
       parameters:
         - name: installCRDs
           value: "true"
+      values: |
+        ingressShim:
+          defaultIssuerName: "letsencrypt-prod"
+          defaultIssuerKind: "ClusterIssuer"
     repoURL: https://charts.jetstack.io
     targetRevision: v1.17.1
   syncPolicy:
