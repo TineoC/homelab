@@ -8,11 +8,11 @@ service:
   type: ClusterIP
 
 ingress:
-  enabled: true
   className: traefik
   annotations:
-    kubernetes.io/tls-acme: "true"
+    # kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
   tls:
     - hosts:
         - *websiteName
-      secretName: tls-tineochristopher-com
+      secretName: selfsigned-tineochristopher-com
