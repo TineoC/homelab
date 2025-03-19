@@ -6,13 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://metallb.github.io/metallb
-    chart: metallb
-    targetRevision: v0.14.9
-    helm:
-      values: |
-        crds:
-          enabled: true
+    repoURL: https://github.com/TineoC/homelab.git
+    targetRevision: HEAD
+    path: ./control-plane/manifests/metal-lb
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system
