@@ -1,6 +1,5 @@
 websiteName: &websiteName web.tineochristopher.com
 
-ingressClassName: traefik
 image: nginx:alpine
 
 service:
