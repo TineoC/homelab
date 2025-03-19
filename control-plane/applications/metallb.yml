@@ -8,6 +8,9 @@ spec:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: HEAD
     path: ./control-plane/manifests/metal-lb
+  helm:
+    valueFiles:
+      - values.yml
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb-system
