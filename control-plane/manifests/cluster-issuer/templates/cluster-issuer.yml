@@ -7,7 +7,7 @@ spec:
   acme:
     server: {{ .Values.server }}
     email: {{ .Values.email}}
-    privateKeySecretRef: {{ .Values.privateKeySecretRef }}
+    privateKeySecretRef: {{ toYaml .Values.privateKeySecretRef | nindent 6 }}
     solvers:
       - http01:
           ingress:
