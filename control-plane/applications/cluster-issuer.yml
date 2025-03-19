@@ -8,7 +8,7 @@ spec:
     namespace: cert-manager
     server: https://kubernetes.default.svc
   source:
-    repoUrl: https://github.com/TineoC/homelab.git
+    repoURL: https://github.com/TineoC/homelab.git
     path: ./control-plane/manifests/cluster-issuer
     helm:
       valuesFile:
