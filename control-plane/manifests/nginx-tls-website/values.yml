@@ -14,6 +14,6 @@ ingress:
   annotations:
     kubernetes.io/tls-acme: "true"
   tls:
-    secretName: tls-tineochristopher-com
-    hosts:
-      - *websiteName
+    - hosts:
+        - *websiteName
+      secretName: tls-tineochristopher-com
