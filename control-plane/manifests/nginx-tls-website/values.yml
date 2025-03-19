@@ -1,0 +1,19 @@
+websiteName: &websiteName web.tineochristopher.com
+
+ingressClassName: traefik
+image: nginx:alpine
+
+service:
+  internalPort: 80
+  externalPort: 80
+  type: ClusterIP
+
+ingress:
+  enabled: true
+  className: traefik
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  tls:
+    secretName: tls-tineochristopher-com
+    hosts:
+      - *websiteName
