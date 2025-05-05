@@ -1,12 +1,13 @@
-server:
-  service:
-    type: NodePort # or ClusterIP if using kubectl port-forward
-  extraArgs:
-  - --insecure # disable TLS (http only)
+argo-cd:
+  server:
+    service:
+      type: NodePort
+    extraArgs:
+    - --insecure
 
-dex:
-  enabled: false # disables SSO for simplicity
+  dex:
+    enabled: false
 
-configs:
-  cm:
-    application.instanceLabelKey: argocd.argoproj.io/instance
+  configs:
+    cm:
+      application.instanceLabelKey: argocd.argoproj.io/instance
