@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: {{ .Values.cloudflare.secretName }}
+  namespace: {{ .Release.namespace }}
+spec:
+  encryptedData:
+    cloudflare_api_token: AgBWT4vzivjogA59a621DEjqT3qPOYdzS4h6XNiSWy4Vcj2j/qRkLJFiM4CxvOhiLWwyOGT0BGGe5IvXeJ4bk4rjhb3QVYpPjX5iWUc5QJISMqCRxHlkdb1HhLXVjUjVYTeqYwaYijxLMcBhWMamwrnfwynZWz7PYYvtrfC0SAfkd/oJJsVbBhDC6IvGRikPo4j1itzOyf1YIwwGcYfa9PtN8eKTF9JLCaCK572QhmbQ+k0BbNo7LbCoGCWzsIT8C1n+Vis6QeoWSsgyQ6FuEzKR5FJkjxc27xw5sv/sMBoC6mHduPncloKOVprq63hZXA7UgdtWtEckhT3bw98TIq1qH6LB+sGGk6DnvbigLmq0VSIb5drk6OoEwc9BY0F3HB8dxBnU7wrobYpWvBmCiYvOUJfWxpiXY564aCj0YCeZcbKgi9AV6JKFWTYorkHr3VoVYGrcRzny8hgnYBlhCcySXUbxCOHfBfJwJ9s8U2d1ytO2wxSiLxxuo1fYnoPuHJ0S9nhLd46xD8mV27LM38B1iA+mWqxcITd5MlnvvGJ3V/UkZnW9KGlthcXkm7lgLgXR/XiWtsjKjyAqD7czsxcoUSPKBuihqseuIglPtr/rvTE3+nkpGbD/ysQZXNk6tJhWzxR/8W/3s1G4Qh928Lcj+mbeho11hH3sjBVgs02cU3hLnOrJkofyJSwpvblS7aceNUsQISUPCl9/h3DgQSBlmWAvHP2CCZpI22B6Ba6ggdtybsgW2he4
+  template:
+    metadata:
+      creationTimestamp: null
+      name: {{ .Values.cloudflare.secretName }}
+      namespace: {{ .Release.namespace }}
