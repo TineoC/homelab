@@ -6,3 +6,4 @@ email: "christophertineo02@gmail.com"
 when_report_upgrades: "always"
 
 kubeconfig: "{{ playbook_dir }}/files/kubeconfig.yaml"
+k3s_version: "v1.33.0-rc2+k3s1"

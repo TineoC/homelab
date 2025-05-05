@@ -1,4 +1,3 @@
----
 - name: Ensure regular system updates
   hosts: cluster
   become: true
@@ -6,12 +5,9 @@
     - apt-maintenance
     - ntp
     - ufw
-
 - name: Install K3s in both controlplane and agents
   hosts: cluster
   become: true
-  vars:
-    k3s_version: "v1.32.2+k3s1"
   tags:
     - k8s
   roles:
