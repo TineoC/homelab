@@ -7,3 +7,6 @@ external-dns:
   cloudflare:
     secretName: *cloudflareApiTokenSecretName
     email: *cloudFlareEmail
+  sources:
+  - ingress
+  policy: sync
