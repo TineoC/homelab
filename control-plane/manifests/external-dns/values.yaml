@@ -1,6 +1,5 @@
 external-dns:
-  provider:
-    name: cloudflare
+  provider: cloudflare
   cloudflare:
     secretName: cloudflare-api-token
     email: christophertineo02@gmail.com
