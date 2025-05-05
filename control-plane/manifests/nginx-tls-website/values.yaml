@@ -10,8 +10,8 @@ service:
 ingress:
   className: traefik
   annotations:
-    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+    cert-manager.io/cluster-issuer: letsencrypt-staging
   tls:
     - hosts:
         - *websiteName
-      secretName: selfsigned-tineochristopher-com
+      secretName: staging-tineochristopher-com
