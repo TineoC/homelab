@@ -1,4 +1,4 @@
-cloudFlare:
+cloudflare:
   secretName: &cloudflareApiTokenSecretName cloudflare-api-token
   email: &cloudFlareEmail christophertineo02@gmail.com
 
