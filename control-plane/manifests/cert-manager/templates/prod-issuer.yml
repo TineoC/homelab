@@ -6,9 +6,9 @@ metadata:
 spec:
   acme:
     server: {{ .Values.prodIssuer.server }}
-    email: {{ .Values.prodIssuer.email}}
+    email: {{ .Values.global.email}}
     privateKeySecretRef: {{ toYaml .Values.prodIssuer.privateKeySecretRef | nindent 6 }}
     solvers:
       - http01:
           ingress:
-            class: {{ .Values.prodIssuer.ingressClassName }}
+            class: {{ .Values.global.ingressClassName }}
