@@ -1,16 +1,9 @@
+cloudFlare:
+  secretName: &cloudflareApiTokenSecretName cloudflare-api-token
+  email: &cloudFlareEmail christophertineo02@gmail.com
+
 external-dns:
   provider: cloudflare
   cloudflare:
-    secretName: cloudflare-api-token
-    email: christophertineo02@gmail.com
-  # env:
-  # - name: CF_API_KEY
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: cloudflare-api-key
-  #       key: apiKey
-  # - name: CF_API_EMAIL
-  #   valueFrom:
-  #     secretKeyRef:
-  #       name: cloudflare-api-key
-  #       key: email
+    secretName: *cloudflareApiTokenSecretName
+    email: *cloudFlareEmail
