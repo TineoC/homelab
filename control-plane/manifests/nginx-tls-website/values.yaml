@@ -11,7 +11,9 @@ ingress:
   className: traefik
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-staging
-    external-dns.alpha.kubernetes.io/hostname: *websiteName
+    external-dns.alpha.kubernetes.io/hostname: tineochristopher.com
+    external-dns.alpha.kubernetes.io/target¶: web.tineochristopher.com
+    external-dns.alpha.kubernetes.io/ttl: "60"
   tls:
     - hosts:
         - *websiteName
