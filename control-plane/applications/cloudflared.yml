@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cloudflared
+spec:
+  destination:
+    namespace: cloudflared
+    server: https://kubernetes.default.svc
+  source:
+    repoURL: https://github.com/TineoC/homelab.git
+    targetRevision: HEAD
+    path: control-plane/manifests/cloudflared
+  project: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
