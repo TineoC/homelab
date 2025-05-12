@@ -1,5 +1,4 @@
 websiteName: &websiteName web.tineochristopher.com
-secondaryWebsiteName: &aliasWebsiteName www.web.tineochristopher.com
 
 image: nginx:alpine
 
@@ -15,5 +14,4 @@ ingress:
   tls:
     - hosts:
         - *websiteName
-        - *aliasWebsiteName
       secretName: staging-tineochristopher-com
