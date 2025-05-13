@@ -7,7 +7,7 @@ external-dns:
   cloudflare:
     secretName: *cloudflareApiTokenSecretName
     email: *cloudFlareEmail
-    proxied: false
+    proxied: true
   policy: sync
   registry: txt
   sources:
