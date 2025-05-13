@@ -14,7 +14,6 @@ argo-cd:
       ingressClassName: traefik
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/backend-protocol: "HTTP"
         cert-manager.io/cluster-issuer: letsencrypt-staging
       hostname: argocd.tineochristopher.com
       tls: true
@@ -25,7 +24,3 @@ argo-cd:
 
     certificate:
       enabled: false
-
-    service:
-      servicePortHttp: 80
-      servicePortHttps: 443
