@@ -4,12 +4,15 @@ cloudflare:
 
 external-dns:
   provider: cloudflare
+  domainFilters:
+  - "tineochristopher.com"
   cloudflare:
     secretName: *cloudflareApiTokenSecretName
     email: *cloudFlareEmail
     proxied: true
   policy: sync
-  registry: noop
+  registry: txt
+  txtOwnerId: homelab
   txtPrefix: ext-
   sources:
   - ingress
