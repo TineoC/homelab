@@ -12,6 +12,7 @@ ingress:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-staging
     external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
+    external-dns.alpha.kubernetes.io/target: a273a7f4-6ef1-44a6-82f7-48c6ee866673.cfargotunnel.com
   tls:
     - secretName: staging-tineochristopher-com
       hosts:
