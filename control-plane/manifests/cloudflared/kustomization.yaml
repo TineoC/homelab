@@ -5,7 +5,7 @@ namespace: cloudflared
 
 resources:
 - sealed-tunnel-credentials.yaml
-- https://raw.githubusercontent.com/cloudflare/argo-tunnel-examples/master/named-tunnel-k8s/cloudflared.yaml
+- cloudflared.yaml
 
 commonLabels:
   app: cloudflared
