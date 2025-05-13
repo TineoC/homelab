@@ -13,7 +13,8 @@ argo-cd:
       enabled: true
       ingressClassName: traefik
       annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+        traefik.ingress.kubernetes.io/redirect-entry-point: websecure
         cert-manager.io/cluster-issuer: letsencrypt-staging
       hostname: argocd.tineochristopher.com
       tls: true
