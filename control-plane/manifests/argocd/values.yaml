@@ -1,6 +1,6 @@
 argo-cd:
   global:
-    domain: argocd.tineochristopher.com
+    domain: &argoDomain argocd.tineochristopher.com
 
   configs:
     cm:
@@ -15,13 +15,17 @@ argo-cd:
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
         traefik.ingress.kubernetes.io/redirect-entry-point: websecure
-        cert-manager.io/cluster-issuer: letsencrypt-staging
-      hostname: argocd.tineochristopher.com
+        cert-manager.io/cluster-issuer: &clusterIssuer letsencrypt-staging
+      hostname: *argoDomain
       tls: true
       extraTls:
       - hosts:
-        - argocd.tineochristopher.com
+        - *argoDomain
         secretName: argocd-server-tls
 
     certificate:
-      enabled: false
+      enabled: true
+      domain: *argoDomain
+      issuer:
+        kind: ClusterIssuer
+        name: *clusterIssuer
