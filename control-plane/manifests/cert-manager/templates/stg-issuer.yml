@@ -9,6 +9,8 @@ spec:
     email: {{ .Values.global.email}}
     privateKeySecretRef: {{ toYaml .Values.stgIssuer.privateKeySecretRef | nindent 6 }}
     solvers:
-      - http01:
-          ingress:
-            class: {{ .Values.global.ingressClassName }}
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cloudflare-api-token
+              key: cloudflare_api_token
