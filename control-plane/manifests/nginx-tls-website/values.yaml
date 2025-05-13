@@ -17,3 +17,5 @@ ingress:
     external-dns.alpha-kubernetes.io/cloudflare-proxied: "true"
   tls:
     - secretName: staging-tineochristopher-com
+      hosts:
+        - *websiteName
