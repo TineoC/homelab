@@ -10,5 +10,6 @@ external-dns:
     proxied: true
   policy: sync
   registry: noop
+  txtPrefix: ext-
   sources:
   - ingress
