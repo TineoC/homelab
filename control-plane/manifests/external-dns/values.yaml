@@ -9,6 +9,6 @@ external-dns:
     email: *cloudFlareEmail
     proxied: true
   policy: sync
-  registry: txt
+  registry: noop
   sources:
   - ingress
