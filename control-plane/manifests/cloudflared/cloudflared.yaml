@@ -71,12 +71,12 @@ metadata:
   name: cloudflared
 data:
   config.yaml: |
-    tunnel: homelab-tunnel
+    tunnel: a273a7f4-6ef1-44a6-82f7-48c6ee866673
     credentials-file: /etc/cloudflared/creds/credentials.json
     metrics: 0.0.0.0:2000
     no-autoupdate: true
     ingress:
-    - hostname: "*.tineochristopher.com"
+    - hostname: web.tineochristopher.com
       service: http://traefik.kube-system.svc.cluster.local:80
     - service: http_status:404
 
