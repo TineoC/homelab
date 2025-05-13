@@ -9,7 +9,7 @@ external-dns:
   cloudflare:
     secretName: *cloudflareApiTokenSecretName
     email: *cloudFlareEmail
-    proxied: true
+    proxied: false
   policy: sync
   registry: txt
   txtOwnerId: homelab
