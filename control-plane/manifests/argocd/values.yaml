@@ -1,9 +1,21 @@
 argo-cd:
   global:
     domain: argocd.tineochristopher.com
+
+  certificate:
+    enabled: true
+
   configs:
     params:
       server.insecure: true
+
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+      tls: true
 
   dex:
     enabled: false
@@ -11,10 +23,3 @@ argo-cd:
   configs:
     cm:
       application.instanceLabelKey: argocd.argoproj.io/instance
-
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-staging
-    tls: true
