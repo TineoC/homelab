@@ -9,3 +9,10 @@ argo-cd:
   configs:
     cm:
       application.instanceLabelKey: argocd.argoproj.io/instance
+
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+    tls: true
