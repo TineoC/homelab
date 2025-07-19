@@ -2,6 +2,11 @@ global:
   ingressClassName: &commonIngressClassName traefik
   email: &commonEmail christophertineo02@gmail.com
 
+cloudflare:
+  apiKeySecretRef:
+    name: cloudflare-api-key
+    key: apiKey
+
 prodIssuer:
   name: &prodClusterIssuerName letsencrypt-prod
   privateKeySecretRef:

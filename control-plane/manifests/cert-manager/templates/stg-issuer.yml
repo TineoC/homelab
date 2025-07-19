@@ -8,3 +8,8 @@ spec:
     server: {{ .Values.stgIssuer.server }}
     email: {{ .Values.global.email}}
     privateKeySecretRef: {{ toYaml .Values.stgIssuer.privateKeySecretRef | nindent 6 }}
+  solvers:
+  - dns01:
+      cloudflare:
+        email: {{ .Values.global.email }}
+        apiKeySecretRef: {{ toYaml .Values.cloudflare.apiKeySecretRef | nindent 12 }}
