@@ -7,15 +7,25 @@ resources:
 - ../../base
 
 patches:
-- patch: |
-    - op: replace
-      path: /spec/rules/0/host
-      value: dev.web.tineochristopher.com
-  target:
+- target:
     group: networking.k8s.io
     version: v1
     kind: Ingress
     name: nginx
+  patch: |
+    - op: replace
+      path: /spec/rules/0/host
+      value: dev.web.tineochristopher.com
+    - op: replace
+      path: /spec/tls
+      value:
+        - hosts:
+            - dev.web.tineochristopher.com
+          secretName: dev-web-tls
+    - op: replace
+      path: /metadata/annotations
+      value:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
 
 labels:
 - pairs:
