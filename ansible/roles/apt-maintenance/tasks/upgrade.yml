@@ -1,6 +1,16 @@
----
-- name: Upgrade all packages
+- name: Install unattended-upgrades
   apt:
-    upgrade: dist
-    autoremove: yes
-    autoclean: yes
+    name: unattended-upgrades
+    state: present
+
+- name: Enable automatic security updates
+  copy:
+    dest: /etc/apt/apt.conf.d/50unattended-upgrades
+    content: |
+      Unattended-Upgrade::Allowed-Origins {
+          "${distro_id}:${distro_codename}-security";
+      };
+      Unattended-Upgrade::Automatic-Reboot "true";
+
+- name: Run unattended-upgrade manually
+  command: unattended-upgrade -d

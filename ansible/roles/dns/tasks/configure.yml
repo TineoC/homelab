@@ -1,0 +1,30 @@
+---
+- name: Ensure systemd-resolved uses public DNS
+  lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: "^DNS="
+    line: "DNS=8.8.8.8 1.1.1.1"
+    create: yes
+  notify: Restart systemd-resolved
+
+- name: Ensure fallback DNS is configured
+  lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: "^FallbackDNS="
+    line: "FallbackDNS=1.0.0.1"
+    create: yes
+  notify: Restart systemd-resolved
+
+- name: Remove stub-resolver /etc/resolv.conf
+  file:
+    path: /etc/resolv.conf
+    state: absent
+    force: yes
+
+- name: Deploy static resolv.conf file
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644

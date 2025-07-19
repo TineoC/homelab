@@ -1,19 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cloudflared
+  name: metal-lb
 spec:
-  destination:
-    namespace: cloudflared
-    server: https://kubernetes.default.svc
-  source:
-    repoURL: https://github.com/TineoC/homelab.git
-    targetRevision: HEAD
-    path: control-plane/manifests/cloudflared
   project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ingress-nginx
+  source:
+    repoURL: https://metallb.github.io/metallb
+    chart: metallb
+    targetRevision: 0.15.2
   syncPolicy:
     automated:
-      selfHeal: true
       prune: true
+      selfHeal: true
     syncOptions:
       - CreateNamespace=true

@@ -5,6 +5,7 @@
     - apt-maintenance
     - ntp
     - ufw
+    - dns
 - name: Install K3s in both controlplane and agents
   hosts: cluster
   become: true

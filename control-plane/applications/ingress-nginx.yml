@@ -1,19 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx-tls
+  name: ingress-nginx
 spec:
   project: default
   destination:
-    namespace: default
     server: https://kubernetes.default.svc
+    namespace: ingress-nginx
   source:
-    repoURL: https://github.com/TineoC/homelab.git
-    targetRevision: HEAD
-    path: control-plane/manifests/nginx-tls-website
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    chart: ingress-nginx
+    path: control-plane/manifests/ingress-nginx
     helm:
       valueFiles:
         - values.yaml
+    targetRevision: 4.13.0
   syncPolicy:
     automated:
       prune: true
