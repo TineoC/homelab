@@ -8,9 +8,3 @@ spec:
     server: {{ .Values.prodIssuer.server }}
     email: {{ .Values.global.email}}
     privateKeySecretRef: {{ toYaml .Values.prodIssuer.privateKeySecretRef | nindent 6 }}
-    solvers:
-      - dns01:
-          cloudflare:
-            apiTokenSecretRef:
-              name: cloudflare-api-token
-              key: cloudflare_api_token
