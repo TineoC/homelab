@@ -16,17 +16,6 @@ patches:
     - op: replace
       path: /spec/rules/0/host
       value: web.tineochristopher.com
-    - op: replace
-      path: /spec/tls
-      value:
-        - hosts:
-            - web.tineochristopher.com
-          secretName: dev-web-tls
-    - op: replace
-      path: /metadata/annotations
-      value:
-        cert-manager.io/cluster-issuer: letsencrypt-staging
-
 labels:
 - pairs:
     env: dev

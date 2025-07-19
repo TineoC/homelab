@@ -12,5 +12,3 @@ external-dns:
     - tineochristopher.com
   sources:
     - ingress
-  extraArgs:
-    - "--annotation-filter=external-dns.alpha.kubernetes.io/hostname!=_acme-challenge.*"
