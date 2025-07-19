@@ -1,6 +1,6 @@
 dependencies:
-- name: metallb
-  repository: https://metallb.github.io/metallb
-  version: 0.15.2
-digest: sha256:cdc39d6e105eb385752583aae6d0b4df17013862f9ee077a626f06b3aafbdf50
-generated: "2025-07-19T13:52:28.662686011-04:00"
+- name: external-secrets
+  repository: https://charts.external-secrets.io
+  version: 0.18.2
+digest: sha256:bba4e52855b14d7801c4d600074bdc3c1cf0aeb7e8bd1f962ccea5438a9a35fb
+generated: "2025-07-19T15:03:36.580579349-04:00"
