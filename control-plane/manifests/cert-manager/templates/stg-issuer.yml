@@ -11,5 +11,6 @@ spec:
     solvers:
     - dns01:
         cloudflare:
-          email: {{ .Values.global.email }}
-          apiKeySecretRef: {{ toYaml .Values.cloudflare.apiKeySecretRef | nindent 12 }}
+          apiTokenSecretRef:
+            name: {{ .Values.cloudflare.secret.name }}
+            key: {{ .Values.cloudflare.secret.key }}

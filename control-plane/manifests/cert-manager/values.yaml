@@ -3,7 +3,7 @@ global:
   email: &commonEmail christophertineo02@gmail.com
 
 cloudflare:
-  apiKeySecretRef:
+  secret:
     name: cloudflare-api-key
     key: apiKey
 
