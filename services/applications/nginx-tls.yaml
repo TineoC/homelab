@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: services/applications/nginx-tls.yaml
+    path: services/manifests/nginx-tls/overlays/dev
   destination:
     server: https://kubernetes.default.svc
     namespace: dev
