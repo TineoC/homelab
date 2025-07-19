@@ -15,12 +15,12 @@ patches:
   patch: |
     - op: replace
       path: /spec/rules/0/host
-      value: dev.web.tineochristopher.com
+      value: web.tineochristopher.com
     - op: replace
       path: /spec/tls
       value:
         - hosts:
-            - dev.web.tineochristopher.com
+            - web.tineochristopher.com
           secretName: dev-web-tls
     - op: replace
       path: /metadata/annotations
