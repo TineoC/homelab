@@ -8,9 +8,8 @@ spec:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
   source:
-    repoURL: https://metallb.github.io/metallb
-    chart: metallb
-    targetRevision: 0.15.2
+    repoURL: https://github.com/tineoc/homelab
+    path: control-plane/manifests/metal-lb
   syncPolicy:
     automated:
       prune: true

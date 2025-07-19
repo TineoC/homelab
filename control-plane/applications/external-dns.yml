@@ -9,9 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://kubernetes-sigs.github.io/external-dns/
-    chart: external-dns
-    targetRevision: 1.18.0
+    repoURL: https://github.com/tineoc/homelab
     path: control-plane/manifests/external-dns
     helm:
       valueFiles:
