@@ -2,4 +2,4 @@ controller:
   ingressClassResource:
     default: true
   service:
-    type: LoadBalancer
+    type: ClusterIP
