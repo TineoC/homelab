@@ -22,13 +22,7 @@ patches:
         external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
         cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/server-snippet: |
-          location /.well-known/acme-challenge/ {
-            allow all;
-            root /usr/share/nginx/html;
-          }
-
+        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
 labels:
 - pairs:
     env: dev
