@@ -24,7 +24,8 @@ version: 0.1.0
 appVersion: "0.1.0"
 
 dependencies:
-- name: cloudflared
+- name: cloudflare-tunnel
   repository: https://cloudflare.github.io/helm-charts
   condition: cloudflare.enabled
+  version: 0.3.2
 
