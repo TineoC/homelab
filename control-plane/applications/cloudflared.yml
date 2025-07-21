@@ -11,9 +11,6 @@ spec:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: HEAD
     path: control-plane/manifests/cloudflared
-    helm:
-      valueFiles:
-        - values.yaml
   syncPolicy:
     automated:
       prune: true
