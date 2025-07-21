@@ -24,6 +24,10 @@ patches:
       path: /metadata/annotations
       value:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
+    - op: add
+      path: /metadata/annotations
+      value:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
 
 labels:
 - pairs:
