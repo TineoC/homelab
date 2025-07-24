@@ -1,14 +1,14 @@
 keycloak:
   auth:
-    existingSecret: keycloak-admin-creds
-    passwordKey: admin-password
+    adminUser: admin
+    adminPassword: admin
   service:
     type: ClusterIP
   ingress:
     enabled: true
     hostname: keycloak.tineochristopher.com
     ingressClassName: nginx
-    extraTLS:
+    extraTls:
     - hosts:
         - keycloak.tineochristopher.com
       secretName: keycloak-tls
