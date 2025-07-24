@@ -5,6 +5,7 @@ keycloak:
   service:
     type: ClusterIP
   ingress:
+    tls: true
     enabled: true
     hostname: keycloak.tineochristopher.com
     ingressClassName: nginx
