@@ -12,9 +12,3 @@ dependencies:
     condition: kubernetes-dashboard.enabled
     tags:
       - kubernetes-dashboard
-  - name: oauth2-proxy
-    version: 7.14.2
-    repository: https://kubernetes.github.io/dashboard
-    condition: oauth2-proxy.enabled
-    tags:
-      - oauth2-proxy
