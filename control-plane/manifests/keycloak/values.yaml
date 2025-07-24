@@ -1,7 +1,6 @@
 keycloak:
   auth:
     existingSecret: keycloak-admin-creds
-    usernameKey: admin-username
     passwordKey: admin-password
   service:
     type: ClusterIP
