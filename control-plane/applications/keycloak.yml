@@ -16,10 +16,6 @@ spec:
           adminPassword: admin
         service:
           type: ClusterIP
-        ingress:
-          enabled: true
-          hostname: keycloak.tineochristopher.com
-          ingressClassName: nginx
   destination:
     server: https://kubernetes.default.svc
     namespace: keycloak
