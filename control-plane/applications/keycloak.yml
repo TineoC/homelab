@@ -6,25 +6,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
-    chart: keycloak
-    targetRevision: 24.8.1
+    repoURL: https://github.com/TineoC/homelab.git
+    targetRevision: main
+    path: control-plane/manifests/keycloak
     helm:
-      values: |
-        auth:
-          adminUser: admin
-          adminPassword: admin
-        service:
-          type: ClusterIP
-        ingress:
-          enabled: true
-          hostname: keycloak.tineochristopher.com
-          ingressClassName: nginx
-          annotations:
-            external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
-            cert-manager.io/cluster-issuer: letsencrypt-staging
-            nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-            external-dns.alpha.kubernetes.io/target: 96.248.109.98
+      valuesFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: keycloak
