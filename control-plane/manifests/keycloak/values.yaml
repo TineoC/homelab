@@ -9,7 +9,7 @@ keycloak:
     enabled: true
     hostname: keycloak.tineochristopher.com
     ingressClassName: nginx
-    extraTls:
+    extraTLS:
     - hosts:
         - keycloak.tineochristopher.com
       secretName: keycloak-tls
