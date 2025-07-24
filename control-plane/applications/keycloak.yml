@@ -16,6 +16,15 @@ spec:
           adminPassword: admin
         service:
           type: ClusterIP
+        ingress:
+          enabled: true
+          hostname: keycloak.tineochristopher.com
+          ingressClassName: nginx
+          annotations:
+            external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
+            cert-manager.io/cluster-issuer: letsencrypt-staging
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+            external-dns.alpha.kubernetes.io/target: 96.248.109.98
   destination:
     server: https://kubernetes.default.svc
     namespace: keycloak
