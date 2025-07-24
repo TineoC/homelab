@@ -1,5 +1,6 @@
 keycloak:
   auth:
+    adminUser: admin
     existingSecret: keycloak-admin-creds
     passwordSecretKey: admin-password
   service:
