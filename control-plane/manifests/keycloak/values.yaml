@@ -5,6 +5,7 @@ keycloak:
     passwordSecretKey: admin-password
   service:
     type: ClusterIP
+  proxy: edge
   postgresql:
     enabled: true
     auth:
