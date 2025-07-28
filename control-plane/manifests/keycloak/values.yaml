@@ -22,10 +22,15 @@ keycloak:
     architecture: standalone
   ingress:
     enabled: true
-    ingressClassName: nginx
     tls: true
+    ingressClassName: nginx
     hostname: keycloak.tineochristopher.com
+    extraTls:
+    - hosts:
+      - keycloak.tineochristopher.com
+      secretName: keycloak-tls
     annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: HTTPS
       cert-manager.io/cluster-issuer: letsencrypt-staging
       external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
