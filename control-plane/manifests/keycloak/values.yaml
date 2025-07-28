@@ -5,6 +5,15 @@ keycloak:
     passwordSecretKey: admin-password
   service:
     type: ClusterIP
+  postgresql:
+    enabled: true
+    auth:
+      username: keycloak
+      database: keycloak
+      existingSecret: keycloak-db-credentials
+      secretKeys:
+        userPasswordKey: password
+    architecture: standalone
   tls:
     enabled: true
     existingSecret: keycloak-tls
