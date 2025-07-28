@@ -1,7 +1,5 @@
 keycloak:
   production: true
-  logging:
-    level: DEBUG
   auth:
     adminUser: admin
     existingSecret: keycloak-admin-creds
