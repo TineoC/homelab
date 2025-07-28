@@ -5,3 +5,13 @@ namespace: argocd
 
 resources:
 - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+- ingress.yaml
+
+patches:
+- target:
+    kind: ConfigMap
+    name: argocd-cm
+  patch: |-
+    - op: replace
+      path: /data/url
+      value: https://argocd.tineochristopher.com
