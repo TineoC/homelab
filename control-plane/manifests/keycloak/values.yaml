@@ -19,10 +19,6 @@ keycloak:
     ingressClassName: nginx
     tls: true
     hostname: keycloak.tineochristopher.com
-    extraTLS:
-    - hosts:
-        - keycloak.tineochristopher.com
-      secretName: keycloak-tls
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-staging
       external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
