@@ -5,16 +5,19 @@ keycloak:
     passwordSecretKey: admin-password
   service:
     type: ClusterIP
-  ingress:
-    tls: true
+  tls:
     enabled: true
-    hostname: keycloak.tineochristopher.com
+    existingSecret: keycloak-tls
+  ingress:
+    enabled: true
     ingressClassName: nginx
-    extraTls:
+    tls: true
+    hostname: keycloak.tineochristopher.com
+    extraTLS:
     - hosts:
         - keycloak.tineochristopher.com
       secretName: keycloak-tls
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
       cert-manager.io/cluster-issuer: letsencrypt-staging
+      external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
