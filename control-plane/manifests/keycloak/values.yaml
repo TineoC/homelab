@@ -14,9 +14,6 @@ keycloak:
       secretKeys:
         userPasswordKey: password
     architecture: standalone
-  tls:
-    enabled: true
-    existingSecret: keycloak-tls
   ingress:
     enabled: true
     ingressClassName: nginx
