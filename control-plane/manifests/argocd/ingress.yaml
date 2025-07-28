@@ -7,6 +7,8 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    external-dns.alpha.kubernetes.io/hostname: argocd.tineochristopher.com
+    external-dns.alpha.kubernetes.io/target: "96.248.109.98"
 spec:
   ingressClassName: nginx
   tls:
