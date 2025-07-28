@@ -1,4 +1,11 @@
 controller:
+  config:
+    # Pass X-Forwarded-* headers to backends
+    use-forwarded-headers: "true"
+    # Header name for client IP
+    forwarded-for-header: "X-Forwarded-For"
+    # (optional) If you want to append rather than replace
+    compute-full-forwarded-for: "true"
   ingressClassResource:
     default: true
   service:
