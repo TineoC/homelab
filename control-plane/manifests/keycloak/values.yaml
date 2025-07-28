@@ -1,4 +1,6 @@
 keycloak:
+  logging:
+    level: DEBUG
   auth:
     adminUser: admin
     existingSecret: keycloak-admin-creds
