@@ -18,6 +18,6 @@ keycloak:
     hostname: keycloak.tineochristopher.com
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: HTTPS
-      cert-manager.io/cluster-issuer: letsencrypt-staging
+      cert-manager.io/cluster-issuer: letsencrypt-prod
       external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
