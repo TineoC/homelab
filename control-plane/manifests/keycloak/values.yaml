@@ -11,6 +11,8 @@ keycloak:
       existingSecret: keycloak-db-credentials
       secretKeys:
         userPasswordKey: password
+  production: true
+  proxy: edge
   ingress:
     enabled: true
     tls: true
