@@ -2,8 +2,7 @@
   hosts: primary_servers
   become: true
   vars:
-    keycloak_domain: "keycloak.tineochristopher.com"
-    keycloak_realm: "kubernetes"
+    keycloak_domain: https://keycloak.tineochristopher.com/realms/kubernetes
     oidc_client_id: "k3s-cluster"
     oidc_username_claim: "email"
     oidc_groups_claim: "groups"
@@ -13,7 +12,7 @@
         path: /etc/rancher/k3s/config.yaml
         block: |
           kube-apiserver-arg:
-            - "oidc-issuer-url=https://{{ keycloak_domain }}/realms/{{ keycloak_realm }}"
+            - "oidc-issuer-url={{ keycloak_domain }}"
             - "oidc-client-id={{ oidc_client_id }}"
             - "oidc-username-claim={{ oidc_username_claim | default('preferred_username') }}"
             - "oidc-groups-claim={{ oidc_groups_claim | default('groups') }}"
