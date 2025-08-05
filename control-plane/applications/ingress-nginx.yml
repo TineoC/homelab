@@ -17,7 +17,8 @@ spec:
           ingressClassResource:
             default: true
           service:
-            type: ClusterIP
+            type: LoadBalancer
+            loadBalancerIP: 192.168.1.240
           allowSnippetAnnotations: true
           config:
             annotations-risk-level: "Critical"
