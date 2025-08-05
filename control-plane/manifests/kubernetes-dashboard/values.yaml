@@ -15,8 +15,6 @@ kubernetes-dashboard:
         # OAUTH2 Proxy Annotations
         nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$request_uri"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          proxy_set_header X-Auth-Request-Redirect $request_uri;
       hosts:
       - dashboard.tineochristopher.com
       path: /
