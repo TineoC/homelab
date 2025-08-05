@@ -19,7 +19,7 @@ kubernetes-dashboard:
         # OAUTH2 Proxy Annotations
         nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: "http://$host/oauth2/start?rd=$escaped_request_uri"
-        nginx.ingress.kubernetes.io/auth-response-headers: "authorization"
+        nginx.ingress.kubernetes.io/auth-response-headers: "authorization, x-auth-request-access-token"
       hosts:
       - dashboard.tineochristopher.com
       path: /
@@ -46,7 +46,6 @@ oauth2-proxy:
     provider: keycloak-oidc
     scope: "openid email groups"
     cookie-secure: true
-    cookie-httponly: true
     skip-provider-button: true
     set-authorization-header: true
     set-xauthrequest:   true
