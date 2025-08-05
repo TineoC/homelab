@@ -4,7 +4,7 @@
   vars:
     keycloak_domain: https://keycloak.tineochristopher.com/realms/kubernetes
     oidc_client_id: "k3s-cluster"
-    oidc_username_claim: "email"
+    oidc_username_claim: "preferred_username"
     oidc_groups_claim: "groups"
   tasks:
     - name: Configure OIDC settings for K3s
