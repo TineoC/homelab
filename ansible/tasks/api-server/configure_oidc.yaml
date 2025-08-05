@@ -13,10 +13,10 @@
         path: /etc/rancher/k3s/config.yaml
         block: |
           kube-apiserver-arg:
-            - "--oidc-issuer-url=https://{{ keycloak_domain }}/realms/{{ keycloak_realm }}"
-            - "--oidc-client-id={{ oidc_client_id }}"
-            - "--oidc-username-claim={{ oidc_username_claim | default('preferred_username') }}"
-            - "--oidc-groups-claim={{ oidc_groups_claim | default('groups') }}"
+            - "oidc-issuer-url=https://{{ keycloak_domain }}/realms/{{ keycloak_realm }}"
+            - "oidc-client-id={{ oidc_client_id }}"
+            - "oidc-username-claim={{ oidc_username_claim | default('preferred_username') }}"
+            - "oidc-groups-claim={{ oidc_groups_claim | default('groups') }}"
       become: true
 
     - name: Restart K3s to apply OIDC config
