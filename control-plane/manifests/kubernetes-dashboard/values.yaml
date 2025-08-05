@@ -1,47 +1,9 @@
 kubernetes-dashboard:
   protocolHttp: false
-  app:
-    ingress:
-      enabled: true
-      tls:
-        enabled: true
-        secretName: dashboard-tls
-      annotations:
-        # Kubernetes Ingress Annotations
-        # TLS configuration
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    
-        # External DNS Annotations
-        external-dns.alpha.kubernetes.io/target: 96.248.109.98
-        external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
-        
-        # OAUTH2 Proxy Annotations
-        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "http://$host/oauth2/start?rd=$escaped_request_uri"
-        nginx.ingress.kubernetes.io/auth-response-headers: "authorization, x-auth-request-access-token"
-      hosts:
-      - dashboard.tineochristopher.com
-      path: /
-      pathType: Prefix
-      ingressClassName: nginx
 
 oauth2-proxy:
   config:
     existingSecret: kubernetes-dashboard-client-config
-  ingress:
-    enabled: true
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-staging
-    className: nginx
-    path: /oauth2
-    pathType: Prefix
-    hosts:
-    - dashboard.tineochristopher.com
-    tls:
-    - hosts:
-      - dashboard.tineochristopher.com
-      secretName: dashboard-tls
   extraArgs:
     provider: keycloak-oidc
     scope: "openid email groups"
