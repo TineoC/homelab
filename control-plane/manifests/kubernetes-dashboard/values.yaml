@@ -30,8 +30,6 @@ oauth2-proxy:
     oidc-issuer-url: https://keycloak.tineochristopher.com/realms/kubernetes
     allowed-group: cluster-admins
     upstream: https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443
-    cookie-secure: true
-    cookie-samesite: strict
   ingress:
     enabled: true
     className: nginx
