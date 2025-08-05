@@ -4,3 +4,5 @@ controller:
     default: true
   service:
     type: ClusterIP
+  config:
+    annotations-risk-level: "Critical"
