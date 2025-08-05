@@ -25,7 +25,3 @@ oauth2-proxy:
     oidcIssuerURL: https://keycloak.tineochristopher.com/realms/kubernetes
     emailDomains:
     - "*"
-  extraArgs:
-    scope: "openid email profile groups"
-    passAuthorizationHeader: "true"
-    setXAuthRequest: "true"
