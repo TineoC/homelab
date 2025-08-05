@@ -20,8 +20,9 @@ kubernetes-dashboard:
 
 oauth2-proxy:
   config:
-    provider: keycloak-oidc
     existingSecret: kubernetes-dashboard-client-config
-    oidcIssuerURL: https://keycloak.tineochristopher.com/realms/kubernetes
-    emailDomains:
-    - "*"
+  extraArgs:
+    provider: keycloak-oidc
+    redirect-url: https://dashboard.tineochristopher.com/oauth2/callback
+    oidc-issuer-url: https://keycloak.tineochristopher.com/realms/kubernetes
+    allowed-group: cluster-admins
