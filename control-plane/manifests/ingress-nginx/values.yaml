@@ -1,8 +1,0 @@
-controller:
-  allowSnippetAnnotations: true
-  ingressClassResource:
-    default: true
-  service:
-    type: ClusterIP
-  config:
-    annotations-risk-level: "Critical"

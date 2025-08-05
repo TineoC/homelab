@@ -12,8 +12,15 @@ spec:
     chart: ingress-nginx
     path: control-plane/manifests/ingress-nginx
     helm:
-      valueFiles:
-        - values.yaml
+      values: |
+        controller:
+          ingressClassResource:
+            default: true
+          service:
+            type: ClusterIP
+          allowSnippetAnnotations: true
+          config:
+            annotations-risk-level: "Critical"
     targetRevision: 4.13.0
   syncPolicy:
     automated:
