@@ -12,6 +12,11 @@ kubernetes-dashboard:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
+        # OAUTH2 Proxy Annotations
+        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$request_uri"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          proxy_set_header X-Auth-Request-Redirect $request_uri;
       hosts:
       - dashboard.tineochristopher.com
       path: /
@@ -26,3 +31,22 @@ oauth2-proxy:
     redirect-url: https://dashboard.tineochristopher.com/oauth2/callback
     oidc-issuer-url: https://keycloak.tineochristopher.com/realms/kubernetes
     allowed-group: cluster-admins
+    upstream: https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443
+    cookie-secure: true
+    cookie-samesite: strict
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+    - dashboard.tineochristopher.com
+    paths:
+    - path: /oauth2
+      pathType: Prefix
+    tls:
+    - hosts:
+      - dashboard.tineochristopher.com
+      secretName: dashboard-oauth2-proxy-tls
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
