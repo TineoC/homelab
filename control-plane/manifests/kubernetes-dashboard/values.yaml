@@ -52,6 +52,9 @@ oauth2-proxy:
     set-xauthrequest:   true
     pass-access-token: true
     set-basic-auth: false
+    auth-logging: true
+    request-logging: true
+    standard-logging: true
     redirect-url: https://dashboard.tineochristopher.com/oauth2/callback
     oidc-issuer-url: https://keycloak.tineochristopher.com/realms/kubernetes
     allowed-group: cluster-admins
