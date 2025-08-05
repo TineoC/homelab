@@ -3,9 +3,13 @@ kubernetes-dashboard:
   app:
     ingress:
       enabled: true
+      issuer:
+        name: letsencrypt-prod
+        scope: cluster
+      tls:
+        enabled: true
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-        cert-manager.io/cluster-issuer: letsencrypt-prod
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
       hosts:
