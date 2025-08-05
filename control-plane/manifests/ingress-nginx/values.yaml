@@ -3,3 +3,4 @@ controller:
     default: true
   service:
     type: ClusterIP
+  allowSnippetAnnotations: true
