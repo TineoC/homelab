@@ -32,6 +32,7 @@ oauth2-proxy:
     upstream: https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443
     cookie-secure: true
     cookie-samesite: strict
+    email-domain: "*"
   ingress:
     enabled: true
     ingressClassName: nginx
