@@ -4,7 +4,7 @@ metadata:
   name: kubernetes-dashboard
   namespace: {{ .Release.Namespace}}
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
     nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
     external-dns.alpha.kubernetes.io/target: 96.248.109.98
