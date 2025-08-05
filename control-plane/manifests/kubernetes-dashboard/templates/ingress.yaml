@@ -6,7 +6,8 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$request_uri"
+    nginx.ingress.kubernetes.io/auth-bypass-urls: "^/oauth2/(start|callback)"
     external-dns.alpha.kubernetes.io/target: 96.248.109.98
     external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
     nginx.ingress.kubernetes.io/auth-response-headers: "authorization, x-auth-request-access-token"
