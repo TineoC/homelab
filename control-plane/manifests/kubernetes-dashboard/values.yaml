@@ -32,7 +32,7 @@ oauth2-proxy:
   ingress:
     enabled: true
     annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+      cert-manager.io/cluster-issuer: letsencrypt-staging
     className: nginx
     path: /oauth2
     pathType: Prefix
