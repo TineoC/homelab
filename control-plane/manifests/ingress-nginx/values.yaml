@@ -1,6 +1,6 @@
 controller:
+  allowSnippetAnnotations: true
   ingressClassResource:
     default: true
   service:
     type: ClusterIP
-  allowSnippetAnnotations: true
