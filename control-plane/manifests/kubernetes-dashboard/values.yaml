@@ -13,8 +13,11 @@ kubernetes-dashboard:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
         # OAUTH2 Proxy Annotations
-        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$request_uri"
+        nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
+        nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-User, X-Auth-Request-Email"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          proxy_set_header Authorization $http_authorization;
       hosts:
       - dashboard.tineochristopher.com
       path: /
@@ -26,22 +29,17 @@ oauth2-proxy:
     existingSecret: kubernetes-dashboard-client-config
   extraArgs:
     provider: keycloak-oidc
+    scope: "openid email groups"
+    cookie-secure: true
+    cookie-httponly: true
+    skip-provider-button: true
+    set-authorization-header: true
+    set-xauthrequest:   true
+    pass-access-token: true
+    set-basic-auth: false
     redirect-url: https://dashboard.tineochristopher.com/oauth2/callback
     oidc-issuer-url: https://keycloak.tineochristopher.com/realms/kubernetes
     allowed-group: cluster-admins
-    upstream: https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443
-  ingress:
-    enabled: true
-    className: nginx
-    hosts:
-    - dashboard.tineochristopher.com
-    path: /oauth2
-    pathType: Prefix
-    tls:
-    - hosts:
-      - dashboard.tineochristopher.com
-      secretName: dashboard-oauth2-proxy-tls
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
+    upstream: https://dashboard-kong-proxy
+  configFile: |
+    email_domains = [ "*" ]
