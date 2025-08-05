@@ -34,7 +34,7 @@ oauth2-proxy:
     cookie-samesite: strict
   ingress:
     enabled: true
-    ingressClassName: nginx
+    className: nginx
     hosts:
     - dashboard.tineochristopher.com
     path: /oauth2
