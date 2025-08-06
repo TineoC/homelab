@@ -1,23 +1,22 @@
 kubernetes-dashboard:
-  fullnameOverride: dashboard
+  protocolHttp: true
   ingress:
-    enabled: false
-    ingressClassName: true
+    enabled: true
+    ingressClassName: nginx
     hosts:
-      - host: dashboard.tineochristopher.com
-        paths:
-          - path: /
-            pathType: Prefix
+      - dashboard.tineochristopher.com
+    path: /
+    pathType: Prefix
+    issuer: 
+      name: letsencrypt-staging
+      scope: cluster
     tls:
-      - secretName: dashboard-tls
-        hosts:
-          - dashboard.tineochristopher.com
+      enabled: true
+      secretName: dashboard-tls
+      
     annotations:
       # TLS/SSL annotations
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      
-      # Cert Manager annotations
-      cert-manager.io/cluster-issuer: letsencrypt-staging
       
       # External DNS
       external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
