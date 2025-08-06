@@ -1,21 +1,21 @@
 kubernetes-dashboard:
+  protocolHttp: false
   app:  
     ingress:
       enabled: true
-      ingressClassName: nginx
-      hosts:
-        - dashboard.tineochristopher.com
-      pathType: Prefix
       issuer: 
         name: letsencrypt-staging
         scope: cluster
       tls:
         enabled: true
-        secretName: kubernetes-dashboard-tls
+      ingressClassName: nginx
+      hosts:
+        - dashboard.tineochristopher.com
+      pathType: Prefix
       useDefaultAnnotations: true
       annotations:
         # External DNS
-        external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
+        external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
