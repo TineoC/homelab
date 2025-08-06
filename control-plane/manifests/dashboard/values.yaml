@@ -8,12 +8,14 @@ kubernetes-dashboard:
         scope: cluster
       tls:
         enabled: true
-      ingressClassName: nginx
       hosts:
         - dashboard.tineochristopher.com
+      path: /
       pathType: Prefix
-      useDefaultAnnotations: true
+      ingressClassName: nginx
+      pathType: Prefix
       annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         # External DNS
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
