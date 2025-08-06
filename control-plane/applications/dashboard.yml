@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: control-plane/manifests/kubernetes-dashboard
+    path: control-plane/manifests/dashboard
     helm:
       valueFiles:
         - values.yaml
