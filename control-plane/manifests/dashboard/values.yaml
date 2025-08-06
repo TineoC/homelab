@@ -1,29 +1,30 @@
 kubernetes-dashboard:
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - dashboard.tineochristopher.com
-    path: /
-    pathType: Prefix
-    issuer: 
-      name: letsencrypt-staging
-      scope: cluster
-    tls:
+  app:  
+    ingress:
       enabled: true
-      secretName: dashboard-tls
-      
-    annotations:
-      # TLS/SSL annotations
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-      
-      # External DNS
-      external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
-      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+      ingressClassName: nginx
+      hosts:
+        - dashboard.tineochristopher.com
+      path: /
+      pathType: Prefix
+      issuer: 
+        name: letsencrypt-staging
+        scope: cluster
+      tls:
+        enabled: true
+        secretName: dashboard-tls
+        
+      annotations:
+        # TLS/SSL annotations
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        
+        # External DNS
+        external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
+        external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
-      # oauth2-proxy annotations
-      # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
-      # nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
+        # oauth2-proxy annotations
+        # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
+        # nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
 
 # oauth2-proxy:
 #   existingSecret: oauth2-proxy-client-config
