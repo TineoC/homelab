@@ -1,0 +1,30 @@
+kubernetes-dashboard:
+  fullnameOverride: dashboard
+  ingress:
+    enabled: false
+    ingressClassName: nginx
+    hosts:
+      - host: dashboard.tineochristopher.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: dashboard-tls
+        hosts:
+          - dashboard.tineochristopher.com
+    annotations:
+      nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
+      nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+# oauth2-proxy:
+#   existingSecret: oauth2-proxy-client-config
+#   httpScheme: https
+#   extraArgs:
+#     provider: "keycloak"
+#     login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
+#     redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
+#     profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
+#     validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
+#     allowed-groups:
+#       - cluster-admins
