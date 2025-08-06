@@ -2,7 +2,7 @@ kubernetes-dashboard:
   fullnameOverride: dashboard
   ingress:
     enabled: false
-    ingressClassName: nginx
+    ingressClassName: true
     hosts:
       - host: dashboard.tineochristopher.com
         paths:
@@ -13,9 +13,19 @@ kubernetes-dashboard:
         hosts:
           - dashboard.tineochristopher.com
     annotations:
-      nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
-      nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
+      # TLS/SSL annotations
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+      
+      # Cert Manager annotations
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      
+      # External DNS
+      external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
+      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+
+      # oauth2-proxy annotations
+      # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
+      # nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
 
 # oauth2-proxy:
 #   existingSecret: oauth2-proxy-client-config
@@ -28,3 +38,9 @@ kubernetes-dashboard:
 #     validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
 #     allowed-groups:
 #       - cluster-admins
+#     cookie-secure: true
+#     cookie-samesite: "lax"
+#     cookie-domain: "tineochristopher.com"
+#     set-authorization-header: true
+#     pass-authorization-header: true
+#     pass-user-headers: true
