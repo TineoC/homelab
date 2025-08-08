@@ -31,16 +31,16 @@ oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
-    provider: "oidc"
+    provider: oidc
     upstream: "static://200"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
     oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
     allowed-group: cluster-admins
     scope: openid email profile
     email-domain: "*"
+    cookie-domain: ".tineochristopher.com"
     cookie-secure: true
-    cookie-domain: "tineochristopher.com"
-    cookie-samesite: "lax"
+    cookie-samesite: lax
     set-authorization-header: true
   ingress:
     enabled: true
