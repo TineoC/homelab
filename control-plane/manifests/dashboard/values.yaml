@@ -46,7 +46,6 @@ oauth2-proxy:
     cookie-secure: true
     cookie-samesite: lax
     set-authorization-header: true
-    v: "4"  # Enable debug logging
     standard-logging: true
     auth-logging: true
     request-logging: true
