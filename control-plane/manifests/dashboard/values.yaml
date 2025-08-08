@@ -33,7 +33,7 @@ oauth2-proxy:
     provider: "oidc"
     upstream: "static://200"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
-    oidc-issuer-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes"
+    oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
     allowed-group: cluster-admins
     scope: openid email profile
     email-domain: "*"
