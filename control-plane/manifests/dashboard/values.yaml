@@ -21,23 +21,23 @@ kubernetes-dashboard:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
-        # nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
+        # nginx.ingress.kubernetes.io/auth-url: "https://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
         # nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
 
-# oauth2-proxy:
-#   existingSecret: oauth2-proxy-client-config
-#   httpScheme: https
-#   extraArgs:
-#     provider: "keycloak"
-#     login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
-#     redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
-#     profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
-#     validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
-#     allowed-groups:
-#       - cluster-admins
-#     cookie-secure: true
-#     cookie-samesite: "lax"
-#     cookie-domain: "tineochristopher.com"
-#     set-authorization-header: true
-#     pass-authorization-header: true
-#     pass-user-headers: true
+oauth2-proxy:
+  existingSecret: oauth2-proxy-client-config
+  httpScheme: https
+  extraArgs:
+    provider: "keycloak"
+    login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
+    redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
+    profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
+    validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
+    allowed-groups:
+      - cluster-admins
+    cookie-secure: true
+    cookie-samesite: "lax"
+    cookie-domain: "tineochristopher.com"
+    set-authorization-header: true
+    pass-authorization-header: true
+    pass-user-headers: true
