@@ -31,8 +31,7 @@ oauth2-proxy:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
     provider: oidc
-    upstreams: 
-    - "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
+    upstream: "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
     oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
     allowed-group: cluster-admins
