@@ -23,8 +23,8 @@ kubernetes-dashboard:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
-        nginx.ingress.kubernetes.io/auth-url: "https://dashboard.tineochristopher.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=/redirect/$http_host$request_uri"
+        nginx.ingress.kubernetes.io/auth-url: "http://dashboard.tineochristopher.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "http://dashboard.tineochristopher.com/oauth2/start?rd=/redirect/$http_host$request_uri"
 
 oauth2-proxy:
   config:
