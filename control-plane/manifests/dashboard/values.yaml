@@ -30,8 +30,8 @@ oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
-    provider: oidc
-    upstream: static://200
+    provider: "oidc"
+    upstream: "static://200"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
     oidc-issuer-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes"
     allowed-group: cluster-admins
