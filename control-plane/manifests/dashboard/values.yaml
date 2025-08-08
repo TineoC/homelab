@@ -16,18 +16,21 @@ kubernetes-dashboard:
       pathType: Prefix
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
         # External DNS
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
-        # nginx.ingress.kubernetes.io/auth-url: "https://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local:4180/oauth2/auth"
-        # nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$request_uri"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
 
 oauth2-proxy:
   existingSecret: oauth2-proxy-client-config
   extraArgs:
     provider: keycloak
+    upstream: static://200
     login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
     redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
     profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
@@ -36,7 +39,23 @@ oauth2-proxy:
     email-domain: "*"
     cookie-secure: true
     cookie-samesite: "lax"
-    cookie-domain: "tineochristopher.com"
+    cookie-domain: ".tineochristopher.com"
+    whitelist-domain: ".tineochristopher.com"
     set-authorization-header: true
     pass-authorization-header: true
     pass-user-headers: true
+  ingress:
+    enabled: true
+    className: nginx
+    path: /oauth2
+    pathType: Prefix
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "2000m"
+      nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
+      nginx.org/client-max-body-size: "2000m"
+      nginx.org/proxy-buffer-size: "32k"
+    tls:
+      - hosts:
+        - dashboard.tineochristopher.com
+        secretName: dashboard-kubernetes-dashboard-certs
