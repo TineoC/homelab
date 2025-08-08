@@ -38,6 +38,8 @@ oauth2-proxy:
     scope: openid email profile
     email-domain: "*"
     cookie-secure: true
+    cookie-domain: "tineochristopher.com"
+    cookie-samesite: "lax"
     set-authorization-header: true
   ingress:
     enabled: true
