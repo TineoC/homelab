@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: HEAD
-    path: control-plane/manifests/istio
+    path: control-plane/manifests/istio/overlays/dev
   syncPolicy:
     automated:
       prune: true
