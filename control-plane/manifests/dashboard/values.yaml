@@ -37,6 +37,7 @@ oauth2-proxy:
     profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
     validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
     allowed-group: cluster-admins
+    email-domain: "*"
     cookie-secure: true
     cookie-samesite: "lax"
     cookie-domain: "tineochristopher.com"
