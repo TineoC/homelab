@@ -23,9 +23,9 @@ kubernetes-dashboard:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
-        nginx.ingress.kubernetes.io/auth-url: "http://dashboard.tineochristopher.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "http://dashboard.tineochristopher.com/oauth2/start?rd=/redirect/$http_host$request_uri"
-
+        nginx.ingress.kubernetes.io/auth-response-headers: Authorization
+        nginx.ingress.kubernetes.io/auth-signin: https://$host/oauth2/start?rd=$escaped_request_uri
+        nginx.ingress.kubernetes.io/auth-url: https://$host/oauth2/auth
 oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
@@ -33,7 +33,7 @@ oauth2-proxy:
       provider = "oidc"
       oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
       email_domains = [ "*" ]
-      cookie_secure = false
+      cookie_secure = true
       upstreams = [ "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443" ]
       redirect_url = "https://dashboard.tineochristopher.com/oauth2/callback"
       scope = "openid email profile"
@@ -45,13 +45,17 @@ oauth2-proxy:
       cookie_name = "_oauth2_proxy"
       cookie_refresh = "2m"
       cookie_expire = "24h"
-      ssl_insecure_skip_verify = true
-      skip_provider_button = true
+      code_challenge_method = "S256"
+      reverse_proxy = true
   ingress:
     enabled: true
     className: nginx
     path: /oauth2
     pathType: Prefix
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-staging"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     tls:
       - hosts:
         - dashboard.tineochristopher.com
