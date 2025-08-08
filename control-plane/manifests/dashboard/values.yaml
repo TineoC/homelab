@@ -24,27 +24,29 @@ kubernetes-dashboard:
 
         # oauth2-proxy annotations
         nginx.ingress.kubernetes.io/auth-url: "https://dashboard.tineochristopher.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=https%3A%2F%2F$host$request_uri"
+        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=/redirect/$http_host$request_uri"
 
 oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
-  extraArgs:
-    provider: oidc
-    upstream: "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
-    redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
-    oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
-    allowed-group: cluster-admins
-    scope: openid email profile
-    cookie-name: "_oauth2_proxy_dashboard"  # Unique cookie name
-    cookie-path: "/"
-    cookie-refresh: "1m"  # Reduce refresh frequency
-    email-domain: "*"
-    cookie-domain: ".tineochristopher.com"
-    cookie-secure: true
-    cookie-samesite: lax
-    set-authorization-header: true
-    pass-access-token: true
+    configFile: |
+      provider = "oidc"
+      oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
+      email_domains = [ "*" ]
+      cookie_secure = false
+      upstreams = [ "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443" ]
+      redirect_url = "https://dashboard.tineochristopher.com/oauth2/callback"
+      scope = "openid email profile"
+      pass_access_token = true
+      pass_authorization_header = true
+      pass_user_headers = true
+      set_authorization_header = true
+      cookie_domains = ".tineochristopher.com"
+      cookie_name = "_oauth2_proxy"
+      cookie_refresh = "2m"
+      cookie_expire = "24h"
+      ssl_insecure_skip_verify = true
+      skip_provider_button = true
   ingress:
     enabled: true
     className: nginx
