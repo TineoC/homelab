@@ -26,6 +26,10 @@ kubernetes-dashboard:
         nginx.ingress.kubernetes.io/auth-url: "https://dashboard.tineochristopher.com/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$escaped_request_uri"
         nginx.ingress.kubernetes.io/auth-response-headers: "authorization"
+        nginx.ingress.kubernetes.io/configuration-snippet: |
+          if ($request_uri = "/favicon.ico") {
+            return 204;
+          }
 
 oauth2-proxy:
   config:
@@ -42,6 +46,10 @@ oauth2-proxy:
     cookie-secure: true
     cookie-samesite: lax
     set-authorization-header: true
+    v: "4"  # Enable debug logging
+    standard-logging: true
+    auth-logging: true
+    request-logging: true
   ingress:
     enabled: true
     className: nginx
