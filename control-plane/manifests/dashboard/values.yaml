@@ -27,6 +27,9 @@ kubernetes-dashboard:
 oauth2-proxy:
   existingSecret: oauth2-proxy-client-config
   httpScheme: https
+  service:
+    portNumber: 443
+    appProtocol: https
   extraArgs:
     provider: "keycloak"
     login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
