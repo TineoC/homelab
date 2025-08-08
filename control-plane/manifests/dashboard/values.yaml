@@ -16,6 +16,7 @@ kubernetes-dashboard:
       pathType: Prefix
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
         # External DNS
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
@@ -27,8 +28,10 @@ kubernetes-dashboard:
         nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$escaped_request_uri"
         nginx.ingress.kubernetes.io/auth-response-headers: "authorization"
         nginx.ingress.kubernetes.io/configuration-snippet: |
-          if ($request_uri = "/favicon.ico") {
-            return 204;
+          location ~* \.(ico|css|js|gif|jpe?g|png|svg|woff2?)$ {
+            auth_request off;
+            expires 1y;
+            add_header Cache-Control "public, immutable";
           }
 
 oauth2-proxy:
@@ -36,19 +39,19 @@ oauth2-proxy:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
     provider: oidc
-    upstream: "https://dashboard.tineochristopher.com"
+    upstream: "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
     oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
     allowed-group: cluster-admins
     scope: openid email profile
+    cookie-name: "_oauth2_proxy_dashboard"  # Unique cookie name
+    cookie-path: "/"
+    cookie-refresh: "1m"  # Reduce refresh frequency
     email-domain: "*"
     cookie-domain: ".tineochristopher.com"
     cookie-secure: true
     cookie-samesite: lax
     set-authorization-header: true
-    standard-logging: true
-    auth-logging: true
-    request-logging: true
   ingress:
     enabled: true
     className: nginx
