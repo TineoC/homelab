@@ -30,22 +30,15 @@ oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
-    provider: keycloak
+    provider: oidc
     upstream: static://200
-    login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
-    redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
-    profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
-    validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
+    redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
+    oidc-issuer-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes"
     allowed-group: cluster-admins
     scope: openid email profile
     email-domain: "*"
     cookie-secure: true
-    cookie-samesite: "lax"
-    cookie-domain: ".tineochristopher.com"
-    whitelist-domain: ".tineochristopher.com"
     set-authorization-header: true
-    pass-authorization-header: true
-    pass-user-headers: true
   ingress:
     enabled: true
     className: nginx
