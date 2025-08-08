@@ -23,8 +23,8 @@ kubernetes-dashboard:
 
         # oauth2-proxy annotations
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
-        nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
+        nginx.ingress.kubernetes.io/auth-url: "https://dashboard.tineochristopher.com/oauth2/auth"
+        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$escaped_request_uri"
         nginx.ingress.kubernetes.io/auth-response-headers: "authorization"
 
 oauth2-proxy:
