@@ -52,6 +52,10 @@ oauth2-proxy:
     cookie-secure: true
     cookie-samesite: lax
     set-authorization-header: true
+    code-challenge-method: S256  # Enable PKCE
+    skip-oidc-discovery: false
+    insecure-oidc-allow-unverified-email: false
+    pass-access-token: true
   ingress:
     enabled: true
     className: nginx
