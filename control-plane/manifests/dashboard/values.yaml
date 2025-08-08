@@ -23,23 +23,16 @@ kubernetes-dashboard:
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
 
         # oauth2-proxy annotations
-        nginx.ingress.kubernetes.io/ssl-redirect: "true"
         nginx.ingress.kubernetes.io/auth-url: "https://dashboard.tineochristopher.com/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=$escaped_request_uri"
-        nginx.ingress.kubernetes.io/auth-response-headers: "authorization"
-        nginx.ingress.kubernetes.io/configuration-snippet: |
-          location ~* \.(ico|css|js|gif|jpe?g|png|svg|woff2?)$ {
-            auth_request off;
-            expires 1y;
-            add_header Cache-Control "public, immutable";
-          }
+        nginx.ingress.kubernetes.io/auth-signin: "https://dashboard.tineochristopher.com/oauth2/start?rd=https%3A%2F%2F$host$request_uri"
 
 oauth2-proxy:
   config:
     existingSecret: dashboard-oauth2-proxy
   extraArgs:
     provider: oidc
-    upstream: "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
+    upstreams: 
+    - "https://dashboard-kong-proxy.kubernetes-dashboard.svc.cluster.local:443"
     redirect-url: "https://dashboard.tineochristopher.com/oauth2/callback"
     oidc-issuer-url: "https://keycloak.tineochristopher.com/realms/kubernetes"
     allowed-group: cluster-admins
@@ -52,9 +45,6 @@ oauth2-proxy:
     cookie-secure: true
     cookie-samesite: lax
     set-authorization-header: true
-    code-challenge-method: S256  # Enable PKCE
-    skip-oidc-discovery: false
-    insecure-oidc-allow-unverified-email: false
     pass-access-token: true
   ingress:
     enabled: true
