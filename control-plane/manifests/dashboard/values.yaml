@@ -31,13 +31,12 @@ oauth2-proxy:
     portNumber: 443
     appProtocol: https
   extraArgs:
-    provider: "keycloak"
+    provider: keycloak
     login-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/auth"
     redeem-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/token"
     profile-url:  "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
     validate-url: "https://keycloak.tineochristopher.com/auth/realms/kubernetes/protocol/openid-connect/userinfo"
-    allowed-groups:
-      - cluster-admins
+    allowed-group: cluster-admins
     cookie-secure: true
     cookie-samesite: "lax"
     cookie-domain: "tineochristopher.com"
