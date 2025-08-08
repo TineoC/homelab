@@ -3,7 +3,7 @@
   become: true
   vars:
     keycloak_domain: https://keycloak.tineochristopher.com/realms/kubernetes
-    oidc_client_id: "k3s-cluster"
+    oidc_client_id: "kubernetes"
     oidc_username_claim: "preferred_username"
     oidc_groups_claim: "groups"
   tasks:
