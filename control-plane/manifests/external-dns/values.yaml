@@ -6,8 +6,8 @@ external-dns:
   - name: CF_API_TOKEN
     valueFrom:
       secretKeyRef:
-        name: cloudflare-api-key
-        key: apiKey
+        name: cloudflare-api-token
+        key: apiToken
   policy: upsert-only
   domainFilters:
     - tineochristopher.com
