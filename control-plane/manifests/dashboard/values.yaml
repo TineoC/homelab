@@ -27,7 +27,8 @@ kubernetes-dashboard:
         nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
 
 oauth2-proxy:
-  existingSecret: oauth2-proxy-client-config
+  config:
+    existingSecret: oauth2-proxy-client-config
   extraArgs:
     provider: keycloak
     upstream: static://200
