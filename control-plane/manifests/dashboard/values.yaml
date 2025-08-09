@@ -24,7 +24,7 @@ kubernetes-dashboard:
 
         # Auth with oauth2-proxy
         nginx.ingress.kubernetes.io/auth-url: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: http://oauth2-proxy.tineochristopher.com/oauth2/start?rd=$escaped_request_uri
+        nginx.ingress.kubernetes.io/auth-signin: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/start?rd=$escaped_request_uri"
         nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-User,X-Auth-Request-Email
 
 
@@ -54,5 +54,13 @@ oauth2-proxy:
       email_domains = ["*"]
       cookie_secure = "false"
       redirect_url = "http://oauth2-proxy.tineochristopher.com/oauth2/callback"
-      upstreams = [ "file:///dev/null" ]
+      upstreams = [ "static://202" ]
+
+      # Cookie settings
       set_xauthrequest = true
+      pass_access_token = true
+      pass_authorization_header = true
+      skip_provider_button = true
+      cookie_name = "_oauth2_proxy"
+      cookie_expire = "4h"
+      cookie_refresh = "1h"
