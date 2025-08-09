@@ -21,3 +21,41 @@ kubernetes-dashboard:
         # External DNS
         external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
         external-dns.alpha.kubernetes.io/target: 96.248.109.98
+
+        # Auth with oauth2-proxy
+        nginx.ingress.kubernetes.io/auth-signin: http://oauth2-proxy.tineochristopher.com/oauth2/start
+        nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth
+        nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-User,X-Auth-Request-Email
+
+
+oauth2-proxy:
+  nameOverride: oauth2-proxy
+  ingress:
+    enabled: true
+    className: nginx
+    path: /oauth2
+    pathType: Prefix
+    hosts:
+    - oauth2-proxy.tineochristopher.com
+    # tls:
+    # - host: oauth2-proxy.tineochristopher.com
+    #   secretName: oauth2-proxy-tls
+    annotations:
+      # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      external-dns.alpha.kubernetes.io/hostname: oauth2-proxy.tineochristopher.com
+      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+  config:
+    existingSecret: oauth2-proxy-config
+  config:
+    configFile: |
+      provider="oidc"
+      oidc_issuer_url="https://keycloak.tineochristopher.com/realms/kubernetes"
+      cookie_domains=".tineochristopher.com"
+      whitelist_domains=[".tineochristopher.com"]
+      email_domains=["*"]
+      cookie_secure="false"
+      redirect_url="http://oauth2-proxy.tineochristopher.com/oauth2/callback"
+      upstreams = [ "file:///dev/null" ]
+      set_xauthrequest = true
+      # reverse_proxy = true
+      # cookie_secure = true
