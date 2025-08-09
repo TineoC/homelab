@@ -68,6 +68,13 @@ oauth2-proxy:
       upstreams = [ "static://202" ]
       reverse_proxy = true
 
+      # Authentication headers
+      set_xauthrequest = true 
+      pass_access_token = true 
+      pass_authorization_header = true 
+      pass_user_headers = true 
+      set_authorization_header = true
+
       # Cookie settings
       set_xauthrequest = true
       skip_provider_button = true
