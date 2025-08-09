@@ -1,37 +1,11 @@
 kubernetes-dashboard:
-  protocolHttp: true
+  protocolHttp: false
   kong:
     enabled: false
   app:  
     ingress:
-      enabled: true
-      issuer: 
-        name: letsencrypt-staging
-        scope: cluster
-      tls:
-        enabled: true
-      hosts:
-        - dashboard.tineochristopher.com
-      path: /
-      pathType: Prefix
-      ingressClassName: nginx
-      pathType: Prefix
-      annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-        nginx.ingress.kubernetes.io/ssl-redirect: "true"
-
-        # External DNS
-        external-dns.alpha.kubernetes.io/hostname: dashboard.tineochristopher.com
-        external-dns.alpha.kubernetes.io/target: 96.248.109.98
-
-        # Auth with oauth2-proxy
-        nginx.ingress.kubernetes.io/auth-url: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "https://auth.tineochristopher.com/oauth2/start?rd=$scheme://$http_host$request_uri"
-        nginx.ingress.kubernetes.io/auth-response-headers: Authorization,X-Auth-Request-User,X-Auth-Request-Email
-        nginx.ingress.kubernetes.io/auth-snippet: |
-          auth_request_set $auth_header $upstream_http_authorization;
-          proxy_set_header Authorization $auth_header;
-
+      enabled: false
+        
 redis:
   architecture: standalone
   auth:
