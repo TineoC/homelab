@@ -25,16 +25,11 @@ kubernetes-dashboard:
         # Auth with oauth2-proxy
         nginx.ingress.kubernetes.io/auth-url: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth"
         nginx.ingress.kubernetes.io/auth-signin: "https://auth.tineochristopher.com/oauth2/start?rd=$scheme://$http_host$request_uri"
-        nginx.ingress.kubernetes.io/auth-response-headers: "X-Auth-Request-User,X-Auth-Request-Email,X-Auth-Request-Access-Token,X-Auth-Request-Groups,Authorization"
+        nginx.ingress.kubernetes.io/auth-response-headers: Authorization,X-Auth-Request-User,X-Auth-Request-Email
         nginx.ingress.kubernetes.io/auth-snippet: |
-          auth_request_set $user $upstream_http_x_auth_request_user;
-          auth_request_set $email $upstream_http_x_auth_request_email;
-          auth_request_set $access_token $upstream_http_x_auth_request_access_token;
-          auth_request_set $groups $upstream_http_x_auth_request_groups;
-          proxy_set_header X-Remote-User $user;
-          proxy_set_header X-Remote-Email $email;
-          proxy_set_header X-Remote-Groups $groups;
-          proxy_set_header Authorization "Bearer $access_token";
+          auth_request_set $auth_header $upstream_http_authorization;
+          proxy_set_header Authorization $auth_header;
+
 redis:
   architecture: standalone
   auth:
@@ -74,6 +69,7 @@ oauth2-proxy:
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       upstreams = [ "static://202" ]
       reverse_proxy = true
+      scope = "openid email profile"
 
       # Authentication headers
       set_xauthrequest = true 
