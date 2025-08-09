@@ -46,7 +46,6 @@ oauth2-proxy:
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
   config:
     existingSecret: oauth2-proxy-config
-  config:
     configFile: |
       provider="oidc"
       oidc_issuer_url="https://keycloak.tineochristopher.com/realms/kubernetes"
