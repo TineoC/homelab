@@ -5,5 +5,8 @@ dependencies:
 - name: kubernetes-dashboard
   repository: https://kubernetes.github.io/dashboard
   version: 7.13.0
-digest: sha256:7b93ab81514d550cd078d818ea7f99eb2e8335d09ab60846bfedfbc918b34894
-generated: "2025-08-08T18:38:14.663226303-04:00"
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 22.0.1
+digest: sha256:87e271769728941ef083be4878b480b696837024732e03df44b3cbea7da79d04
+generated: "2025-08-09T15:45:51.903091527-04:00"
