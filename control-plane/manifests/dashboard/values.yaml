@@ -53,6 +53,6 @@ oauth2-proxy:
       whitelist_domains = [".tineochristopher.com"]
       email_domains = ["*"]
       cookie_secure = "false"
-      redirect_url = "https://oauth2-proxy.tineochristopher.com/oauth2/callback"
+      redirect_url = "http://oauth2-proxy.tineochristopher.com/oauth2/callback"
       upstreams = [ "file:///dev/null" ]
       set_xauthrequest = true
