@@ -24,7 +24,7 @@ kubernetes-dashboard:
 
         # Auth with oauth2-proxy
         nginx.ingress.kubernetes.io/auth-url: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/auth"
-        nginx.ingress.kubernetes.io/auth-signin: "http://dashboard-oauth2-proxy.kubernetes-dashboard.svc.cluster.local/oauth2/start?rd=$escaped_request_uri"
+        nginx.ingress.kubernetes.io/auth-signin: "http://auth.tineochristopher.com/oauth2/start?rd=$escaped_request_uri"
         nginx.ingress.kubernetes.io/auth-response-headers: X-Auth-Request-User,X-Auth-Request-Email
 
 
@@ -36,13 +36,13 @@ oauth2-proxy:
     path: /oauth2
     pathType: Prefix
     hosts:
-    - oauth2-proxy.tineochristopher.com
+    - auth.tineochristopher.com
     # tls:
     # - host: oauth2-proxy.tineochristopher.com
     #   secretName: oauth2-proxy-tls
     annotations:
       # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      external-dns.alpha.kubernetes.io/hostname: oauth2-proxy.tineochristopher.com
+      external-dns.alpha.kubernetes.io/hostname: auth.tineochristopher.com
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
   config:
     existingSecret: oauth2-proxy-config
@@ -53,7 +53,7 @@ oauth2-proxy:
       whitelist_domains = [".tineochristopher.com"]
       email_domains = ["*"]
       cookie_secure = "false"
-      redirect_url = "http://oauth2-proxy.tineochristopher.com/oauth2/callback"
+      redirect_url = "http://auth.tineochristopher.com/oauth2/callback"
       upstreams = [ "static://202" ]
 
       # Cookie settings
