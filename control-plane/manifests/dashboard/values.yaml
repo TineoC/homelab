@@ -65,7 +65,6 @@ oauth2-proxy:
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       upstreams = [ "static://202" ]
       reverse_proxy = true
-      skip_provider_button = true
 
       # Authentication headers
       set_xauthrequest = true 
@@ -76,7 +75,7 @@ oauth2-proxy:
 
       # Cookie settings
       cookie_domains = ".tineochristopher.com"
-      cookie_secure = "false"
+      cookie_secure = "true"
       cookie_name = "_oauth2_proxy"
       cookie_expire = "4h"
       cookie_refresh = "1h"
