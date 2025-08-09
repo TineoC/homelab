@@ -76,7 +76,6 @@ oauth2-proxy:
       set_authorization_header = true
 
       # Cookie settings
-      set_xauthrequest = true
       skip_provider_button = true
       cookie_name = "_oauth2_proxy"
       cookie_expire = "4h"
