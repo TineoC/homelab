@@ -41,7 +41,9 @@ oauth2-proxy:
     # - host: oauth2-proxy.tineochristopher.com
     #   secretName: oauth2-proxy-tls
     annotations:
-      # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      
       external-dns.alpha.kubernetes.io/hostname: auth.tineochristopher.com
       external-dns.alpha.kubernetes.io/target: 96.248.109.98
   config:
@@ -53,8 +55,9 @@ oauth2-proxy:
       whitelist_domains = [".tineochristopher.com"]
       email_domains = ["*"]
       cookie_secure = "false"
-      redirect_url = "http://auth.tineochristopher.com/oauth2/callback"
+      redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       upstreams = [ "static://202" ]
+      reverse_proxy = true
 
       # Cookie settings
       set_xauthrequest = true
