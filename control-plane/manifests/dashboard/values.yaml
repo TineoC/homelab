@@ -1,5 +1,7 @@
 kubernetes-dashboard:
   protocolHttp: false
+  kong:
+    enabled: false
   app:  
     ingress:
       enabled: true
