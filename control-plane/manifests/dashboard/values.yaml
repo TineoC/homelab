@@ -41,6 +41,7 @@ oauth2-proxy:
     # - host: oauth2-proxy.tineochristopher.com
     #   secretName: oauth2-proxy-tls
     annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
       
