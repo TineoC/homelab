@@ -60,13 +60,12 @@ oauth2-proxy:
     configFile: |
       provider = "oidc"
       oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
-      cookie_domains = ".tineochristopher.com"
       whitelist_domains = [".tineochristopher.com"]
       email_domains = ["*"]
-      cookie_secure = "false"
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       upstreams = [ "static://202" ]
       reverse_proxy = true
+      skip_provider_button = true
 
       # Authentication headers
       set_xauthrequest = true 
@@ -76,7 +75,8 @@ oauth2-proxy:
       set_authorization_header = true
 
       # Cookie settings
-      skip_provider_button = true
+      cookie_domains = ".tineochristopher.com"
+      cookie_secure = "false"
       cookie_name = "_oauth2_proxy"
       cookie_expire = "4h"
       cookie_refresh = "1h"
