@@ -1,5 +1,5 @@
 kubernetes-dashboard:
-  protocolHttp: false
+  protocolHttp: true
   kong:
     enabled: false
   app:  
@@ -17,7 +17,7 @@ kubernetes-dashboard:
       ingressClassName: nginx
       pathType: Prefix
       annotations:
-        nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
         nginx.ingress.kubernetes.io/ssl-redirect: "true"
 
         # External DNS
