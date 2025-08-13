@@ -2,7 +2,6 @@ kubernetes-dashboard:
   protocolHttp: false
   annotations:
     konghq.com/plugins: add-auth-headers
-    konghq.com/override: dashboard-kong-config
   app:  
     ingress:
       enabled: true
