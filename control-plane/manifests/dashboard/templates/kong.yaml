@@ -1,0 +1,27 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: add-auth-headers
+config:
+  add:
+    headers:
+    - "Authorization:$(headers.authorization)"
+    - "X-Remote-User:$(headers.x-remote-user)"
+    - "X-Remote-Email:$(headers.x-remote-email)"
+    - "X-Remote-Groups:$(headers.x-remote-groups)"
+  remove:
+    headers: []
+plugin: request-transformer
+---
+apiVersion: configuration.konghq.com/v1
+kind: KongIngress
+metadata:
+  name: dashboard-kong-config
+upstream:
+  algorithm: round-robin
+proxy:
+  preserve_host: true
+  pass_host: preserve
+route:
+  preserve_host: true
+  strip_path: false
