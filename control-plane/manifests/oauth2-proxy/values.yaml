@@ -45,7 +45,7 @@ oauth2-proxy:
 
       # Redis session store
       session_store_type = "redis"
-      redis_connection_url = "redis://dashboard-redis-master.oauth2-proxy.svc.cluster.local:6379"
+      redis_connection_url = "redis://oauth2-proxy-redis-master.oauth2-proxy.svc.cluster.local:6379"
       redis_password = "password"
 
 redis:
