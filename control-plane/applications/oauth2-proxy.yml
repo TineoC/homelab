@@ -7,11 +7,11 @@ spec:
   project: default
   destination:
     server: https://kubernetes.default.svc
-    namespace: kubernetes-dashboard
+    namespace: oauth2-proxy
   source:
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: main
-    path: control-plane/manifests/dashboard
+    path: control-plane/manifests/oauth2-proxy
     helm:
       valueFiles:
         - values.yaml

@@ -1,0 +1,59 @@
+oauth2-proxy:
+  nameOverride: oauth2-proxy
+  ingress:
+    enabled: true
+    className: nginx
+    path: /oauth2
+    pathType: Prefix
+    hosts:
+    - auth.tineochristopher.com
+    tls:
+    - host: oauth2-proxy.tineochristopher.com
+      secretName: oauth2-proxy-tls
+    annotations:
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      
+      external-dns.alpha.kubernetes.io/hostname: auth.tineochristopher.com
+      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+  config:
+    existingSecret: oauth2-proxy-config
+    configFile: |
+      provider = "oidc"
+      oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
+      whitelist_domains = [".tineochristopher.com"]
+      email_domains = ["*"]
+      redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
+      upstreams = [ "static://202" ]
+      reverse_proxy = true
+
+      # Authentication headers
+      set_xauthrequest = true 
+      pass_access_token = true 
+      pass_authorization_header = true 
+      pass_user_headers = true 
+      set_authorization_header = true
+
+      # Cookie settings
+      cookie_domains = ".tineochristopher.com"
+      cookie_secure = "true"
+      cookie_name = "_oauth2_proxy"
+      cookie_expire = "4h"
+      cookie_refresh = "1h"
+
+      # Redis session store
+      session_store_type = "redis"
+      redis_connection_url = "redis://dashboard-redis-master.oauth2-proxy.svc.cluster.local:6379"
+      redis_password = "password"
+
+redis:
+  architecture: standalone
+  auth:
+    enabled: true
+    password: password
+  master:
+    persistence:
+      enabled: true
+      size: 1Gi
