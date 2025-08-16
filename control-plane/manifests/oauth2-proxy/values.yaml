@@ -28,7 +28,6 @@ oauth2-proxy:
       email_domains = ["*"]
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       reverse_proxy = false
-      # upstreams = [ "static://202" ]
 
       # Authentication headers
       set_xauthrequest = true 
