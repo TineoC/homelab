@@ -30,11 +30,7 @@ oauth2-proxy:
       reverse_proxy = false
       upstreams = ["static://202"]
 
-      # Authentication headers
-      set_xauthrequest = true 
-      pass_access_token = true 
-      pass_authorization_header = true 
-      pass_user_headers = true 
+      set_xauthrequest = true
       set_authorization_header = true
 
       # Cookie settings
