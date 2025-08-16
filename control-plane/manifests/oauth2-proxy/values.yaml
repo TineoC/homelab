@@ -8,7 +8,7 @@ oauth2-proxy:
     hosts:
     - auth.tineochristopher.com
     tls:
-    - host: oauth2-proxy.tineochristopher.com
+    - hosts: auth.tineochristopher.com
       secretName: oauth2-proxy-tls
     annotations:
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
