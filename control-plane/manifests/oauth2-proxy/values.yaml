@@ -22,23 +22,15 @@ oauth2-proxy:
   config:
     existingSecret: oauth2-proxy-config
     configFile: |
-      provider = "oidc"
+      provider = "keycloak-oidc"
       oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
       whitelist_domains = [".tineochristopher.com", "web.tineochristopher.com"]
       email_domains = ["*"]
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       reverse_proxy = false
       upstreams = ["static://202"]
-
-      set_xauthrequest = true
-      set_authorization_header = true
-
-      # Cookie settings
-      cookie_domains = ".tineochristopher.com"
-      cookie_secure = "true"
-      cookie_name = "_oauth2_proxy"
-      cookie_expire = "4h"
-      cookie_refresh = "1h"
+      allowed_groups = ["cluster-admins"]
+      code_challenge_method = "S256"
 
       # Redis session store
       session_store_type = "redis"
