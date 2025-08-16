@@ -16,16 +16,40 @@ data:
     </head>
     <body>
         <div class="header">
-            <h1>🔒 Protected Application</h1>
+            <h1>Protected Application</h1>
             <p>You are successfully authenticated!</p>
         </div>
         <div class="content">
             <h2>Authentication Headers:</h2>
-            <p>This app is protected by oauth2-proxy. Check your browser's developer tools to see the authentication headers.</p>
+            <div id="headers"></div>
             <p><strong>Current time:</strong> <span id="time"></span></p>
         </div>
         <script>
             document.getElementById('time').textContent = new Date().toLocaleString();
+            
+            // Display request headers
+            fetch(window.location.href)
+                .then(response => {
+                    const headersDiv = document.getElementById('headers');
+                    headersDiv.innerHTML = '<h3>Request Headers:</h3>';
+                    
+                    // Show common auth headers that should be present
+                    const authHeaders = [
+                        'X-Auth-Request-User',
+                        'X-Auth-Request-Email', 
+                        'X-Auth-Request-Access-Token'
+                    ];
+                    
+                    authHeaders.forEach(header => {
+                        const value = response.headers.get(header) || 'Not available in response headers';
+                        headersDiv.innerHTML += `<p><strong>${header}:</strong> ${value}</p>`;
+                    });
+                    
+                    headersDiv.innerHTML += '<p><em>Note: Auth headers are passed to the backend but may not be visible in response headers. Check Network tab in browser dev tools for request headers.</em></p>';
+                })
+                .catch(err => {
+                    document.getElementById('headers').innerHTML = '<p>Error loading headers: ' + err.message + '</p>';
+                });
         </script>
     </body>
     </html>
