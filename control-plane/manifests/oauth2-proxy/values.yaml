@@ -24,8 +24,7 @@ oauth2-proxy:
     configFile: |
       provider = "oidc"
       oidc_issuer_url = "https://keycloak.tineochristopher.com/realms/kubernetes"
-      whitelist_domains = [".tineochristopher.com"]
-      email_domains = ["*"]
+      whitelist_domains = [".tineochristopher.com", "web.tineochristopher.com"]
       redirect_url = "https://auth.tineochristopher.com/oauth2/callback"
       reverse_proxy = false
       upstreams = ["static://202"]
