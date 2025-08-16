@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-app-html
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Protected App</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            .header { background: #4CAF50; color: white; padding: 20px; }
+            .content { padding: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <h1>🔒 Protected Application</h1>
+            <p>You are successfully authenticated!</p>
+        </div>
+        <div class="content">
+            <h2>Authentication Headers:</h2>
+            <p>This app is protected by oauth2-proxy. Check your browser's developer tools to see the authentication headers.</p>
+            <p><strong>Current time:</strong> <span id="time"></span></p>
+        </div>
+        <script>
+            document.getElementById('time').textContent = new Date().toLocaleString();
+        </script>
+    </body>
+    </html>

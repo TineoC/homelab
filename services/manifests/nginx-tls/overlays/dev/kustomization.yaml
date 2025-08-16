@@ -12,17 +12,8 @@ patches:
     version: v1
     kind: Ingress
     name: nginx
-  patch: |
-    - op: replace
-      path: /spec/rules/0/host
-      value: web.tineochristopher.com
-    - op: add
-      path: /metadata/annotations
-      value:
-        external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
-        external-dns.alpha.kubernetes.io/target: 96.248.109.98
-        cert-manager.io/cluster-issuer: letsencrypt-prod
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+  path: patch-ingress.yaml
+  
 labels:
 - pairs:
     env: dev
