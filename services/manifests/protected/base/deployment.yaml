@@ -2,18 +2,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: protected-web
+    app: web
   name: protected-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: protected-web
+      app: web
   strategy: {}
   template:
     metadata:
       labels:
-        app: protected-web
+        app: web
     spec:
       containers:
       - image: nginx:alpine
