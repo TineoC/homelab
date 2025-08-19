@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
+    external-dns.alpha.kubernetes.io/target: "96.248.109.98"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - web.tineochristopher.com
+    secretName: protected-web-tls
+  rules:
+  - host: web.tineochristopher.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: web
+            port:
+              name: http
+        path: /
+        pathType: Prefix
+status:
+  loadBalancer: {}

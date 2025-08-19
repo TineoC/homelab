@@ -1,18 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: k8s-dashboard
+  name: protected-site
   namespace: argocd
 spec:
   destination:
-    namespace: argocd
+    namespace: protected
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: ./services/manifest/k8s-dashboard/overlays/dev
+    path: ./services/manifest/protected/overlays/dev
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: HEAD
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
     automated:
       prune: true
       selfHeal: true

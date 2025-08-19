@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: protected-web
+  name: protected-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: protected-web
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: protected-web
+    spec:
+      containers:
+      - image: nginx:alpine
+        name: nginx
+        ports:
+        - containerPort: 80
