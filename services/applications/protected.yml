@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    path: ./services/manifest/protected/overlays/dev
+    path: ./services/manifests/protected/overlays/dev
     repoURL: https://github.com/TineoC/homelab.git
     targetRevision: HEAD
   syncPolicy:
