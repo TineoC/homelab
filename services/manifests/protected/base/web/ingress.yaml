@@ -6,16 +6,16 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
+    external-dns.alpha.kubernetes.io/hostname: __INGRESS_HOST__
     external-dns.alpha.kubernetes.io/target: "96.248.109.98"
 spec:
   ingressClassName: nginx
   tls:
   - hosts:
-    - web.tineochristopher.com
-    secretName: protected-web-tls
+    - __INGRESS_HOST__
+    secretName: __INGRESS_SECRET__
   rules:
-  - host: web.tineochristopher.com
+  - host: __INGRESS_HOST__
     http:
       paths:
       - backend:
