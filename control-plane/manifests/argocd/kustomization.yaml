@@ -11,20 +11,4 @@ patches:
 - target:
     kind: ConfigMap
     name: argocd-cm
-  patch: |-
-    - op: replace
-      path: /data/url
-      value: https://argocd.tineochristopher.com
-- target:
-    kind: ConfigMap
-    name: argocd-cm
-  patch: |-
-    - op: replace 
-      path: /data/oidc.config 
-      value: |
-        name: Keycloak
-        issuer: https://keycloak.tineochristopher.com/realms/kubernetes
-        clientID: argocd
-        clientSecret: $oidc.keycloak.clientSecret
-        requestedScopes: ["openid", "profile", "email", "groups"]
-      
+  path: argocd-cm.yml

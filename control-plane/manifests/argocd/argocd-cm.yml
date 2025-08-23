@@ -1,0 +1,13 @@
+apiVersion: v1
+data:
+  oidc.config: |-
+    name: Keycloak
+    issuer: https://keycloak.tineochristopher.com/realms/kubernetes
+    clientID: argocd
+    clientSecret: $oidc.keycloak.clientSecret
+    requestedScopes: ["openid", "profile", "email", "groups"]
+  url: https://argocd.tineochristopher.com
+kind: ConfigMap
+metadata:
+  name: argocd-cm
+  namespace: argocd
