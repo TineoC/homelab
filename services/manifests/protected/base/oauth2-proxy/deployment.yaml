@@ -50,7 +50,6 @@ spec:
         - containerPort: 4180
           protocol: TCP
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -67,7 +66,6 @@ spec:
   selector:
     app: oauth2-proxy
 ---
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -90,4 +88,3 @@ spec:
   - hosts:
     - __INGRESS_HOST__
     secretName: __INGRESS_SECRET__
----
