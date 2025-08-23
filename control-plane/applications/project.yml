@@ -4,7 +4,7 @@ metadata:
   name: control-plane
   namespace: argocd
 spec:
-  sourceRepos: ["https://github.com/TineoC/homelab.git"]
+  sourceRepos: ["*"]
   sourceNamespaces: ["*"]
   destinations:
     - namespace: "*"
