@@ -60,7 +60,7 @@ metadata:
 spec:
   ports:
   - name: http
-    port: 4180
+    port: 80
     protocol: TCP
     targetPort: 4180
   selector:
@@ -83,7 +83,7 @@ spec:
           service:
             name: oauth2-proxy
             port:
-              number: http
+              number: 80
   tls:
   - hosts:
     - __INGRESS_HOST__
