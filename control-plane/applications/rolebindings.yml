@@ -4,7 +4,7 @@ metadata:
   name: rolebindings
   namespace: argocd
 spec:
-  project: default
+  project: control-plane
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system

@@ -3,7 +3,7 @@ kind: Application
 metadata:
   name: cert-manager
 spec:
-  project: default
+  project: control-plane
   destination:
     namespace: cert-manager
     server: https://kubernetes.default.svc

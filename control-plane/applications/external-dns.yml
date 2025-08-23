@@ -7,7 +7,7 @@ spec:
   destination:
     namespace: external-dns
     server: https://kubernetes.default.svc
-  project: default
+  project: control-plane
   source:
     repoURL: https://github.com/tineoc/homelab
     path: control-plane/manifests/external-dns

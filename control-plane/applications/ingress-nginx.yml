@@ -3,7 +3,7 @@ kind: Application
 metadata:
   name: ingress-nginx
 spec:
-  project: default
+  project: control-plane
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
