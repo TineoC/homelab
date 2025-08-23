@@ -16,29 +16,29 @@ spec:
     spec:
       containers:
       - args:
-      - --provider=keycloak-oidc
-      - --redirect-url=https://web.tineochristopher.com/oauth2/callback
-      - --oidc-issuer-url=https://keycloak.tineochristopher.com/realms/kubernetes
-      - --oidc-groups-claim=groups
-      - --allowed-group=cluster-admins
-      - --code-challenge-method=S256
-      - --email-domain=*
-      - --upstream=http://web
-      - --http-address=0.0.0.0:4180
-      # Session and cookie settings
-      - --session-store-type=redis
-      - --redis-connection-url=redis://redis-service:6379
-      - --cookie-secure=true
-      - --cookie-httponly=true
-      - --cookie-samesite=lax
-      - --cookie-domain=.tineochristopher.com
-      - --cookie-expire=24h
-      - --cookie-refresh=1h
-      # Additional settings
-      - --skip-provider-button=true
-      - --pass-basic-auth=false
-      - --pass-access-token=true
-      - --pass-user-headers=true
+        - --provider=keycloak-oidc
+        - --redirect-url=https://web.tineochristopher.com/oauth2/callback
+        - --oidc-issuer-url=https://keycloak.tineochristopher.com/realms/kubernetes
+        - --oidc-groups-claim=groups
+        - --allowed-group=cluster-admins
+        - --code-challenge-method=S256
+        - --email-domain=*
+        - --upstream=http://web
+        - --http-address=0.0.0.0:4180
+        # Session and cookie settings
+        - --session-store-type=redis
+        - --redis-connection-url=redis://redis-service:6379
+        - --cookie-secure=true
+        - --cookie-httponly=true
+        - --cookie-samesite=lax
+        - --cookie-domain=.tineochristopher.com
+        - --cookie-expire=24h
+        - --cookie-refresh=1h
+        # Additional settings
+        - --skip-provider-button=true
+        - --pass-basic-auth=false
+        - --pass-access-token=true
+        - --pass-user-headers=true
         env:
         - name: OAUTH2_PROXY_CLIENT_ID
           valueFrom:
