@@ -1,0 +1,28 @@
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages:
+  - RequestReceived
+rules:
+  - level: RequestResponse
+    verbs: ["create", "update", "patch", "delete", "deletecollection"]
+    resources:
+      - group: ""
+        resources:
+          - "*"
+      - group: "apps"
+        resources: ["deployments", "statefulsets"]
+      - group: "networking.k8s.io"
+        resources: ["networkpolicies", "ingresses"]
+
+  - level: Metadata
+    verbs: ["get", "list", "watch", "delete"]
+    resources:
+      - group: ""
+        resources: ["secrets", "configmaps"]
+
+  - level: Request
+    users: ["system:serviceaccount:argocd:argocd-application-controller"]
+    verbs: ["create", "update", "patch", "delete"]
+    resources:
+      - group: "argoproj.io"
+        resources: ["applications"]

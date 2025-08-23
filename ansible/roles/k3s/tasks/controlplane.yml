@@ -1,3 +1,10 @@
+- copy:
+    src: ../../control-plane/manifests/auditing/policy.yml
+    dest: /var/lib/rancher/k3s/server/audit.yaml
+    owner: root
+    group: root
+    mode: "0644"
+
 - template:
     src: config-controlplane.yaml.j2
     dest: /etc/rancher/k3s/config.yaml
