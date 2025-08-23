@@ -3,11 +3,17 @@ kind: Ingress
 metadata:
   name: web
   annotations:
+    # Cert-manager annotations for TLS
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    # Ingress nginx annotations
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # External DNS annotations
     external-dns.alpha.kubernetes.io/hostname: __INGRESS_HOST__
-    external-dns.alpha.kubernetes.io/target: "96.248.109.98"
+    external-dns.alpha.kubernetes.io/target: "96.248.109.98" # Your public IP
+    # OAuth2 Proxy annotations
+    nginx.ingress.kubernetes.io/auth-url: "https://$host/oauth2/auth"
+    nginx.ingress.kubernetes.io/auth-signin: "https://$host/oauth2/start?rd=$escaped_request_uri"
 spec:
   ingressClassName: nginx
   tls:
