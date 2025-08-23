@@ -7,6 +7,8 @@ data:
     p, role:developer, applications, update, *, allow
     p, role:developer, applications, get, *, allow
     p, role:developer, applications, sync, *, allow
+    p, role:readonly, applications, get, *, allow
+  policy.default: role:readonly
   oidc.config: |-
     name: Keycloak
     issuer: https://keycloak.tineochristopher.com/realms/kubernetes
