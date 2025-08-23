@@ -23,7 +23,8 @@ spec:
         - --allowed-group=cluster-admins
         - --code-challenge-method=S256
         - --email-domain=*
-        - --upstream=http://web
+        # - --upstream=http://web
+        - --upstream=file:///dev/null
         - --http-address=0.0.0.0:4180
         # Session and cookie settings
         - --session-store-type=redis
