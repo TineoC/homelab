@@ -15,11 +15,9 @@ data:
     p, role:admin, gpgkeys, *, *, allow
 
     g, ArgoCDAdmins, role:admin
+    g, cluster-admins, role:admin
     g, developers, role:developer
 
-    p, role:developer, applications, create, *, allow
-    p, role:developer, applications, update, *, allow
-    p, role:developer, applications, get, *, allow
-    p, role:developer, applications, sync, *, allow
+    p, role:developer, applications, *, dev/*, allow
 
     p, role:readonly, applications, get, *, allow
