@@ -22,7 +22,6 @@ spec:
         - --oidc-groups-claim=groups
         - --allowed-group=cluster-admins
         - --code-challenge-method=S256
-        - --provider=github
         - --email-domain=*
         - --upstream=file:///dev/null
         - --http-address=0.0.0.0:4180
