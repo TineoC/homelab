@@ -9,6 +9,3 @@ spec:
   destinations:
     - namespace: "*"
       server: "https://kubernetes.default.svc"
-  namespaceResourceBlacklist:
-    - group: "*"
-      kind: "*"
