@@ -15,6 +15,9 @@ patches:
     - op: replace
       path: /data/url
       value: https://argocd.tineochristopher.com
+- target:
+    kind: ConfigMap
+    name: argocd-cm
   patch: |-
     - op: replace 
       path: /data/oidc.config 
