@@ -6,7 +6,9 @@ metadata:
 spec:
   sourceRepos: ["https://github.com/TineoC/homelab.git"]
   sourceNamespaces: ["*"]
-  destinations: ["https://kubernetes.default.svc,*"]
+  destinations:
+    - namespace: "*"
+      server: "https://kubernetes.default.svc"
   namespaceResourceBlacklist:
     - group: "*"
       kind: "*"
