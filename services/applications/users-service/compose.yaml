@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  users-service:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: users-service
+    ports:
+    - "8080:8080"
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: users
+      DB_PASSWORD: postgrespassword
+      DB_NAME: usersdb
+      PORT: 8080
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+
+  db:
+    image: postgres:15
+    container_name: users-db
+    restart: always
+    user: postgres
+    volumes:
+    - db-data:/var/lib/postgresql/data
+    - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql:ro # seed schema/data
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_DB: usersdb
+      POSTGRES_USER: users
+      POSTGRES_PASSWORD: postgrespassword
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U users -d usersdb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
