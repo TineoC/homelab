@@ -1,13 +1,13 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: vault
   namespace: argocd
 spec:
   project: control-plane
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: vault
   source:
     repoURL: https://helm.releases.hashicorp.com
     chart: vault
