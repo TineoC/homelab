@@ -3,14 +3,12 @@ kind: Application
 metadata:
   name: envoy-gateway
   namespace: argocd
-  annotations:
-    argocd.argoproj.io/sync-wave: "-1"
 spec:
   project: control-plane
   source:
     chart: gateway-helm
     repoURL: docker.io/envoyproxy
-    targetRevision: v0.0.0-latest
+    targetRevision: v1.5.2
   destination:
     namespace: envoy-gateway-system
     server: https://kubernetes.default.svc
