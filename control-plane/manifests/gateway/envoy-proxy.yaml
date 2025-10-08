@@ -2,7 +2,6 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
   name: eg-public
-  namespace: envoy-gateway-system
 spec:
   provider:
     type: Kubernetes
@@ -17,7 +16,6 @@ apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
   name: eg-private
-  namespace: envoy-gateway-system
 spec:
   provider:
     type: Kubernetes
