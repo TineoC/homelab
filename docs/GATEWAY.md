@@ -9,7 +9,7 @@
 > Note: We avoid Ingress entirely. All external traffic goes through this Gateway.
 
 ## Resources (high level)
-- Managed by Argo CD app `control-plane/applications/gateway.yml`.
+- Managed by Argo CD app `control-plane/applications/networking/gateway.yml`.
 - Helm chart lives at `control-plane/manifests/gateway`.
 - `Gateway` in `gateway-system`
 - `TLS` secret for the host (demo: self-signed)

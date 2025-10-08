@@ -1,16 +1,19 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-dns
+  name: cert-manager
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
 spec:
-  destination:
-    namespace: external-dns
-    server: https://kubernetes.default.svc
   project: control-plane
+  destination:
+    namespace: cert-manager
+    server: https://kubernetes.default.svc
   source:
-    repoURL: https://github.com/tineoc/homelab
-    path: control-plane/manifests/external-dns
+    repoURL: https://github.com/TineoC/homelab.git
+    targetRevision: HEAD
+    path: control-plane/manifests/cert-manager
     helm:
       valueFiles:
         - values.yaml

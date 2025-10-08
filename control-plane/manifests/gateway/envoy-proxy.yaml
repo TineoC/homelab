@@ -1,0 +1,29 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: eg-public
+  namespace: gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      service:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/address-pool: public-pool
+        externalTrafficPolicy: Local
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: eg-private
+  namespace: gateway-system
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      service:
+        type: LoadBalancer
+        annotations:
+          metallb.universe.tf/address-pool: private-pool
+        externalTrafficPolicy: Local

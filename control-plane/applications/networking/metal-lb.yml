@@ -1,17 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: metal-lb
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
 spec:
   project: control-plane
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd
+    namespace: metallb-system
   source:
-    repoURL: https://github.com/TineoC/homelab.git
-    targetRevision: HEAD
-    path: control-plane/manifests/argocd
+    repoURL: https://github.com/tineoc/homelab
+    path: control-plane/manifests/metal-lb
   syncPolicy:
     automated:
       prune: true

@@ -1,17 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: metal-lb
+  name: external-dns
+  namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "1"
+    argocd.argoproj.io/sync-wave: "-2"
 spec:
-  project: control-plane
   destination:
+    namespace: external-dns
     server: https://kubernetes.default.svc
-    namespace: metallb-system
+  project: control-plane
   source:
     repoURL: https://github.com/tineoc/homelab
-    path: control-plane/manifests/metal-lb
+    path: control-plane/manifests/external-dns
+    helm:
+      valueFiles:
+        - values.yaml
   syncPolicy:
     automated:
       prune: true
