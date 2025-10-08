@@ -13,7 +13,7 @@ spec:
     path: control-plane/manifests/gateway
   destination:
     server: https://kubernetes.default.svc
-    namespace: gateway-system
+    namespace: envoy-gateway-system
   syncPolicy:
     automated:
       prune: true

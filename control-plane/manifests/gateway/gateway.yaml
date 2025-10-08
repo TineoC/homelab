@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: public-gw
-  namespace: gateway-system
+  namespace: envoy-gateway-system
   labels:
     gateway.envoyproxy.io/owning-proxy: eg-public
     cert-manager.io/cluster-issuer: letsencrypt-staging
@@ -21,7 +21,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: private-gw
-  namespace: gateway-system
+  namespace: envoy-gateway-system
   labels:
     gateway.envoyproxy.io/owning-proxy: eg-private
     cert-manager.io/cluster-issuer: letsencrypt-staging
