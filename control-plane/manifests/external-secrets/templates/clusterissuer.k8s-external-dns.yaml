@@ -2,6 +2,7 @@ apiVersion: external-secrets.io/v1beta1
 kind: ClusterSecretStore
 metadata:
   name: k8s-external-dns
+  namespace: external-secrets
 spec:
   provider:
     kubernetes:
