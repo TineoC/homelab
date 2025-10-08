@@ -1,24 +1,7 @@
 oauth2-proxy:
   nameOverride: oauth2-proxy
   ingress:
-    enabled: true
-    className: nginx
-    path: /oauth2
-    pathType: Prefix
-    hosts:
-    - auth.tineochristopher.com
-    tls:
-    - hosts: 
-      - auth.tineochristopher.com
-      secretName: oauth2-proxy-tls
-    annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-      nginx.ingress.kubernetes.io/ssl-redirect: "true"
-      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
-      cert-manager.io/cluster-issuer: letsencrypt-staging
-      
-      external-dns.alpha.kubernetes.io/hostname: auth.tineochristopher.com
-      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+    enabled: false
   config:
     existingSecret: oauth2-proxy-config
     configFile: |

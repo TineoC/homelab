@@ -12,4 +12,4 @@ external-dns:
   domainFilters:
     - tineochristopher.com
   sources:
-    - ingress
+    - service

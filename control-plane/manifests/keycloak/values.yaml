@@ -14,12 +14,4 @@ keycloak:
   production: true
   proxy: edge
   ingress:
-    enabled: true
-    tls: true
-    ingressClassName: nginx
-    hostname: keycloak.tineochristopher.com
-    annotations:
-      nginx.ingress.kubernetes.io/backend-protocol: HTTP
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      external-dns.alpha.kubernetes.io/hostname: keycloak.tineochristopher.com
-      external-dns.alpha.kubernetes.io/target: 96.248.109.98
+    enabled: false

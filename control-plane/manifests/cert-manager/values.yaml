@@ -1,5 +1,4 @@
 global:
-  ingressClassName: &commonIngressClassName traefik
   email: &commonEmail christophertineo02@gmail.com
 
 cloudflare:
@@ -24,6 +23,3 @@ selfSignedIssuer:
 
 cert-manager:
   installCRDs: true
-  ingressShim:
-    defaultIssuerName: *stgClusterIssuerName
-    defaultIssuerKind: ClusterIssuer

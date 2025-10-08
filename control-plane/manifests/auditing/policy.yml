@@ -12,7 +12,7 @@ rules:
       - group: "apps"
         resources: ["deployments", "statefulsets"]
       - group: "networking.k8s.io"
-        resources: ["networkpolicies", "ingresses"]
+        resources: ["networkpolicies"]
 
   - level: Metadata
     verbs: ["get", "list", "watch", "delete"]

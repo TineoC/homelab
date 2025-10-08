@@ -107,31 +107,3 @@ spec:
     targetPort: 4180
   selector:
     app: oauth2-proxy
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: oauth2-proxy
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    external-dns.alpha.kubernetes.io/hostname: web.tineochristopher.com
-    external-dns.alpha.kubernetes.io/target: "96.248.109.98"
-spec:
-  ingressClassName: nginx
-  rules:
-  - host: __INGRESS_HOST__
-    http:
-      paths:
-      - path: /oauth2
-        pathType: Prefix
-        backend:
-          service:
-            name: oauth2-proxy
-            port:
-              number: 80
-  tls:
-  - hosts:
-    - __INGRESS_HOST__
-    secretName: __INGRESS_SECRET__
