@@ -8,8 +8,8 @@ metadata:
 spec:
   project: control-plane
   source:
-    repoURL: oci://docker.io/envoyproxy
     chart: gateway-helm
+    repoURL: docker.io/envoyproxy
     targetRevision: v0.0.0-latest
   destination:
     namespace: gateway-system
