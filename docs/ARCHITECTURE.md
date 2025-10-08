@@ -10,7 +10,7 @@
    - Maps LDAP groups → Keycloak roles/realm groups.
    - OIDC clients created per app: `app-a`, `app-b`, `app-c`, `app-d`.
 
-3) **Envoy Gateway + Gateway API** (`gateway-system` ns)
+3) **Envoy Gateway + Gateway API** (`envoy-gateway-system` ns)
    - One `Gateway` with listener `HTTPS : 443`.
    - `HTTPRoute`s per app attach auth filters:
      - **JWT** validation (issuer: Keycloak; audience: the client)

@@ -11,7 +11,7 @@
 ## Resources (high level)
 - Managed by Argo CD app `control-plane/applications/networking/gateway.yml`.
 - Helm chart lives at `control-plane/manifests/gateway`.
-- `Gateway` in `gateway-system`
+- `Gateway` in `envoy-gateway-system`
 - `TLS` secret for the host (demo: self-signed)
 - `HTTPRoute` for each `app-a..d` in `apps` ns, parentRef to the Gateway
 - `Authentication`/`Authorization` policies (Envoy Gateway CRDs) referenced by routes
