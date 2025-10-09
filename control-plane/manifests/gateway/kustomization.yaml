@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - public/
   - private/
-  - externalsecret.cloudflare-token.yaml
   - gatewayclass.yaml
