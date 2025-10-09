@@ -1,3 +1,4 @@
+# argocd-cm
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -8,6 +9,6 @@ data:
   oidc.config: |
     name: Keycloak
     issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
-    clientID: argocd
+    clientID: oauth2-proxy
     clientSecret: AvJgCRNbT99PBCKMg6j2LFSex2hE3m6v
     requestedScopes: ["openid", "profile", "email", "groups"]
