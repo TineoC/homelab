@@ -23,3 +23,6 @@ selfSignedIssuer:
 
 cert-manager:
   installCRDs: true
+  config:
+    kind: ControllerConfiguration
+    enableGatewayAPI: true
