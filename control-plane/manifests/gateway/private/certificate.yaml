@@ -1,12 +1,26 @@
+# For Keycloak: exact FQDN
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: private-gw-cert
+  name: idp-cert
   namespace: envoy-gateway-system
 spec:
-  secretName: private-gw-tls
+  secretName: idp-tls
   dnsNames:
-  - "*.internal.tineochristopher.com"
+  - keycloak.internal.tineochristopher.com
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: apps-cert
+  namespace: envoy-gateway-system
+spec:
+  secretName: apps-gw-tls
+  dnsNames:
+  - "*.apps.internal.tineochristopher.com"
+  issuerRef:
+    name: letsencrypt-prod
     kind: ClusterIssuer

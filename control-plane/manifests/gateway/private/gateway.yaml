@@ -14,10 +14,9 @@ spec:
       mode: Terminate
       certificateRefs:
       - kind: Secret
-        name: private-gw-tls
+        name: apps-gw-tls # <- NEW (matches *.apps.internal...)
     allowedRoutes:
-      namespaces:
-        from: All
+      namespaces: { from: All }
   - name: idp
     protocol: HTTPS
     port: 443
@@ -26,7 +25,6 @@ spec:
       mode: Terminate
       certificateRefs:
       - kind: Secret
-        name: private-gw-tls
+        name: idp-tls # <- NEW (matches keycloak.internal...)
     allowedRoutes:
-      namespaces:
-        from: All
+      namespaces: { from: All }
