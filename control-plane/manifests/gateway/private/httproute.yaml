@@ -79,7 +79,7 @@ spec:
           <meta charset="utf-8">
           <title>Private Website!</title>
           <link rel="icon" href="data:,">
-          <h1>Only (Cluster Operator) - OIDC callback OK)</h1>
+          <h1>Private Website (Cluster Operator) - OIDC callback OK</h1>
           HTML
         
           exec nginx -g 'daemon off;'
