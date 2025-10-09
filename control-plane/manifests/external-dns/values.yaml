@@ -12,4 +12,10 @@ external-dns:
   domainFilters:
     - tineochristopher.com
   sources:
-    - service
+  - gateway-httproute
+  - gateway-tlsroute
+  - gateway-tcproute
+  interval: 1m
+  policy: sync
+  txtOwnerId: "homelab"
+  registry: "txt"
