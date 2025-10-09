@@ -1,0 +1,87 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: login-anchor
+  namespace: envoy-gateway-system
+spec:
+  parentRefs:
+  - name: private-gw
+  hostnames: [ "login.internal.tineochristopher.com" ]
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: placeholder-svc
+      port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: placeholder-svc
+  namespace: envoy-gateway-system
+spec:
+  selector:
+    app: placeholder
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+  namespace: envoy-gateway-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: placeholder
+  template:
+    metadata:
+      labels:
+        app: placeholder
+    spec:
+      containers:
+      - name: placeholder
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        command: [ "/bin/sh", "-c" ]
+        args:
+        - |
+          echo '<h1>Login anchor placeholder - OIDC callback OK</h1>' > /usr/share/nginx/html/index.html;
+          exec nginx -g 'daemon off;'
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: gw-oidc-keycloak
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: private-gw
+    namespace: envoy-gateway-system
+  oidc:
+    # --- Keycloak OIDC provider details ---
+    provider:
+      # Issuer is your realm URL (MUST end up matching the provider’s .well-known config)
+      issuer: "https://keycloak.internal.tineochristopher.com/realms/kubernetes"
+      # These two are required when not using a public provider; point to your realm endpoints:
+      authorizationEndpoint: "https://keycloak.internal.tineochristopher.com/realms/homelab/protocol/openid-connect/auth"
+      tokenEndpoint: "https://keycloak.internal.tineochristopher.com/realms/homelab/protocol/openid-connect/token"
+
+    # --- OIDC client registered in Keycloak ---
+    clientID: oauth2-proxy
+    clientSecret:
+      name: "keycloak-client-secret" # secret created in step 0 (key 'client-secret')
+
+    # --- Callback & logout must match an existing HTTPRoute on this Gateway ---
+    redirectURL: "https://login.internal.tineochristopher.com/oauth2/callback"
+    logoutPath: "/logout"
+
+    # --- Make SSO cookies work across ALL subdomains on this gateway ---
+    cookieDomain: "internal.tineochristopher.com"
