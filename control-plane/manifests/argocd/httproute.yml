@@ -6,6 +6,7 @@ metadata:
 spec:
   parentRefs:
     - name: private-gw
+      namespace: envoy-gateway-system
       sectionName: apps
   hostnames: ["argocd.apps.internal.tineochristopher.com"]
   rules:
