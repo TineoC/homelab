@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - public/
   - private/
-  - ldap/
   - gatewayclass.yaml
