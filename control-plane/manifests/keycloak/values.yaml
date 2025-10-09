@@ -13,5 +13,14 @@ keycloak:
         userPasswordKey: password
   production: true
   proxy: edge
+  extraEnvVars:
+  - name: KC_PROXY
+    value: edge
+  - name: KC_HOSTNAME
+    value: keycloak.internal.tineochristopher.com
+  - name: KC_HTTP_ENABLED
+    value: "true"
+  - name: KC_HOSTNAME_STRICT
+    value: "false"
   ingress:
     enabled: false

@@ -15,3 +15,6 @@ spec:
       certificateRefs:
       - kind: Secret
         name: private-gw-tls
+    allowedRoutes:
+      namespaces:
+        from: All
