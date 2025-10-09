@@ -3,40 +3,34 @@
 
 # `docs/KEYCLOAK.md`
 ```md
-# Keycloak (operator) setup
+# Keycloak setup
 
 ## Objects
-- `Keycloak` (CR): single-node dev (demo), `iam` namespace.
-- `KeycloakRealm`: `demo` realm.
-- `KeycloakRealmRole` / group mappers: map LDAP groups to roles.
-- `KeycloakClient` (OIDC) for each app: `app-a`, `app-b`, `app-c`, `app-d`.
-- `KeycloakUserFederation` (LDAP):
-  - vendor: `other`
-  - connection: `ldaps://openldap.directory.svc:636`
-  - bind DN: `cn=admin,dc=example,dc=org`
-  - user/object classes: `inetOrgPerson`, `organizationalPerson`, `person`
-  - group sync: `groupOfNames` (or `groupOfUniqueNames`)
+- Bitnami `keycloak` release in the `keycloak` namespace.
+- Realm export (`demo`) applied via GitOps (clients, roles, groups, LDAP federation + mappers).
+- LDAP truststore secret (`ldap-truststore`) so Keycloak can talk LDAPS to OpenLDAP.
 
-## JWT settings (per client)
-- Access type: `confidential` (for server-to-server) or `public` (SPAs).
-- Redirect URIs (for demo): `https://gw.example.com/*`
-- Standard OIDC scopes + add group/role mappers so `groups`/`roles` appear in the token.
+## JWT settings
+- Clients are `confidential` with secrets (`app-*-client-secret`).
+- Redirect URIs: `https://*.tineochristopher.com/*`.
+- Protocol mappers:
+  - `groups` → short group names (used by Envoy for RBAC).
+  - `realm_access.roles` → realm role mirror.
 
 ## Argo CD flow
-- `applications/iam/keycloak-operator.yaml`
-- `applications/iam/keycloak-instance.yaml`
-- `applications/iam/realm-and-clients.yaml`
-- `applications/iam/ldap-federation.yaml`
+- `gitops/applications/iam.yaml` (syncs `gitops/manifests/iam`).
+- `gitops/manifests/iam/realm-import.yaml` → realm, clients, LDAP federation (consumed by the Bitnami release).
+- `gitops/manifests/iam/secrets.yaml` → LDAP truststore + admin credentials.
 
 ## Testing tokens (demo)
 Get token with password grant (demo only):
 ```bash
-KC=https://keycloak.iam.svc/auth/realms/demo/protocol/openid-connect/token
+KC=http://keycloak.keycloak.svc.cluster.local:8080/realms/demo/protocol/openid-connect/token
 CLIENT_ID=app-a
 CLIENT_SECRET='<from secret>'
 curl -s -X POST "$KC" \
   -d grant_type=password \
   -d username=alice.eng \
-  -d password=alicepass \
+  -d password=password \
   -d client_id="$CLIENT_ID" \
   -d client_secret="$CLIENT_SECRET" | jq -r .access_token

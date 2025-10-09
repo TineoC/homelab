@@ -5,13 +5,15 @@
    - Acts as the AD alternative. Holds org tree: Departments → Groups → Users.
    - Exposes `ldaps://openldap.directory.svc:636`.
 
-2) **Keycloak Operator + Keycloak** (`iam` ns)
-   - Declarative CRs for Keycloak, Realm, Clients, User Federation (LDAP).
+2) **Keycloak** (`keycloak` ns)
+   - Bitnami chart, configured via GitOps (realm import + LDAP federation).
    - Maps LDAP groups → Keycloak roles/realm groups.
    - OIDC clients created per app: `app-a`, `app-b`, `app-c`, `app-d`.
 
 3) **Envoy Gateway + Gateway API** (`envoy-gateway-system` ns)
-   - One `Gateway` with listener `HTTPS : 443`.
+   - Two Gateways:
+     - `public-gw` → `*.tineochristopher.com`
+     - `private-gw` → `*.internal.tineochristopher.com`
    - `HTTPRoute`s per app attach auth filters:
      - **JWT** validation (issuer: Keycloak; audience: the client)
      - **RBAC** using JWT claims (`realm_access.roles` or `groups`)
