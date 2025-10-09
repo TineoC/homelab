@@ -1,13 +1,17 @@
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
 metadata:
-  name: k8s-external-dns
+  name: vault-store
 spec:
   provider:
-    kubernetes:
-      remoteNamespace: external-dns
-      server: { url: https://kubernetes.default.svc }
+    vault:
+      server: "http://vault.vault.svc:8200"
+      path: "secret"
+      version: "v2"
       auth:
-        serviceAccount:
-          name: eso-sa
-          namespace: envoy-gateway-system
+        kubernetes:
+          mountPath: "kubernetes"
+          role: "eso-controller"
+          serviceAccountRef:
+            name: external-secrets
+            namespace: external-secrets
