@@ -18,6 +18,6 @@ spec:
     clientID: "oauth2-proxy"
     clientSecret:
       name: "keycloak-client-secret"
-    redirectURL: "https://login.internal.tineochristopher.com/oauth2/callback"
+    redirectURL: "https://login.apps.internal.tineochristopher.com/oauth2/callback"
     logoutPath: "/logout"
-    cookieDomain: "internal.tineochristopher.com"
+    cookieDomain: "apps.internal.tineochristopher.com"
