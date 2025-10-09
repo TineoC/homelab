@@ -17,4 +17,3 @@ spec:
       name: "keycloak-client-secret"
     redirectURL: "https://login.apps.internal.tineochristopher.com/oauth2/callback"
     logoutPath: "/logout"
-    cookieDomain: "login.apps.internal.tineochristopher.com"
