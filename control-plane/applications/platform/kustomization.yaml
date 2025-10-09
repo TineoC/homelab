@@ -6,3 +6,4 @@ resources:
   - rolebindings.yml
   - sealed-secrets.yml
   - external-secrets.yaml
+  - vault.yaml
