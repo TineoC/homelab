@@ -10,12 +10,56 @@ spec:
   hostnames: [ "login.apps.internal.tineochristopher.com" ]
   rules:
   - matches:
-    - path: { type: PathExact, value: /favicon.ico }
+    - path:
+        type: PathExact
+        value: /favicon.ico
     backendRefs:
     - name: placeholder-svc
       port: 80
   - matches:
-    - path: { type: PathPrefix, value: / }
+    - path:
+        type: PathPrefix
+        value: /
     backendRefs:
     - name: placeholder-svc
       port: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: placeholder-svc
+  namespace: envoy-gateway-system
+spec:
+  selector:
+    app: placeholder
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder
+  namespace: envoy-gateway-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: placeholder
+  template:
+    metadata:
+      labels:
+        app: placeholder
+    spec:
+      containers:
+      - name: placeholder
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        command: [ "/bin/sh", "-c" ]
+        args:
+        - |
+          echo '<h1>Login anchor placeholder - OIDC callback OK</h1>' > /usr/share/nginx/html/index.html;
+          exec nginx -g 'daemon off;'
