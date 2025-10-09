@@ -62,16 +62,6 @@ spec:
           name: ldap
         - containerPort: 636
           name: ldaps
-        readinessProbe:
-          tcpSocket:
-            port: 636
-          initialDelaySeconds: 20
-          periodSeconds: 10
-        livenessProbe:
-          tcpSocket:
-            port: 389
-          initialDelaySeconds: 30
-          periodSeconds: 30
         volumeMounts:
         - mountPath: /var/lib/ldap
           name: data
