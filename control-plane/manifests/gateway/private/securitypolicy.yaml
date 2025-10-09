@@ -11,9 +11,14 @@ spec:
     sectionName: apps
   oidc:
     provider:
-      issuer: "https://keycloak.internal.tineochristopher.com/realms/kubernetes"
-    clientID: "oauth2-proxy"
+      issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
+      backendRefs:
+      - group: gateway.envoyproxy.io
+        kind: Backend
+        name: keycloak-backend
+        port: 443
+    clientID: oauth2-proxy
     clientSecret:
-      name: "keycloak-client-secret"
-    redirectURL: "https://login.apps.internal.tineochristopher.com/oauth2/callback"
-    logoutPath: "/logout"
+      name: keycloak-client-secret
+    redirectURL: https://login.apps.internal.tineochristopher.com/oauth2/callback
+    logoutPath: /logout
