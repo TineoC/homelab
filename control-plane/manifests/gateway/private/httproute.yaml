@@ -65,5 +65,8 @@ spec:
         command: [ "/bin/sh", "-c" ]
         args:
         - |
-          echo '<h1>Login anchor placeholder - OIDC callback OK</h1>' > /usr/share/nginx/html/index.html;
+          # serve a blank favicon + simple robots
+          printf '' > /usr/share/nginx/html/favicon.ico
+          printf 'User-agent: *\nDisallow:\n' > /usr/share/nginx/html/robots.txt
+          echo '<h1>Login anchor placeholder - OIDC callback OK</h1>' > /usr/share/nginx/html/index.html
           exec nginx -g 'daemon off;'
