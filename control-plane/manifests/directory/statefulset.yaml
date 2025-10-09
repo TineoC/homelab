@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: openldap
-        image: osixia/openldap:1.5.0
+        image: osixia/openldap
         imagePullPolicy: IfNotPresent
         env:
         - name: LDAP_ORGANISATION
@@ -39,6 +39,24 @@ spec:
               key: password
         - name: LDAP_TLS
           value: "true"
+        - name: LDAP_TLS_CRT_FILENAME
+          value: tls.crt
+        - name: LDAP_TLS_KEY_FILENAME
+          value: tls.key
+        - name: LDAP_TLS_CA_CRT_FILENAME
+          value: ca.crt
+        startupProbe:
+          tcpSocket: { port: 636 }
+          failureThreshold: 30
+          periodSeconds: 5
+        livenessProbe:
+          tcpSocket: { port: 636 }
+          initialDelaySeconds: 40
+          periodSeconds: 30
+        readinessProbe:
+          tcpSocket: { port: 636 }
+          initialDelaySeconds: 25
+          periodSeconds: 10
         ports:
         - containerPort: 389
           name: ldap
