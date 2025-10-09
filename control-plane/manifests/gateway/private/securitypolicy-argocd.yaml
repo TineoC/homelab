@@ -1,0 +1,38 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: argocd-oidc
+  namespace: envoy-gateway-system
+spec:
+  targetRefs:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: argocd
+  oidc:
+    provider:
+      issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
+    clientID: oauth2-proxy
+    clientSecret:
+      name: keycloak-client-secret
+    redirectURL: https://argocd.apps.internal.tineochristopher.com/oauth2/callback
+    logoutPath: /logout
+    forwardAccessToken: true
+    cookieDomain: argocd.apps.internal.tineochristopher.com
+  jwt:
+    providers:
+    - name: keycloak
+      issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
+      remoteJWKS:
+        uri: https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/certs
+  authorization:
+    defaultAction: Deny
+    rules:
+    - name: allow-cluster-admins
+      action: Allow
+      principal:
+        jwt:
+          provider: keycloak
+          claims:
+          - name: groups
+            valueType: StringArray
+            values: ["/cluster-admins", "cluster-admins"]

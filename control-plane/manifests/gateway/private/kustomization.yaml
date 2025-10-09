@@ -4,4 +4,5 @@ resources:
   - certificate.yaml
   - gateway.yaml
   - httproute.yaml
+  - securitypolicy-argocd.yaml
   - securitypolicy.yaml
