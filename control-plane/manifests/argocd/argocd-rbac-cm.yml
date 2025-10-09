@@ -4,20 +4,33 @@ metadata:
   name: argocd-rbac-cm
   namespace: argocd
 data:
+  # Safe default for everyone else
   policy.default: role:readonly
+
   policy.csv: |
-    p, role:admin, applications, *, */*, allow
-    p, role:admin, clusters, *, *, allow
-    p, role:admin, repositories, *, *, allow
-    p, role:admin, certificates, *, *, allow
-    p, role:admin, projects, *, *, allow
-    p, role:admin, accounts, *, *, allow
-    p, role:admin, gpgkeys, *, *, allow
+    # ── Admins: everything on everything ───────────────────────────────
+    p, role:admin, *, *, *, allow
 
+    # ── Developers: allow all actions on common resources… ─────────────
+    p, role:developer, applications,  *, *, allow
+    p, role:developer, projects,      *, *, allow
+    p, role:developer, repositories,  *, *, allow
+    p, role:developer, clusters,      *, *, allow
+    p, role:developer, certificates,  *, *, allow
+    p, role:developer, gpgkeys,       *, *, allow
+    # (accounts is sensitive—read-only is safer)
+    p, role:developer, accounts,      get, *, allow
+
+    # …but explicitly DENY deletes (deny overrides allow) ───────────────
+    p, role:developer, applications,  delete, *, deny
+    p, role:developer, projects,      delete, *, deny
+    p, role:developer, repositories,  delete, *, deny
+    p, role:developer, clusters,      delete, *, deny
+    p, role:developer, certificates,  delete, *, deny
+    p, role:developer, gpgkeys,       delete, *, deny
+    # (no delete on accounts either)
+    p, role:developer, accounts,      delete, *, deny
+
+    # ── Group → Role mappings ───────────────────────────────────────────
     g, ArgoCDAdmins, role:admin
-    g, cluster-admins, role:admin
-    g, developers, role:developer
-
-    p, role:developer, applications, *, dev/*, allow
-
-    p, role:readonly, applications, get, *, allow
+    g, developers,   role:developer
