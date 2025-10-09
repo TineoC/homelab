@@ -1,17 +1,13 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  labels:
-    external-dns.alpha.kubernetes.io/target: 96.248.109.98
-    external-dns.alpha.kubernetes.io/hostname: "keycloak.internal.tineochristopher.com"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
   name: keycloak
   namespace: keycloak
 spec:
   parentRefs:
   - name: private-gw
     namespace: envoy-gateway-system
-    sectionName: https
+    sectionName: idp
   hostnames:
   - keycloak.internal.tineochristopher.com
   rules:

@@ -9,6 +9,7 @@ spec:
     kind: Gateway
     name: private-gw
     namespace: envoy-gateway-system
+    sectionName: apps
   oidc:
     provider:
       issuer: "https://keycloak.internal.tineochristopher.com/realms/kubernetes"

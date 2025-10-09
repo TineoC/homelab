@@ -6,10 +6,22 @@ metadata:
 spec:
   gatewayClassName: envoy
   listeners:
-  - name: https
+  - name: apps
     protocol: HTTPS
     port: 443
     hostname: "*.internal.tineochristopher.com"
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - kind: Secret
+        name: private-gw-tls
+    allowedRoutes:
+      namespaces:
+        from: All
+  - name: idp
+    protocol: HTTPS
+    port: 443
+    hostname: "keycloak.internal.tineochristopher.com"
     tls:
       mode: Terminate
       certificateRefs:

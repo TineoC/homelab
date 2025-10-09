@@ -6,6 +6,7 @@ metadata:
 spec:
   parentRefs:
   - name: private-gw
+    sectionName: apps
   hostnames: [ "login.internal.tineochristopher.com" ]
   rules:
   - matches:
