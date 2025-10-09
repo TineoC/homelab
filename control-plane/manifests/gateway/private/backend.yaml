@@ -3,6 +3,8 @@ kind: Backend
 metadata:
   name: keycloak-backend
   namespace: envoy-gateway-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
 spec:
   endpoints:
   - fqdn:
@@ -14,6 +16,8 @@ kind: BackendTLSPolicy
 metadata:
   name: keycloak-backend-tls
   namespace: envoy-gateway-system
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
 spec:
   targetRefs:
   - group: gateway.envoyproxy.io
