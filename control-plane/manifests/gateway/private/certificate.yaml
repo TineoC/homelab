@@ -8,5 +8,5 @@ spec:
   dnsNames:
   - "*.internal.tineochristopher.com"
   issuerRef:
-    name: selfsigned-cluster-issuer
+    name: letsencrypt-staging
     kind: ClusterIssuer
