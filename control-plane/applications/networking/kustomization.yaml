@@ -5,3 +5,4 @@ resources:
   - external-dns.yml
   - gateway.yml
   - gateway-config.yml
+  - backend.yaml

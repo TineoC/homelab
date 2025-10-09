@@ -9,21 +9,6 @@ spec:
     chart: gateway-helm
     repoURL: docker.io/envoyproxy
     targetRevision: v1.5.2
-    helm:
-      values: |
-        controller:
-          extraEnv:
-            - name: SSL_CERT_FILE
-              value: /etc/ssl/certs/custom-ca.pem
-          extraVolumes:
-            - name: oidc-ca
-              secret:
-                secretName: private-gw-tls
-          extraVolumeMounts:
-            - name: oidc-ca
-              mountPath: /etc/ssl/certs/custom-ca.pem
-              subPath: ca.crt
-              readOnly: true
 
   destination:
     namespace: envoy-gateway-system
