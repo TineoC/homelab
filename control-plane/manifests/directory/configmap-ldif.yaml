@@ -1,0 +1,244 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openldap-bootstrap-ldif
+  namespace: directory
+data:
+  01-base.ldif: |
+    dn: dc=example,dc=org
+    objectClass: top
+    objectClass: dcObject
+    objectClass: organization
+    o: Example Org
+    dc: example
+
+    dn: ou=People,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: People
+
+    dn: ou=Groups,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: Groups
+
+    dn: ou=Departments,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: Departments
+
+    dn: ou=Engineering,ou=Departments,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: Engineering
+
+    dn: ou=Data,ou=Departments,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: Data
+
+    dn: ou=Ops,ou=Departments,dc=example,dc=org
+    objectClass: organizationalUnit
+    ou: Ops
+
+  02-groups.ldif: |
+    dn: cn=eng-app-a,ou=Groups,dc=example,dc=org
+    objectClass: groupOfNames
+    cn: eng-app-a
+    member: cn=placeholder,dc=example,dc=org
+
+    dn: cn=data-app-b,ou=Groups,dc=example,dc=org
+    objectClass: groupOfNames
+    cn: data-app-b
+    member: cn=placeholder,dc=example,dc=org
+
+    dn: cn=ops-app-c,ou=Groups,dc=example,dc=org
+    objectClass: groupOfNames
+    cn: ops-app-c
+    member: cn=placeholder,dc=example,dc=org
+
+    dn: cn=shared-app-d,ou=Groups,dc=example,dc=org
+    objectClass: groupOfNames
+    cn: shared-app-d
+    member: cn=placeholder,dc=example,dc=org
+
+  03-users.ldif: |
+    dn: uid=alice.eng,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Alice Engineer
+    sn: Engineer
+    uid: alice.eng
+    mail: alice.eng@tineochristopher.com
+    userPassword: {SSHA}ftRzga7PdjUuaSqh96k7vUvbWrKfOwGE
+    ou: Engineering
+
+    dn: uid=bob.eng,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Bob Engineer
+    sn: Engineer
+    uid: bob.eng
+    mail: bob.eng@tineochristopher.com
+    userPassword: {SSHA}SX6gHFkNeadt+z6hBSQwQWSzmC+32Z83
+    ou: Engineering
+
+    dn: uid=nina.eng,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Nina Engineer
+    sn: Engineer
+    uid: nina.eng
+    mail: nina.eng@tineochristopher.com
+    userPassword: {SSHA}kUQYUQEyebyaPLgaMx+7wxxYSijjMAKi
+    ou: Engineering
+
+    dn: uid=carol.data,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Carol Data
+    sn: Data
+    uid: carol.data
+    mail: carol.data@tineochristopher.com
+    userPassword: {SSHA}kC3mGsBKKncIP52eUd3eZfJ0bSwFr66r
+    ou: Data
+
+    dn: uid=david.data,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: David Data
+    sn: Data
+    uid: david.data
+    mail: david.data@tineochristopher.com
+    userPassword: {SSHA}dkXTW2CegYvU4HEQKJdT5bG+SaISgo2C
+    ou: Data
+
+    dn: uid=ian.data,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Ian Data
+    sn: Data
+    uid: ian.data
+    mail: ian.data@tineochristopher.com
+    userPassword: {SSHA}ewB7rgFJMi7rPe12bQeaGBU5s29Wu9aJ
+    ou: Data
+
+    dn: uid=oscar.ops,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Oscar Ops
+    sn: Ops
+    uid: oscar.ops
+    mail: oscar.ops@tineochristopher.com
+    userPassword: {SSHA}dgbaETFXdQzY/eT6rlEg7wm/n0/i75ub
+    ou: Ops
+
+    dn: uid=olivia.ops,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Olivia Ops
+    sn: Ops
+    uid: olivia.ops
+    mail: olivia.ops@tineochristopher.com
+    userPassword: {SSHA}0EZBMPMzrj0ervQWi9q0gB3tN3LPRaNX
+    ou: Ops
+
+    dn: uid=nick.ops,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Nick Ops
+    sn: Ops
+    uid: nick.ops
+    mail: nick.ops@tineochristopher.com
+    userPassword: {SSHA}US0Wbq2DcrUerdn/IkD0w0batKH/F3cA
+    ou: Ops
+
+    dn: uid=ivy.ops,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Ivy Ops
+    sn: Ops
+    uid: ivy.ops
+    mail: ivy.ops@tineochristopher.com
+    userPassword: {SSHA}lWPqSN7XNd3FAM3GsUjJrkdyQ4ODu9S4
+    ou: Ops
+
+    dn: uid=sara.shared,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Sara Shared
+    sn: Shared
+    uid: sara.shared
+    mail: sara.shared@tineochristopher.com
+    userPassword: {SSHA}ZNIP/uagqIpZOwsR/uQYFo0428xGQwZn
+    ou: Engineering
+
+    dn: uid=sam.shared,ou=People,dc=example,dc=org
+    objectClass: inetOrgPerson
+    objectClass: organizationalPerson
+    objectClass: person
+    cn: Sam Shared
+    sn: Shared
+    uid: sam.shared
+    mail: sam.shared@tineochristopher.com
+    userPassword: {SSHA}Nq2c/yPB1yUnlApU9XOd1zij1GetO9yz
+    ou: Data
+
+  04-memberships.ldif: |
+    dn: cn=eng-app-a,ou=Groups,dc=example,dc=org
+    changetype: modify
+    delete: member
+    member: cn=placeholder,dc=example,dc=org
+    -
+    add: member
+    member: uid=alice.eng,ou=People,dc=example,dc=org
+    member: uid=bob.eng,ou=People,dc=example,dc=org
+    member: uid=nina.eng,ou=People,dc=example,dc=org
+    member: uid=sara.shared,ou=People,dc=example,dc=org
+
+    dn: cn=data-app-b,ou=Groups,dc=example,dc=org
+    changetype: modify
+    delete: member
+    member: cn=placeholder,dc=example,dc=org
+    -
+    add: member
+    member: uid=carol.data,ou=People,dc=example,dc=org
+    member: uid=david.data,ou=People,dc=example,dc=org
+    member: uid=ian.data,ou=People,dc=example,dc=org
+    member: uid=sam.shared,ou=People,dc=example,dc=org
+
+    dn: cn=ops-app-c,ou=Groups,dc=example,dc=org
+    changetype: modify
+    delete: member
+    member: cn=placeholder,dc=example,dc=org
+    -
+    add: member
+    member: uid=oscar.ops,ou=People,dc=example,dc=org
+    member: uid=olivia.ops,ou=People,dc=example,dc=org
+    member: uid=nick.ops,ou=People,dc=example,dc=org
+    member: uid=ivy.ops,ou=People,dc=example,dc=org
+
+    dn: cn=shared-app-d,ou=Groups,dc=example,dc=org
+    changetype: modify
+    delete: member
+    member: cn=placeholder,dc=example,dc=org
+    -
+    add: member
+    member: uid=alice.eng,ou=People,dc=example,dc=org
+    member: uid=bob.eng,ou=People,dc=example,dc=org
+    member: uid=nina.eng,ou=People,dc=example,dc=org
+    member: uid=carol.data,ou=People,dc=example,dc=org
+    member: uid=david.data,ou=People,dc=example,dc=org
+    member: uid=ian.data,ou=People,dc=example,dc=org
+    member: uid=oscar.ops,ou=People,dc=example,dc=org
+    member: uid=olivia.ops,ou=People,dc=example,dc=org
+    member: uid=nick.ops,ou=People,dc=example,dc=org
+    member: uid=ivy.ops,ou=People,dc=example,dc=org
+    member: uid=sara.shared,ou=People,dc=example,dc=org
+    member: uid=sam.shared,ou=People,dc=example,dc=org

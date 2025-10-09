@@ -1,0 +1,15 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: TLSRoute
+metadata:
+  name: ldaps-route
+  namespace: directory
+spec:
+  parentRefs:
+  - name: ldap-gw
+    namespace: envoy-gateway-system
+  hostnames:
+  - ldap.tineochristopher.com
+  rules:
+  - backendRefs:
+    - name: openldap
+      port: 636

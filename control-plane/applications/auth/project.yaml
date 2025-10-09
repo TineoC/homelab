@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: iam-demo
+  namespace: argocd
+spec:
+  description: IAM demo via Keycloak + Envoy Gateway
+  sourceRepos:
+    - https://github.com/TineoC/homelab.git
+  destinations:
+    - namespace: '*'
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'

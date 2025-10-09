@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: directory
+  labels:
+    app.kubernetes.io/name: directory
+    app.kubernetes.io/part-of: iam-demo

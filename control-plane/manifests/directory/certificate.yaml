@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: openldap-tls
+  namespace: directory
+spec:
+  secretName: openldap-tls
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-staging
+  commonName: ldap.tineochristopher.com
+  dnsNames:
+  - ldap.tineochristopher.com
