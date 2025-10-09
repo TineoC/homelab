@@ -19,6 +19,7 @@ spec:
     redirectURL: https://login.apps.internal.tineochristopher.com/oauth2/callback
     logoutPath: /logout
     forwardAccessToken: true # <- add this
+    cookieDomain: .apps.internal.tineochristopher.com
 
   jwt:
     # validator (reads Authorization: Bearer ...)
