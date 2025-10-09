@@ -14,11 +14,6 @@ spec:
   oidc:
     provider:
       issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
-      backendRefs:
-      - group: gateway.envoyproxy.io
-        kind: Backend
-        name: keycloak-backend
-        port: 443
     clientID: oauth2-proxy
     clientSecret:
       name: keycloak-client-secret
