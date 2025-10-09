@@ -10,13 +10,13 @@ spec:
   hostnames: [ "login.apps.internal.tineochristopher.com" ]
   rules:
   - matches:
-    - path: { type: PathExact, value: /robots.txt }
+    - path: { type: Exact, value: /robots.txt }
     backendRefs:
     - name: placeholder-svc
       port: 80
   - matches:
     - path:
-        type: PathExact
+        type: Exact
         value: /favicon.ico
     backendRefs:
     - name: placeholder-svc
