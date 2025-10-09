@@ -65,8 +65,34 @@ spec:
         command: [ "/bin/sh", "-c" ]
         args:
         - |
-          # serve a blank favicon + simple robots
-          printf '' > /usr/share/nginx/html/favicon.ico
+          cat > /etc/nginx/conf.d/default.conf <<'NGINX'
+          server {
+            listen 80;
+            server_name _;
+        
+            # 204 for favicon.ico so no redirect path ever happens
+            location = /favicon.ico { return 204; }
+        
+            location = /robots.txt  { root /usr/share/nginx/html; try_files /robots.txt =404; }
+        
+            location / {
+              root /usr/share/nginx/html;
+              try_files $uri /index.html;
+            }
+          }
+          NGINX
+        
+          # minimal files
           printf 'User-agent: *\nDisallow:\n' > /usr/share/nginx/html/robots.txt
-          echo '<h1>Login anchor placeholder - OIDC callback OK</h1>' > /usr/share/nginx/html/index.html
+        
+          # Inline data-URL favicon so the browser doesn't ask for /favicon.ico at all
+          cat > /usr/share/nginx/html/index.html <<'HTML'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Login anchor placeholder</title>
+          <link rel="icon" href="data:,">
+          <h1>Login anchor placeholder - OIDC callback OK</h1>
+          HTML
+        
           exec nginx -g 'daemon off;'
+        

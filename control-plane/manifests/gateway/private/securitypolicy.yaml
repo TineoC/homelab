@@ -12,8 +12,6 @@ spec:
   oidc:
     provider:
       issuer: "https://keycloak.internal.tineochristopher.com/realms/kubernetes"
-      authorizationEndpoint: "https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/auth"
-      tokenEndpoint: "https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/token"
     clientID: "oauth2-proxy"
     clientSecret:
       name: "keycloak-client-secret"
