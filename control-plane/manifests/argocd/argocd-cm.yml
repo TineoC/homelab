@@ -6,7 +6,7 @@ data:
     clientID: argocd
     clientSecret: $oidc.keycloak.clientSecret
     requestedScopes: ["openid", "profile", "email", "groups"]
-  url: https://argocd.tineochristopher.com
+  url: https://argocd.apps.internal.tineochristopher.com
 kind: ConfigMap
 metadata:
   name: argocd-cm
