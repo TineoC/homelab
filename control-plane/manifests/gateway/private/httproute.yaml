@@ -77,9 +77,9 @@ spec:
           cat > /usr/share/nginx/html/index.html <<'HTML'
           <!doctype html>
           <meta charset="utf-8">
-          <title>Login anchor placeholder</title>
+          <title>Private Website!</title>
           <link rel="icon" href="data:,">
-          <h1>Login anchor placeholder - OIDC callback OK</h1>
+          <h1>Only (Cluster Operator) - OIDC callback OK)</h1>
           HTML
         
           exec nginx -g 'daemon off;'
