@@ -14,8 +14,29 @@ spec:
   oidc:
     provider:
       issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
+      # (optional) explicit endpoints if you don't want discovery:
+      # authorizationEndpoint: https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/auth
+      # tokenEndpoint:         https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/token
     clientID: oauth2-proxy
     clientSecret:
       name: keycloak-client-secret
     redirectURL: https://login.apps.internal.tineochristopher.com/oauth2/callback
     logoutPath: /logout
+  jwt:
+    providers:
+    - name: keycloak
+      issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
+      remoteJWKS:
+        uri: https://keycloak.internal.tineochristopher.com/realms/kubernetes/protocol/openid-connect/certs
+  authorization:
+    defaultAction: Deny
+    rules:
+    - name: allow-cluster-admins
+      action: Allow
+      principal:
+        jwt:
+          provider: keycloak
+          claims:
+          - name: groups
+            valueType: StringArray
+            values: [ "cluster-admins" ]
