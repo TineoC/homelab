@@ -9,9 +9,3 @@ spec:
   - name: https
     protocol: HTTPS
     port: 443
-    hostname: "*.tineochristopher.com"
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: public-gw-tls

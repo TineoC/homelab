@@ -9,22 +9,3 @@ spec:
   - name: apps
     protocol: HTTPS
     port: 443
-    hostname: "*.apps.internal.tineochristopher.com"
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: apps-gw-tls # <- NEW (matches *.apps.internal...)
-    allowedRoutes:
-      namespaces: { from: All }
-  - name: idp
-    protocol: HTTPS
-    port: 443
-    hostname: "keycloak.internal.tineochristopher.com"
-    tls:
-      mode: Terminate
-      certificateRefs:
-      - kind: Secret
-        name: idp-tls # <- NEW (matches keycloak.internal...)
-    allowedRoutes:
-      namespaces: { from: All }
