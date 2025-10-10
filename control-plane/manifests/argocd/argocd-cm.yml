@@ -10,5 +10,5 @@ data:
     name: Keycloak
     issuer: https://keycloak.internal.tineochristopher.com/realms/kubernetes
     clientID: oauth2-proxy
-    clientSecret: AvJgCRNbT99PBCKMg6j2LFSex2hE3m6v
+    clientSecret: $oidc.keycloak.clientSecret
     requestedScopes: ["openid", "profile", "email", "groups"]
