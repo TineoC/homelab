@@ -1,0 +1,30 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: private-gw
+  namespace: envoy-gateway-system
+spec:
+  gatewayClassName: envoy-private
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "*.internal.tineochristopher.com"
+    tls:
+      mode: Terminate
+      certificateRefs: [ { kind: Secret, name: private-gw-tls } ]
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: private-gw-cert
+  namespace: envoy-gateway-system
+spec:
+  secretName: private-gw-tls
+  commonName: "*.internal.tineochristopher.com"
+  dnsNames:
+  - "*.internal.tineochristopher.com"
+  issuerRef:
+    name: internal-ca
+    kind: ClusterIssuer
+  
