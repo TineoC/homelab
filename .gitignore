@@ -12,3 +12,12 @@ Thumbs.db
 # Ignore local configuration files
 *.env
 .aider*
+
+# Never commit cluster credentials (see ansible/group_vars/all.yml)
+kubeconfig*.yaml
+*.kubeconfig
+kubeconfig
+.kube/
+*.pem
+*.key
+id_rsa*
