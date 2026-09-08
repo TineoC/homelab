@@ -1,0 +1,10 @@
+# Argo CD pulled this as `chart: gateway-helm` from `repoURL: docker.io/envoyproxy`.
+# Flux addresses OCI registries with an explicit oci:// URL and type: oci.
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: envoyproxy
+spec:
+  type: oci
+  interval: 1h
+  url: oci://docker.io/envoyproxy

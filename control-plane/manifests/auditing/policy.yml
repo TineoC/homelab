@@ -21,8 +21,14 @@ rules:
         resources: ["secrets", "configmaps"]
 
   - level: Request
-    users: ["system:serviceaccount:argocd:argocd-application-controller"]
+    users:
+      - "system:serviceaccount:flux-system:kustomize-controller"
+      - "system:serviceaccount:flux-system:helm-controller"
     verbs: ["create", "update", "patch", "delete"]
     resources:
-      - group: "argoproj.io"
-        resources: ["applications"]
+      - group: "kustomize.toolkit.fluxcd.io"
+        resources: ["kustomizations"]
+      - group: "helm.toolkit.fluxcd.io"
+        resources: ["helmreleases"]
+      - group: "source.toolkit.fluxcd.io"
+        resources: ["*"]

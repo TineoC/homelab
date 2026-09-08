@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metal-lb
+spec:
+  interval: 30m
+  releaseName: metal-lb
+  targetNamespace: metallb-system
+  storageNamespace: metallb-system
+  chart:
+    spec:
+      chart: ./control-plane/manifests/metal-lb
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+  install:
+    createNamespace: true
+    crds: CreateReplace
+    remediation: { retries: 3 }
+  upgrade:
+    crds: CreateReplace
+    remediation: { retries: 3 }
