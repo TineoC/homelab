@@ -1,4 +1,4 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: GatewayClass
-metadata: { name: envoy-public, namespace: envoy-gateway-system }
+metadata: { name: envoy-public }
 spec: { controllerName: gateway.envoyproxy.io/gatewayclass-controller }
