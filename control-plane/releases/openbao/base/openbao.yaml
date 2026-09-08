@@ -1,6 +1,6 @@
-# Local (kind) OpenBao. Same standalone + file storage shape as the homelab
-# release, sized down and pinned to kind's default `standard` StorageClass.
-# Still seals on every pod restart: `bao operator init` once, then unseal.
+# Standalone OpenBao with `file` storage. Per-cluster sizing and StorageClass
+# come from overlay patches; everything else is shared.
+# Seals on every pod restart: `bao operator init` once, then unseal.
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
@@ -17,6 +17,8 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: openbao
+  driftDetection:
+    mode: enabled
   install:
     createNamespace: true
     remediation: { retries: 3 }
@@ -30,8 +32,7 @@ spec:
     server:
       dataStorage:
         enabled: true
-        size: 1Gi
-        storageClass: standard
+        size: 10Gi
       standalone:
         enabled: true
         config: |
