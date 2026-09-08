@@ -148,6 +148,172 @@ To simulate enterprise node failures and practice host-level maintenance (Talos 
 - **Specs per Node**: 4-6 Cores, 16-32 GB RAM, 512GB NVMe SSD.
 - **Distributed Storage**: Ceph (built into Proxmox) or Longhorn (installed in Talos) to replicate storage across all 3 nodes. If one node dies, virtual environments remain online.
 
+#### Option C: Apple Silicon (Mac mini)
+
+Viable, but it forces three architectural changes (see **Apple Silicon Deployment** below)
+because Proxmox/Harvester, bare-metal Talos, and Harbor are all x86-only.
+
+**Buying options compared.** "Usable RAM" subtracts each host's OS overhead — on macOS
+roughly 8 GB per machine, which is the single most under-counted number when comparing
+one big Mac against several small ones.
+
+| Option | Price | Raw RAM | OS tax | Usable | $/usable GB | Cores | Hosts | Real HA? |
+| :--- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | :--- |
+| 1x M6 32GB | ~$1,499 | 32 | 8 | 24 GB | $62 | 12 | 1 | No |
+| 1x M5 Pro 48GB | $2,299 | 48 | 8 | 40 GB | $57 | 15 | 1 | No |
+| **1x M5 Pro 64GB** | **$2,699** | 64 | 8 | **56 GB** | **$48** | 15 | 1 | No |
+| 2x M6 32GB | ~$2,998 | 64 | 16 | 48 GB | $62 | 24 | 2 | Only with a 3rd voter |
+| 3x M6 24GB | ~$3,297 | 72 | 24 | 48 GB | $69 | 36 | 3 | Yes |
+| 3x M6 32GB | ~$4,497 | 96 | 24 | 72 GB | $62 | 36 | 3 | Yes |
+| *1x x86 Beelink 64GB* | *~$550* | 64 | 1 | *63 GB* | *$9* | 16 | 1 | No |
+| *3x x86 Beelink 32GB* | *~$1,350* | 96 | 3 | *93 GB* | *$15* | 48 | 3 | Yes |
+
+M6 prices above the base $899 are **estimated** from Apple's usual $200-per-8GB ladder —
+confirm at the configurator. M5 Pro prices are confirmed.
+
+### Single Big Machine vs. Several Small Ones
+
+**On Apple Silicon: buy one big machine.** Three reasons, in order of weight:
+
+1. **The macOS tax is per-host.** Every Mac surrenders ~8 GB to the host OS before a
+   single VM boots. Two 32 GB Macs give 48 GB usable; one 64 GB Mac gives 56 GB — more
+   usable RAM, for $300 *less*.
+2. **Soldered memory removes the escape hatch.** On x86 you can add DIMMs when you guess
+   wrong. Here the only fix is another whole machine, so the cost of under-buying is
+   several thousand dollars rather than a hundred.
+3. **macOS is the fragile layer.** It is not designed to be an unattended hypervisor —
+   sleep, auto-updates, and login state all conspire against uptime. Each extra Mac
+   multiplies exposure to the least reliable component in the stack.
+
+Note the trap in the two-machine option: **two physical hosts cannot form an etcd
+quorum.** Split three Talos VMs 2+1 and losing the larger host kills the cluster; split
+2+2 and neither side holds a majority. Genuine host-failure tolerance needs a third
+voter, so 2x M6 costs more than 1x M5 Pro *and* still does not deliver the HA that is
+its only reason for existing.
+
+**Several small only pays off at three machines or more**, which on Mac hardware means
+~$4,500 — 1.7x the single-box price for capability most homelabs never exercise.
+
+**On x86: several small is the better buy** — and it is 5x cheaper per usable GB either
+way. Proxmox clusters natively, RAM is upgradable, used Tiny/USFF boxes are cheap, and
+three nodes give real quorum for less than a single Mac mini. If the goal is maximum lab
+per dollar rather than Apple hardware specifically, Option A or B above wins decisively.
+
+**Recommendation: 1x Mac mini M5 Pro, 15-core, 64 GB, 512 GB, 2.5GbE — $2,699.**
+Best $/usable-GB in the Apple lineup, one host to maintain, and 56 GB usable comfortably
+clears the 36 GB target with room for the management plane to grow.
+
+Skip these upsells (~$600 total):
+
+| Upsell | Cost | Verdict |
+| :--- | ---: | :--- |
+| 18-core CPU | +$200 | This build is memory-bound, not compute-bound. |
+| 1 TB internal SSD | +$300 | 2 TB external over Thunderbolt 5 costs ~$250. |
+| 10 Gigabit Ethernet | +$100 | Retrofittable via a Thunderbolt adapter; the HP EliteDesk is 1GbE anyway. |
+
+Add a **2 TB Thunderbolt 5 NVMe enclosure (~$250)** for Longhorn volumes. Total ~$2,949.
+
+---
+
+## Apple Silicon Deployment (Mac mini)
+
+Three components of the reference architecture above cannot run on Apple Silicon and
+require substitution — not merely re-specification.
+
+| Blocker | Why | Replacement |
+| :--- | :--- | :--- |
+| **Proxmox VE / Harvester** | x86-64 only; no arm64 build exists. | macOS Virtualization.framework, driven by Lima (`vz` backend) or UTM. |
+| **Bare-metal Talos** | Cannot replace macOS on Mac hardware. | Talos arm64 as a guest VM. |
+| **Harbor** | Upstream publishes amd64 images only. | Run Harbor on the HP EliteDesk (x86), outside the cluster. |
+
+Everything else in the component stack — Talos, Cilium, Kyverno, Argo CD, Tekton,
+vcluster, Keycloak, OpenLDAP, Envoy Gateway, ESO, OpenBao, Forgejo, Prometheus, Grafana,
+Loki, CloudNativePG, Longhorn, Syft, Grype, Cosign, Velero — ships working arm64 images.
+
+### 1. Virtual Machine Layout
+
+Run **three Talos arm64 VMs** on the single Mac mini. Three VMs on one physical box still
+buys the Kubernetes-layer learning the reference design is after: genuine etcd quorum,
+genuine Longhorn 3-replica storage, and genuine drain/cordon/rolling-upgrade practice.
+
+| VM | vCPU | RAM | Boot disk | Longhorn disk |
+| :--- | ---: | ---: | :--- | :--- |
+| `talos-1` (control plane + worker) | 5 | 16 GB | 100 GB internal | 400 GB external |
+| `talos-2` (control plane + worker) | 5 | 16 GB | 100 GB internal | 400 GB external |
+| `talos-3` (control plane + worker) | 5 | 16 GB | 100 GB internal | 400 GB external |
+| macOS host | shared | ~16 GB | — | — |
+
+What is lost relative to Proxmox: hypervisor snapshots, live migration, Proxmox Backup
+Server, and physical-host failure simulation. The first three are replaced in §4 below;
+the fourth genuinely requires a second machine.
+
+### 2. Networking: socket_vmnet, Not NAT
+
+Virtualization.framework's true bridged mode requires the Apple-restricted
+`com.apple.vm.networking` entitlement. The default NAT would strand the Talos nodes behind
+the Mac and break LAN access to Envoy Gateway.
+
+Use **socket_vmnet** (supported by Lima) so each Talos VM receives a real LAN address.
+Cilium L2 announcements then assign Envoy Gateway a routable LoadBalancer IP, and
+`dev/staging/prod.homelab.local` resolve normally from the rest of the network.
+
+### 3. macOS Host Hardening
+
+macOS is not built to be a headless hypervisor. Required before this is trustworthy:
+
+- `sudo pmset -a sleep 0 disablesleep 1` — never sleep.
+- Disable automatic macOS updates; an unattended reboot takes the cluster down.
+- A LaunchDaemon to start the Talos VMs at boot.
+- Enable auto-login, or verify the VMs start pre-login.
+- Verify FileVault's interaction with auto-login explicitly.
+
+### 4. The HP EliteDesk Becomes the amd64 Island
+
+Run **Proxmox VE bare-metal** on the HP EliteDesk and host every service that is either
+amd64-only or that must survive a cluster rebuild:
+
+| Service | Rationale |
+| :--- | :--- |
+| **Harbor** | Resolves the amd64-only constraint outright — official offline installer. |
+| **Forgejo** | Git must outlive a Talos rebuild; Argo CD reconciles the cluster back from it. |
+| **OpenBao** | Secrets must likewise outlive the cluster. |
+| **buildkitd** (amd64) | Tekton attaches it as a remote builder, enabling genuine multi-arch images. |
+| **MinIO** | S3 target for Velero, Longhorn backups, and CNPG WAL archiving. |
+| **Pi-hole / WireGuard** | Local DNS for `*.homelab.local`, plus remote access. |
+
+The Kubernetes cluster therefore stays **pure arm64**. The alternative — adding the HP as
+an amd64 worker node — was rejected: it would impose `nodeSelector` and architecture
+constraints on every Helm chart, and an i5-6500T makes a poor worker regardless.
+
+Estimated HP footprint is ~12–15 GB of its 16 GB. If it strains, Pi-hole and WireGuard
+are the first services to migrate onto the Mac cluster.
+
+### 5. Backup Strategy: MinIO Replaces Proxmox Backup Server
+
+PBS cannot back up Virtualization.framework VMs, so the hypervisor-level layer of the DR
+strategy does not apply. Replacements, all targeting MinIO on the HP:
+
+- **Velero** — Kubernetes API resources plus CSI volume snapshots.
+- **Longhorn native backups** — per-volume incrementals.
+- **CloudNativePG WAL archiving** — point-in-time recovery.
+- **Argo CD + Forgejo** — full declarative rebuild, unchanged from the reference design.
+
+Configuration RTO stays at minutes. VM-level instant restore is lost, but Talos nodes are
+cattle and rebuild from machine configuration, making this an acceptable trade.
+
+### 6. Multi-Architecture Build Pipeline
+
+On an arm64 cluster every Tekton-built image is arm64-only unless explicitly cross-built.
+Configure a buildx builder with two nodes: in-cluster arm64 (native) and the HP's
+buildkitd for amd64. Syft, Grype, and Cosign all handle multi-arch manifests correctly.
+
+### 7. Scaling Out Later
+
+If physical host-failure tolerance becomes a goal, add a second M5 Pro and promote the HP
+EliteDesk to a **tainted, control-plane-only amd64 Talos node** serving as the third etcd
+voter. Because no user workloads schedule there, the mixed-architecture cost never reaches
+the Helm charts — which is precisely why this works where a bare two-Mac cluster does not.
+
 ---
 
 ## Multi-Environment Deployment Topology
