@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - gatewayclass.yaml
   - public-gateway.yaml
-  - private-gateway.yaml

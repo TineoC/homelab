@@ -44,24 +44,6 @@ spec:
     kind: GitRepository
     name: flux-system
 ---
-# was: cert-manager Application, sync-wave -5
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: tls
-  namespace: flux-system
-spec:
-  interval: 10m
-  path: ./control-plane/releases/tls
-  prune: true
-  wait: true
-  timeout: 10m
-  dependsOn:
-    - name: platform
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
----
 # was: envoy-gateway (unwaved)
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -75,13 +57,13 @@ spec:
   wait: true
   timeout: 10m
   dependsOn:
-    - name: tls
+    - name: platform
   sourceRef:
     kind: GitRepository
     name: flux-system
 ---
 # was: gateway-config Application, sync-wave 1. Needs the Gateway API CRDs from
-# envoy-gateway and the ClusterIssuer from cert-manager, hence dependsOn networking.
+# envoy-gateway, hence dependsOn networking.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
