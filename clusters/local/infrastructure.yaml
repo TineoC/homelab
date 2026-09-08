@@ -8,6 +8,9 @@ spec:
   interval: 10m
   path: ./control-plane/releases/sources
   prune: true
+  retryInterval: 1m
+  wait: true
+  timeout: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -21,6 +24,7 @@ spec:
   interval: 10m
   path: ./control-plane/releases/openbao-local
   prune: true
+  retryInterval: 1m
   wait: true
   timeout: 10m
   dependsOn:
@@ -41,6 +45,7 @@ spec:
   interval: 10m
   path: ./control-plane/releases/networking
   prune: true
+  retryInterval: 1m
   wait: true
   timeout: 10m
   dependsOn:

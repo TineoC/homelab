@@ -8,6 +8,9 @@ spec:
   interval: 10m
   path: ./control-plane/releases/sources
   prune: true
+  retryInterval: 1m
+  wait: true
+  timeout: 5m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -22,6 +25,7 @@ spec:
   interval: 10m
   path: ./control-plane/manifests/roles
   prune: true
+  retryInterval: 1m
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -36,6 +40,7 @@ spec:
   interval: 10m
   path: ./control-plane/releases/platform
   prune: true
+  retryInterval: 1m
   wait: true
   timeout: 10m
   dependsOn:
@@ -54,6 +59,7 @@ spec:
   interval: 10m
   path: ./control-plane/releases/networking
   prune: true
+  retryInterval: 1m
   wait: true
   timeout: 10m
   dependsOn:
@@ -73,6 +79,7 @@ spec:
   interval: 10m
   path: ./control-plane/manifests/gateway
   prune: true
+  retryInterval: 1m
   dependsOn:
     - name: networking
   sourceRef:
