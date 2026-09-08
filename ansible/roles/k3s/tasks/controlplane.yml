@@ -27,17 +27,16 @@
 - name: Fetch K3s kubeconfig from control plane
   fetch:
     src: /etc/rancher/k3s/k3s.yaml
-    dest: "/tmp/kubeconfig_{{ inventory_hostname }}"
+    dest: "{{ kubeconfig }}"
     flat: yes
-  when: inventory_hostname in groups['primary_servers']
+  when: inventory_hostname == hostvars[groups['primary_servers'][0]].inventory_hostname
 
-- name: Copy kubeconfig to files/config.yaml on localhost
+- name: Restrict kubeconfig permissions
   delegate_to: localhost
   become: false
-  copy:
-    src: "/tmp/kubeconfig_{{ hostvars[groups['primary_servers'][0]].inventory_hostname }}"
-    dest: "{{ kubeconfig }}"
-    mode: "0644"
+  file:
+    path: "{{ kubeconfig }}"
+    mode: "0600"
   when: inventory_hostname == hostvars[groups['primary_servers'][0]].inventory_hostname
 
 - name: Replace localhost IP with control plane IP in kubeconfig
