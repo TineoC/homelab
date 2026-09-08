@@ -26,7 +26,7 @@ spec:
     kind: GitRepository
     name: flux-system
 ---
-# was: sealed-secrets (-13), external-secrets (-12), vault (unwaved)
+# was: external-secrets (-12), vault (unwaved)
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
@@ -62,7 +62,7 @@ spec:
     kind: GitRepository
     name: flux-system
 ---
-# was: metal-lb (-3), external-dns (-2), envoy-gateway (unwaved)
+# was: envoy-gateway (unwaved)
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
