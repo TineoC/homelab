@@ -20,7 +20,7 @@ graph TD
     Sign -->|Push Image, Signatures & SBOM| Registry[Registry: Harbor]
     
     subgraph GitOps [GitOps Promotion Flow]
-        ArgoCD[Argo CD] -->|Pull State| GitRepo
+        Flux[Flux CD] -->|Pull State| GitRepo
     end
     
     subgraph HostPlatform [Physical Host: Proxmox / Harvester Hypervisor]
@@ -36,9 +36,9 @@ graph TD
         end
     end
     
-    ArgoCD -->|Reconcile Dev| DevCluster
-    ArgoCD -->|Reconcile Staging| StgCluster
-    ArgoCD -->|Reconcile Prod| ProdCluster
+    Flux -->|Reconcile Dev| DevCluster
+    Flux -->|Reconcile Staging| StgCluster
+    Flux -->|Reconcile Prod| ProdCluster
     
     Kyverno -->|Verify Cosign Signature & SBOM Attestation| VClusters
 ```
@@ -56,7 +56,7 @@ Below is the structured list of recommended components for this enterprise-grade
 | **Virtual Clusters** | **vcluster** | Environment Sandboxing | Creates virtual Kubernetes clusters inside namespaces on the host Talos cluster. Sandboxes control planes (API, etc.) for isolation. | Run separate virtual clusters for `dev`, `staging`, and `prod` on a single physical host without VM overhead. |
 | **Network & CNI** | **Cilium** | Container Network Interface (CNI) | Uses eBPF instead of iptables. Offers high-performance routing, built-in network security policies, and L7 observability. | Cilium provides deep visibility via Hubble and supports Gateway API out of the box. |
 | **Storage Engine (CSI)** | **Longhorn** or **Rook-Ceph** | Distributed Persistent Storage | Rook-Ceph orchestrates enterprise Ceph storage for highly-available block (RWO) and file (RWX) storage. Longhorn is a lightweight CNCF storage engine. | Highly suited for stateful services like database files (Keycloak/LDAP) and shared registries (Harbor). |
-| **GitOps Engine** | **Argo CD** | Continuous Deployment & Reconciliation | Declarative, Git-driven application lifecycle management. Features multi-tenancy and a web UI dashboard. | Manages environment promotion via Kustomize overlays or Helm values in Git. |
+| **GitOps Engine** | **Flux CD** | Continuous Deployment & Reconciliation | Declarative, Git-driven application lifecycle management. A CNCF-graduated set of composable controllers (source, kustomize, helm, notification) driven entirely by CRDs. | Manages environment promotion via Kustomize overlays or Helm values in Git; ordering via `dependsOn`. |
 | **Continuous Integration (CI)** | **Tekton** | Kubernetes-native CI Engine | Runs pipelines as K8s-native CRDs (Tasks, Pipelines, PipelineRuns). Scales pods dynamically and is vendor-agnostic. | Seamlessly integrates with Kubernetes IAM and namespaces to execute build/test/scan tasks. |
 | **Container Registry** | **Harbor** | Secure Artifact Registry | Enterprise-grade registry supporting RBAC, replication, image signing verification, and Helm chart repositories. | Integrates with Trivy for immediate registry-side vulnerability scanning. |
 | **Software Supply Chain** | **Syft** + **Grype** + **Cosign** | SBOM Generation, Scanning & Signing | **Syft** generates SBOMs (Software Bill of Materials); **Grype** scans them; **Cosign** signs the image and attaches the SBOM. | Automates security checks in the Tekton pipeline before images are pushed to Harbor. |
@@ -81,8 +81,8 @@ To achieve true environment isolation without the overhead of building independe
   - The vcluster control plane (API server, SQLite/k3s datastore) runs isolated, while actual workloads are synced down and run on the host Talos cluster nodes.
 - **GitOps Promotion:**
   - **Git Repo Structure:** A monorepo containing directories for configurations: `deploy/base`, `deploy/overlays/dev`, `deploy/overlays/staging`, and `deploy/overlays/prod`.
-  - **Argo CD Multi-Source:** Argo CD has target destinations pointing to the kubeconfig/API endpoint of each respective `vcluster`.
-  - **Promotion Process:** To promote a version, a Pull Request is merged from `dev` to `staging`, and then to `main` (prod). Argo CD reconciles the changes, deploying the new container tags to the target virtual cluster.
+  - **Flux Multi-Cluster:** each `vcluster` gets a `Kustomization` whose `kubeConfig.secretRef` points at that vcluster's kubeconfig secret.
+  - **Promotion Process:** To promote a version, a Pull Request is merged from `dev` to `staging`, and then to `main` (prod). Flux reconciles the changes, deploying the new container tags to the target virtual cluster.
 
 ### 2. Secure Software Supply Chain (Tekton + Syft + Grype + Cosign + Kyverno)
 An enterprise supply chain guarantees that only verified, scan-compliant containers can execute.
@@ -116,11 +116,11 @@ Stateful applications in Kubernetes (like databases, registry storage, and git d
 
 ## Hardware Requirements & Sizing
 
-Running a Kubernetes cluster with a secure supply chain (Harbor, Tekton), IAM (Keycloak), GitOps (Argo CD), and three separate environments (vcluster instances) requires a solid hardware profile, primarily due to the memory footprint of the management tools.
+Running a Kubernetes cluster with a secure supply chain (Harbor, Tekton), IAM (Keycloak), GitOps (Flux CD), and three separate environments (vcluster instances) requires a solid hardware profile, primarily due to the memory footprint of the management tools.
 
 ### 1. Hardware Footprint Breakdown
 We categorize resource usage into two main layers:
-- **Management Plane (Control Plane Host)**: Forgejo, Harbor, Tekton, Argo CD, Keycloak, Prometheus, Grafana, Loki, Kyverno, and Cilium. These are memory-intensive.
+- **Management Plane (Control Plane Host)**: Forgejo, Harbor, Tekton, Flux CD, Keycloak, Prometheus, Grafana, Loki, Kyverno, and Cilium. These are memory-intensive.
 - **Tenant Plane (Virtualized Environments)**: `vcluster` control planes (very light, ~200MB RAM each) + actual application workloads (Dev, Staging, Prod).
 
 ### 2. Resource Estimations
@@ -164,8 +164,8 @@ graph TD
     
     subgraph HostCluster [Host Kubernetes Cluster]
         direction TB
-        subgraph AdminNS [Namespace: gitops-control]
-            ArgoCD[Argo CD]
+        subgraph AdminNS [Namespace: flux-system]
+            Flux[Flux CD]
             Tekton[Tekton Pipelines]
             Harbor[Harbor Registry]
         end
@@ -194,7 +194,7 @@ graph TD
     VC_Prod -.->|Syncer| Workload_Prod
     
     %% GitOps management
-    ArgoCD -->|Deploy & Promotes Config| VC_Dev & VC_Stg & VC_Prod
+    Flux -->|Deploy & Promotes Config| VC_Dev & VC_Stg & VC_Prod
 ```
 
 ### How the Environments Differ & Operate:
@@ -212,9 +212,9 @@ graph TD
      - `prod.homelab.local` -> routes to `vcluster-prod`.
 
 3. **Promotion Flow in Practice**
-   - **Dev**: Automatically builds on Git commits to the `dev` branch. Tekton compiles the code, signs the image with Cosign, runs vulnerability checks, and pushes to Harbor. Argo CD instantly deploys to the `dev` vcluster.
-   - **Staging**: Merging `dev` into `staging` triggers a Tekton run (or reuse of the signed image tag). Argo CD updates the `staging` vcluster. Staging is used for integration testing.
-   - **Production**: Promotion is triggered by creating a Release Tag or merging into the `main` branch. Argo CD deploys the tag to the `prod` vcluster.
+   - **Dev**: Automatically builds on Git commits to the `dev` branch. Tekton compiles the code, signs the image with Cosign, runs vulnerability checks, and pushes to Harbor. Flux instantly deploys to the `dev` vcluster.
+   - **Staging**: Merging `dev` into `staging` triggers a Tekton run (or reuse of the signed image tag). Flux updates the `staging` vcluster. Staging is used for integration testing.
+   - **Production**: Promotion is triggered by creating a Release Tag or merging into the `main` branch. Flux deploys the tag to the `prod` vcluster.
 
 ---
 
@@ -248,9 +248,9 @@ Postgres operators archive WAL files and database snapshots to an S3-compatible 
 This setup is fully compatible with, and designed for, robust backup and disaster recovery (DR) protocols across multiple layers of the stack.
 
 ### 1. The Declarative Layer (GitOps Rebuild)
-Because the entire platform configuration (Namespaces, Policies, Gateway API routing, Argo CD applications, and `vcluster` setups) is managed declaratively in **Forgejo**:
+Because the entire platform configuration (Namespaces, Policies, Gateway API routing, Flux `Kustomization`/`HelmRelease` objects, and `vcluster` setups) is managed declaratively in **Forgejo**:
 - **Recovery Time Objective (RTO) for Config**: **Minutes**.
-- **Process**: In the event of a total cluster loss (hardware fire, fatal OS corruption), you simply provision a fresh Talos cluster, deploy Argo CD, and point it back to your Forgejo git repository. Argo CD will instantly reconcile the entire cluster structure back to its desired state.
+- **Process**: In the event of a total cluster loss (hardware fire, fatal OS corruption), you simply provision a fresh Talos cluster and run `flux bootstrap` against your Forgejo git repository. Flux will instantly reconcile the entire cluster structure back to its desired state.
 
 ### 2. The VM & Node Layer (Hypervisor-Level Backup)
 If running on **Proxmox VE** or **Harvester**:
@@ -365,4 +365,4 @@ Running critical core services outside Kubernetes prevents "chicken-and-egg" sit
 - **Why it is great**:
   - Run **OPNsense** to handle network routing and isolation for your labs.
   - Run **Pi-hole / AdGuard Home** to provide local DNS resolution for your homelab domains (like `dev.homelab.local` and `prod.homelab.local`).
-  - Run **WireGuard VPN** so you can securely SSH into your nodes, access Harbor, or read Argo CD dashboards from anywhere outside your home network.
+  - Run **WireGuard VPN** so you can securely SSH into your nodes, access Harbor, or read Grafana dashboards from anywhere outside your home network.

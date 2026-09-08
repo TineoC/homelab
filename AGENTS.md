@@ -4,7 +4,10 @@
 Provision IAM for 4 demo services using Keycloak (operator), federated to OpenLDAP as an AD alternative. Enforce authN/authZ at the edge via Gateway API (Envoy Gateway). No Ingress for control-plane apps.
 
 ## Architecture constraints
-- GitOps via Argo CD Applications/ApplicationSets only. No kubectl patching by hand.
+- GitOps via Flux `Kustomization`/`HelmRelease` objects only. No kubectl patching by hand.
+- Cluster entrypoints live in `clusters/<cluster>/`; reusable releases in `control-plane/releases/`;
+  raw charts and kustomize bases stay in `control-plane/manifests/`.
+- Ordering is expressed with `dependsOn`, not sync-waves.
 - Namespaces:
   - `iam` → Keycloak operator + Keycloak
   - `directory` → OpenLDAP
@@ -16,7 +19,8 @@ Provision IAM for 4 demo services using Keycloak (operator), federated to OpenLD
 - Authorization done by Envoy/Gateway using **JWT from Keycloak** and **claims/roles**.
 
 ## Definition of Done
-- `make bootstrap` installs CRDs/controllers (Argo CD, Envoy Gateway, Keycloak Operator).
+- `flux bootstrap github --owner=TineoC --repository=homelab --path=clusters/<cluster>` installs the
+  Flux controllers; Flux then reconciles Envoy Gateway and the Keycloak Operator.
 - `make deploy` applies:
   - OpenLDAP with seeded users/groups/departments
   - Keycloak instance + Realm + LDAP Federation + OIDC clients (one per app)

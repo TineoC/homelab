@@ -1,0 +1,50 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sources
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/sources
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: openbao
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/openbao-local
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+    - name: sources
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+# Proves the OCI chart path in control-plane/releases/networking/envoy-gateway.yaml
+# actually pulls. An OCI HelmRepository is static, so its Ready=True says nothing
+# about the URL; only a HelmRelease exercises it.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: networking
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/networking
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+    - name: sources
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

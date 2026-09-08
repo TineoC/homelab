@@ -1,0 +1,80 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: sources
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/sources
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+# was: rolebindings Application, sync-wave -14
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: roles
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/manifests/roles
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+# was: external-secrets (-12), vault (unwaved)
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: platform
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/platform
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+    - name: sources
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+# was: envoy-gateway (unwaved)
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: networking
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/releases/networking
+  prune: true
+  wait: true
+  timeout: 10m
+  dependsOn:
+    - name: platform
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+# was: gateway-config Application, sync-wave 1. Needs the Gateway API CRDs from
+# envoy-gateway, hence dependsOn networking.
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gateway-config
+  namespace: flux-system
+spec:
+  interval: 10m
+  path: ./control-plane/manifests/gateway
+  prune: true
+  dependsOn:
+    - name: networking
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
