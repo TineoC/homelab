@@ -49,20 +49,23 @@ buying. RAM, M920q and cable prices are estimates that haven't been verified.
 | **Phase B: network** | | | | |
 | B1 | Switch | MikroTik CRS310-8G+2S+IN, used | eBay | 165 |
 | B2 | Firewall | Lenovo M720q (i5-8500T, 8 GB) running OPNsense, router-on-a-stick | eBay, Facebook Marketplace | 160-260 |
-| B3 | Rack | 12U open frame, used | Facebook Marketplace, eBay | 36-75 |
-| B4 | Cabling | Cat6 patch cables, power strip | Micro Center | ~30 |
-| | **Phase B subtotal** | | | **390-530** |
+| B3 | Rack | 15-18U floor-standing 4-post open frame, adjustable depth to ~30", casters (fits the 25"-deep 4U GPU server) | Facebook Marketplace, eBay, Amazon | 80-150 |
+| B4 | Cabling | Cat6 patch cables | Micro Center | ~30 |
+| B5 | Rack PDU | 1U rack power strip (no daisy-chained power strips) | Amazon, Micro Center | 40-60 |
+| | **Phase B subtotal** | | | **475-665** |
 | **Phase C: k8s HA** | | | | |
 | C1 | HP RAM | 2x 16 GB DDR4 SODIMM (HP 800 G3 to 32 GB) | Micro Center, eBay | 50-60 |
 | C2 | k8s node 2 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
-| C3 | k8s node 3 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
-| | **Phase C subtotal** | | | **450-560** |
-| | **Total** | | | **~2,060-2,650** |
+| C3 | k8s node 3 | The Phase D GPU server doubles as node 3 | — | 0 |
+| | **Phase C subtotal** | | | **250-310** |
+| | **Phases A-C** | | | **~1,945-2,535** |
+| | **Phase D (GPU/AI node, see below)** | | | **~2,280-2,700** |
+| | **Grand total** | | | **~4,225-5,235** |
 
 Already owned: HP EliteDesk 800 G3, ISP router (used as the Wi-Fi access point), TV.
 
-The full plan runs ~$60-650 over the $2,000 budget. Phases are spread over time so Google One savings
-and price alerts absorb the difference. Phases A + B (~$1,610-2,090) fit the budget on their own.
+The original $2,000 budget was dropped once local AI became a goal. Phases A + B (~$1,695-2,225) still
+cover storage, media and the network lab on their own. Phases C and D can follow as prices allow.
 
 ### Rejected options
 
@@ -217,21 +220,75 @@ tokens per request, so each reply takes ~27 minutes.
 - Ollama or vLLM runs as a Deployment behind a Service (`ollama.ai.svc`), and is also exposed as
   `ai.home.tineochristopher.com` via Envoy Gateway. Every node and the laptop use it over the network.
 
-### Options (prices verified 2026-11-22; DRAM shortage has inflated them)
+### Chosen build: 4U GPU server from used parts + used RTX 3090
 
-| Option | Memory | Price | Extensible? | Fits |
-|---|---|---|---|---|
-| **A. GPU server, 1 GPU now, 2nd later** (4U 19" case, board with 2+ x16 slots, 1,000-1,200 W PSU) + used RTX 3090 | 24 GB, then 48 GB | GPU ~$1,430-1,630 used + platform ~$800-1,200 (unverified) | **Yes**: add a 2nd 3090 (48 GB, 70B models) or a newer card | 19" rack |
-| B. Same platform + used RTX 5060 Ti 16GB | 16 GB, then 32 GB | GPU ~$676 used / ~$800 new + platform | Yes, same path | 19" rack |
-| C. Strix Halo mini PC (Ryzen AI Max+ 395) | 64 GB (~$2,200) or 128 GB (~$3,300-3,800) shared | $2,200-3,800 | **No**: soldered memory. Grows only by adding boxes | 10" rack |
-| D. Ryzen 8845HS mini PCs (780M iGPU) as nodes 1-2 | Shared RAM | ~$820-1,100 (32 GB) / ~$350 barebone | No | 10" rack |
+This is the most cost-effective option that fits in the rack. It's fast on long agentic prompts
+(CUDA), extensible to a 2nd GPU, and doubles as k8s node 3. AM4/DDR4 avoids the worst of the DDR5
+shortage.
 
-Recommendation: **Option A**. It's the most extensible path, and NVIDIA CUDA is fastest on the long
-prompts agentic tools send. It requires the 19" rack. qwen3-coder:30b fits in 24 GB.
+| Part | Choice | ~USD |
+|---|---|---|
+| Case | Rosewill RSV-L4000U 4U (16.8" W x 7" H x 25" D; GPU length up to 320 mm with middle fan, 400 mm without) | 210 (verified) |
+| Rails | 4U slide rails, or a full-depth rack shelf | 30-50 |
+| Motherboard | Used X570 with x8/x8 x16 slots, 3-4 slots apart (room for 2 GPUs) | 120-180 |
+| CPU | Used Ryzen 7 5700X | 100-130 |
+| RAM | 64 GB DDR4 | 150-250 |
+| PSU | 1,000 W 80+ Gold (2x 3090 with power limit ~280 W each) | 140-180 |
+| Boot/model disk | 1 TB NVMe | 70 |
+| GPU | Used RTX 3090 24GB, at most 320 mm long (Founders Edition: 313 mm) | 1,430-1,630 (verified) |
+| **Phase D total** | | **~2,280-2,700** |
+
+Only the case and GPU prices are verified (2026-11-22). Board, CPU, RAM, PSU and rails are estimates.
+
+Later: add a 2nd RTX 3090 (~$1,500) for 48 GB of VRAM and 70B models.
+
+### Alternatives considered
+
+| Option | Memory | Price | Why not chosen |
+|---|---|---|---|
+| Strix Halo 64 / 128 GB (Ryzen AI Max+ 395) | 64-128 GB shared | ~$2,200 / $3,300-3,800 | Not extensible (soldered memory). Prompt processing ~1,400 tok/s on qwen3-coder 30B, slower than CUDA on long contexts. AMD stack is less common in k8s. |
+| NVIDIA DGX Spark / ASUS Ascent GX10 (GB10) | 128 GB shared | ~$6,000 | Best compact option (CUDA, ~3x Strix Halo prefill, 2 units can be linked), but too expensive at current prices. Revisit if it drops. |
+| Minisforum MS-01 + RTX 4000 SFF Ada 20GB | 20 GB | ~$2,200-3,000 | Card alone costs $1,333-2,300. Needs a single-slot low-profile card. Tops out at ~30B models. |
+| RTX 5060 Ti 16GB in the same 4U server | 16 GB | ~$676 used / ~$800 new + platform | Cheaper start, but 16 GB limits agentic-quality models |
+| Ryzen 8845HS mini PCs | Shared RAM | ~$820-1,100 | Integrated GPU too slow for agentic prompts |
+
+### Rack layout (15-18U, floor-standing, 4-post)
+
+```
+1U  patch panel
+1U  MikroTik CRS310
+1U  shelf: Tiny OPNsense | Tiny node 2 (M920q)
+1U  shelf: HP EliteDesk (node 1)
+1U  PDU
+6U  shelf: UGREEN DXP4800 Plus
+1U  empty (air gap)
+4U  GPU server (node 3) on rails, low in the rack (heaviest)
+--  UPS on the floor beside the rack
+```
+
+Footprint: about 24" W x 30-36" D, plus ~6" behind for cables and airflow. 18U is ~3 ft tall.
+Total weight when loaded: ~100-150 lb. Use the floor, not the wall: wall racks are too shallow for a
+25" case, and the home is rented (no drilling).
+
+### Safety requirements
+
+- Motherboard only inside a closed, grounded metal chassis on standoffs. No open-air or mining frames.
+- Rails or a shelf rated for 15-20 kg. Don't hang the case from its front ears alone.
+- Front-to-back airflow, dust filters on intake fans (clean every 1-3 months), rack back left open.
+  The closet needs ventilation: ~600 W of heat under load.
+- UPS + rack PDU. No daisy-chained power strips.
+- Load: ~600-700 W peak with 1 GPU, ~1,000 W with 2. Fine on a 15 A circuit (~1,800 W) without
+  other heavy loads.
+- Touch the chassis metal before handling parts. Switch the PSU off before opening the case.
 
 Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
 [RTX 3090 history](https://gpudojo.com/rtx-3090),
+[Rosewill RSV-L4000U](https://www.newegg.com/rosewill-rsv-l4000u-black/p/N82E16811147327),
 [Strix Halo comparison](https://computingforgeeks.com/ryzen-ai-max-395-mini-pc-comparison/),
+[Strix Halo Qwen3-Coder benchmarks](https://github.com/hogeheer499-commits/strix-halo-guide/blob/main/BENCHMARKS.md),
+[DGX Spark vs Strix Halo](https://petronellatech.com/blog/dgx-spark-vs-strix-halo-vs-gorgon-halo-local-llm-benchmarks/),
+[ASUS GX10 at Micro Center](https://www.microcenter.com/product/703497/asus-ascent-gx10-ai-supercomputer),
+[RTX 4000 SFF Ada](https://gpuprix.com/us/gpus/rtx-4000-sff-ada-generation),
 [mini PC prices](https://computingforgeeks.com/mini-pc-prices/),
 [RTX 5060 Ti 16GB history](https://bestvaluegpu.com/history/new-and-used-rtx-5060-ti-16gb-price-history-and-specs/).
 
@@ -242,5 +299,5 @@ Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
 - [x] Go with the full HA plan (3 k8s nodes).
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
-- [ ] Pick the GPU/AI node option (A recommended) and confirm the 19" rack.
-- [ ] Verify GPU server platform prices (case, board, PSU).
+- [x] GPU/AI node: 4U server with used RTX 3090, in a 15-18U floor rack.
+- [ ] Verify GPU server platform prices (board, CPU, DDR4, PSU, rails) and pick a 15-18U rack.
