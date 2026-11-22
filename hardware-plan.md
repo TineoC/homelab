@@ -1,6 +1,6 @@
 # Homelab Hardware Purchase Plan
 
-Status: planning. Last updated 2026-11-22.
+Status: approved, full HA plan, buying in phases. Last updated 2026-11-22.
 
 ## Goals
 
@@ -34,24 +34,35 @@ Status: planning. Last updated 2026-11-22.
 
 ## Shopping list
 
-Prices are snapshots from 2026-11-22. Re-check them before buying.
+Decision: **full HA plan** (3 k8s nodes). Prices are snapshots from 2026-11-22. Re-check them before
+buying. RAM, M920q and cable prices are estimates that haven't been verified.
 
-| # | Item | Choice | New | Used / refurb |
+| # | Item | Choice | Where to buy | ~USD |
 |---|---|---|---|---|
-| 1 | Drives | 2x 12 TB or 2x 16 TB enterprise, recertified | — | 12 TB $190-300 each, 16 TB ~$399 each (WD HC550) |
-| 2 | NAS | UGREEN DXP4800 Plus, running TrueNAS | ~$584-657 | Official refurb (2-yr warranty), open box ~$550 |
-| 2 | App SSD | 1 TB NVMe | ~$70 | Buy new |
-| 3 | UPS | CyberPower CP1500PFCLCD | ~$240 | Refurb $180-220 |
-| 4 | Switch | MikroTik CRS310-8G+2S+IN | ~$192 | Used ~$165 |
-| 5 | Firewall | Lenovo ThinkCentre M720q (i5-8500T, 8 GB) running OPNsense, router-on-a-stick | — | $160-260 |
-| 6 | Rack | 12U open frame | ~$75 | Used from $36 |
-| 7 | RAM upgrades | HP 800 G3: 2x 16 GB DDR4 SODIMM. NAS: +8 GB DDR5 SODIMM. | ~$70-110 | — |
-| 8 | Second k8s node | Lenovo M920q (i5-8500T, 6 cores), 32 GB | — | $200-250 |
-| 9 | Third k8s node (HA) | Lenovo M920q (i5-8500T, 6 cores), 32 GB | — | $200-250 |
+| **Phase A: storage and media** | | | | |
+| A1 | Drives | 2x 12 TB enterprise, recertified (2x 16 TB adds $200-420) | ServerPartDeals, eBay (2-yr+ warranty) | 380-600 |
+| A2 | NAS | UGREEN DXP4800 Plus, running TrueNAS | UGREEN refurb, eBay open box, Micro Center open box | 550-620 |
+| A3 | App SSD | 1 TB NVMe, new | Micro Center, Amazon | 70 |
+| A4 | NAS RAM | +8 GB DDR5 SODIMM | Micro Center | 40-50 |
+| A5 | UPS | CyberPower CP1500PFCLCD, refurb | Woot, Verdi (new battery) | 180-220 |
+| | **Phase A subtotal** | | | **1,220-1,560** |
+| **Phase B: network** | | | | |
+| B1 | Switch | MikroTik CRS310-8G+2S+IN, used | eBay | 165 |
+| B2 | Firewall | Lenovo M720q (i5-8500T, 8 GB) running OPNsense, router-on-a-stick | eBay, Facebook Marketplace | 160-260 |
+| B3 | Rack | 12U open frame, used | Facebook Marketplace, eBay | 36-75 |
+| B4 | Cabling | Cat6 patch cables, power strip | Micro Center | ~30 |
+| | **Phase B subtotal** | | | **390-530** |
+| **Phase C: k8s HA** | | | | |
+| C1 | HP RAM | 2x 16 GB DDR4 SODIMM (HP 800 G3 to 32 GB) | Micro Center, eBay | 50-60 |
+| C2 | k8s node 2 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
+| C3 | k8s node 3 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
+| | **Phase C subtotal** | | | **450-560** |
+| | **Total** | | | **~2,060-2,650** |
 
-Estimated total for items 1-6: ~$1,600-1,800 with 12 TB drives, ~$2,000 with 16 TB drives.
-Items 7-8 add ~$270-360. Item 9 adds ~$200-250 and can wait. RAM and M920q prices are estimates that
-haven't been verified.
+Already owned: HP EliteDesk 800 G3, ISP router (used as the Wi-Fi access point), TV.
+
+The full plan runs ~$60-650 over the $2,000 budget. Phases are spread over time so Google One savings
+and price alerts absorb the difference. Phases A + B (~$1,610-2,090) fit the budget on their own.
 
 ### Rejected options
 
@@ -191,6 +202,6 @@ Media is not backed up, since it can be re-ripped.
 
 - [ ] Decide between 12 TB and 16 TB drives, based on restock prices.
 - [ ] Verify RAM and M920q prices.
-- [ ] Decide when to buy the third k8s node (HA).
+- [x] Go with the full HA plan (3 k8s nodes).
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
