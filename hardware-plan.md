@@ -45,9 +45,13 @@ Prices are snapshots from 2026-11-22. Re-check them before buying.
 | 4 | Switch | MikroTik CRS310-8G+2S+IN | ~$192 | Used ~$165 |
 | 5 | Firewall | Lenovo ThinkCentre M720q (i5-8500T, 8 GB) running OPNsense, router-on-a-stick | — | $160-260 |
 | 6 | Rack | 12U open frame | ~$75 | Used from $36 |
-| 7 | Second k8s node | Another Lenovo Tiny | — | $160-260 |
+| 7 | RAM upgrades | HP 800 G3: 2x 16 GB DDR4 SODIMM. NAS: +8 GB DDR5 SODIMM. | ~$70-110 | — |
+| 8 | Second k8s node | Lenovo M920q (i5-8500T, 6 cores), 32 GB | — | $200-250 |
+| 9 | Third k8s node (HA) | Lenovo M920q (i5-8500T, 6 cores), 32 GB | — | $200-250 |
 
 Estimated total for items 1-6: ~$1,600-1,800 with 12 TB drives, ~$2,000 with 16 TB drives.
+Items 7-8 add ~$270-360. Item 9 adds ~$200-250 and can wait. RAM and M920q prices are estimates that
+haven't been verified.
 
 ### Rejected options
 
@@ -66,7 +70,8 @@ Estimated total for items 1-6: ~$1,600-1,800 with 12 TB drives, ~$2,000 with 16 
 4. **Switch.** Gives the NAS 10GbE or 2.5GbE. Needed before creating VLANs.
 5. **OPNsense on the Lenovo Tiny.**
 6. **Rack.**
-7. **Second k8s node**, when the HP runs out of capacity.
+7. **RAM upgrades + second k8s node.** Runs the full stack, but without HA.
+8. **Third k8s node.** Gives real HA. Then move data volumes from NFS to Longhorn.
 
 Before trusting data to used gear: SMART long test and `badblocks` on drives, battery self-test on the
 UPS, boot test on mini PCs. All inside the return window.
@@ -129,6 +134,50 @@ ONT -- ISP router (Wi-Fi for the house and the TV)
 Rule: apps holding irreplaceable data (Immich, Nextcloud) run on the NAS. Experiments run on the k8s
 cluster.
 
+## Kubernetes capacity
+
+[HOMELAB.md](HOMELAB.md) sizes the full stack at **16 cores, 36 GB RAM and 300 GB+ NVMe**. That stack is
+Talos, Cilium, Kyverno, 3 vclusters, Harbor, Tekton, Forgejo, Keycloak, OpenBao, Flux and
+Prometheus/Grafana/Loki.
+
+| Stage | Nodes | Cores | RAM | Meets sizing? |
+|---|---|---|---|---|
+| HP as bought + M720q 8 GB | 2 | 10 | 24 GB | No (RAM short) |
+| HP 32 GB + M920q 32 GB | 2 | 10 | 64 GB | RAM yes, cores tight. Drop the staging vcluster if needed. |
+| HP 32 GB + 2x M920q 32 GB | 3 | 16 | 96 GB | Yes |
+
+The OPNsense Tiny and the NAS are not counted. The NAS stays busy with ZFS, Immich, Nextcloud and
+Jellyfin.
+
+## High availability
+
+| Nodes | etcd quorum | If one node dies |
+|---|---|---|
+| 1 | 1/1 | Cluster down |
+| 2 | 2/2 | Cluster down. Worse than 1 node, since either failure breaks quorum. |
+| 3 | 2/3 | Cluster survives |
+
+Requirements for k8s HA:
+
+- 3 nodes, each running both control plane and workloads (Talos).
+- Replicated storage: Longhorn or Rook-Ceph on each node's NVMe, 3 replicas. NFS volumes from the NAS
+  are not HA.
+- 2 or more replicas per app, with a PodDisruptionBudget and anti-affinity: Keycloak, Envoy Gateway,
+  Harbor, Forgejo. CloudNativePG with 3 instances for databases.
+- If Proxmox is used: 3 nodes, or 2 nodes plus a Raspberry Pi QDevice.
+
+Accepted single points of failure (normal for a homelab):
+
+| Component | Impact | HA option, if ever wanted |
+|---|---|---|
+| NAS | Media, photos, files and NFS go down | Second NAS with ZFS replication |
+| Switch | Everything goes down | Two switches with LACP/MLAG |
+| OPNsense | Lab loses internet | Second box with CARP. Good future networking exercise (~$180). |
+| UPS / power | Everything goes down | Dual PSUs |
+| ISP | No internet | 5G failover |
+
+Data protection comes from ZFS snapshots and backups, not from infrastructure redundancy.
+
 ## Backup
 
 RAID is not a backup. With no offsite location, choose one:
@@ -141,6 +190,7 @@ Media is not backed up, since it can be re-ripped.
 ## Open items
 
 - [ ] Decide between 12 TB and 16 TB drives, based on restock prices.
-- [ ] Decide whether to buy the second k8s node now or later.
+- [ ] Verify RAM and M920q prices.
+- [ ] Decide when to buy the third k8s node (HA).
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
