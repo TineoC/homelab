@@ -1,0 +1,27 @@
+# Local LLM server (Ollama) on the laptop, used by opencode.
+#
+# Run:   docker compose -f local/ollama/compose.yaml up -d
+# Pull:  docker exec ollama ollama pull qwen3-coder:30b
+# API:   http://127.0.0.1:11434 (bound to localhost only)
+#
+# The laptop has no discrete GPU (i7-1165G7, 64 GB RAM), so models run on the CPU. qwen3-coder:30b is a
+# mixture-of-experts model (~3B active parameters), which is fast enough on CPU and supports the tool
+# calling that opencode needs.
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:11434:11434"
+    environment:
+      OLLAMA_CONTEXT_LENGTH: "32768"   # opencode's system prompt and tools need a large context
+      OLLAMA_KEEP_ALIVE: "30m"
+    volumes:
+      - ~/ollama:/root/.ollama
+
+# Match the Surfshark tunnel MTU, or TLS from containers times out (see local/jellyfin/compose.yaml).
+networks:
+  default:
+    driver_opts:
+      com.docker.network.driver.mtu: "1280"
