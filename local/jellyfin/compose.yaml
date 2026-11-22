@@ -13,6 +13,12 @@
 # Gotchas:
 #   - A VPN (Surfshark) blocks LAN access from the TV. Enable "Allow LAN" in the VPN.
 #   - Set Dashboard > Playback > Transcoding to Intel QuickSync (QSV).
+#   - Google login: SSO-Auth plugin (repo https://raw.githubusercontent.com/9p4/jellyfin-plugin-sso/manifest-release/manifest.json),
+#     provider "google", endpoint https://accounts.google.com, scopes email+profile, username claim "email",
+#     scheme override https. DoNotValidateEndpoints=true is required because Google serves endpoints from
+#     several hosts. Redirect URI: https://jellyfin.home.tineochristopher.com/sso/OID/redirect/google.
+#     The login button lives in Dashboard > General > Branding > Login disclaimer. The TV uses Quick Connect.
+#   - Jellyfin 12.x rejects the X-Emby-Token header. Use `Authorization: MediaBrowser Token="<key>"`.
 #   - group_add is the host `render` group GID (`getent group render`). Adjust it per machine.
 services:
   jellyfin:
