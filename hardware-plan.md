@@ -52,15 +52,15 @@ buying. RAM, M920q and cable prices are estimates that haven't been verified.
 | B3 | Rack | 10" mini rack, 12U (e.g. Tecmojo 12U, 10.23" deep) + shelves | Amazon | ~140 |
 | B4 | Cabling | Cat6 patch cables | Micro Center | ~30 |
 | B5 | Rack PDU | 10" rack power strip (no daisy-chained power strips) | Amazon | 30-50 |
-| | **Phase B subtotal** | | | **465-655** |
+| | **Phase B subtotal** | | | **525-645** |
 | **Phase C: k8s HA** | | | | |
 | C1 | HP RAM | 2x 16 GB DDR4 SODIMM (HP 800 G3 to 32 GB) | Micro Center, eBay | 50-60 |
 | C2 | k8s node 2 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
 | C3 | k8s node 3 | The Phase D Strix Halo doubles as node 3 | — | 0 |
 | | **Phase C subtotal** | | | **250-310** |
-| | **Phases A-C** | | | **~1,945-2,535** |
+| | **Phases A-C** | | | **~1,995-2,515** |
 | | **Phase D (Strix Halo 128GB, see below)** | | | **~3,324-3,959** |
-| | **Grand total** | | | **~5,259-6,484** |
+| | **Grand total** | | | **~5,319-6,474** |
 
 Already owned: HP EliteDesk 800 G3, ISP router (used as the Wi-Fi access point), TV.
 
