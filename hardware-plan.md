@@ -198,6 +198,43 @@ RAID is not a backup. With no offsite location, choose one:
 
 Media is not backed up, since it can be re-ripped.
 
+## GPU / AI node (Phase D)
+
+Goal: serve local models to the whole cluster for agentic coding (opencode), private chat (Open WebUI),
+automation (Postiz, n8n), and practice with k8s GPU operations. Must be **extensible**. The $2,000
+budget doesn't apply to this phase.
+
+Why not CPU: on the laptop (i7-1165G7), prompt processing runs at ~12 tokens/s. opencode sends ~19,500
+tokens per request, so each reply takes ~27 minutes.
+
+### Design
+
+- One AI node, not a GPU in every node. VRAM doesn't pool across nodes, and splitting a model over
+  2.5GbE is slow. Nodes 1-2 stay cheap CPU nodes.
+- The AI node is also k8s node 3, so HA keeps 3 nodes.
+- NVIDIA GPU Operator plus device-plugin time-slicing lets several pods share one GPU. A taint on the
+  node keeps ordinary pods off it.
+- Ollama or vLLM runs as a Deployment behind a Service (`ollama.ai.svc`), and is also exposed as
+  `ai.home.tineochristopher.com` via Envoy Gateway. Every node and the laptop use it over the network.
+
+### Options (prices verified 2026-11-22; DRAM shortage has inflated them)
+
+| Option | Memory | Price | Extensible? | Fits |
+|---|---|---|---|---|
+| **A. GPU server, 1 GPU now, 2nd later** (4U 19" case, board with 2+ x16 slots, 1,000-1,200 W PSU) + used RTX 3090 | 24 GB, then 48 GB | GPU ~$1,430-1,630 used + platform ~$800-1,200 (unverified) | **Yes**: add a 2nd 3090 (48 GB, 70B models) or a newer card | 19" rack |
+| B. Same platform + used RTX 5060 Ti 16GB | 16 GB, then 32 GB | GPU ~$676 used / ~$800 new + platform | Yes, same path | 19" rack |
+| C. Strix Halo mini PC (Ryzen AI Max+ 395) | 64 GB (~$2,200) or 128 GB (~$3,300-3,800) shared | $2,200-3,800 | **No**: soldered memory. Grows only by adding boxes | 10" rack |
+| D. Ryzen 8845HS mini PCs (780M iGPU) as nodes 1-2 | Shared RAM | ~$820-1,100 (32 GB) / ~$350 barebone | No | 10" rack |
+
+Recommendation: **Option A**. It's the most extensible path, and NVIDIA CUDA is fastest on the long
+prompts agentic tools send. It requires the 19" rack. qwen3-coder:30b fits in 24 GB.
+
+Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
+[RTX 3090 history](https://gpudojo.com/rtx-3090),
+[Strix Halo comparison](https://computingforgeeks.com/ryzen-ai-max-395-mini-pc-comparison/),
+[mini PC prices](https://computingforgeeks.com/mini-pc-prices/),
+[RTX 5060 Ti 16GB history](https://bestvaluegpu.com/history/new-and-used-rtx-5060-ti-16gb-price-history-and-specs/).
+
 ## Open items
 
 - [ ] Decide between 12 TB and 16 TB drives, based on restock prices.
@@ -205,3 +242,5 @@ Media is not backed up, since it can be re-ripped.
 - [x] Go with the full HA plan (3 k8s nodes).
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
+- [ ] Pick the GPU/AI node option (A recommended) and confirm the 19" rack.
+- [ ] Verify GPU server platform prices (case, board, PSU).
