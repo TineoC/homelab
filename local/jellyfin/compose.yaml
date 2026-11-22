@@ -1,0 +1,31 @@
+# Interim Jellyfin server on the laptop, until the NAS arrives (see hardware-plan.md).
+#
+# Run:   docker compose -f local/jellyfin/compose.yaml up -d
+# Open:  http://localhost:8096  (TV app: http://<laptop-lan-ip>:8096)
+#
+# Library layout. ~/Media is filled with hardlinks from ~/Downloads (`ln -f src dst`), so it takes no
+# extra disk space and the downloads stay untouched:
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>).mkv
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>).en.srt       external subtitles
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>) - <label>.mkv  multiple versions
+#   ~/Media/Movies/<Title> (<Year>)/featurettes/*.mkv               extras
+#
+# Gotchas:
+#   - A VPN (Surfshark) blocks LAN access from the TV. Enable "Allow LAN" in the VPN.
+#   - Set Dashboard > Playback > Transcoding to Intel QuickSync (QSV).
+#   - group_add is the host `render` group GID (`getent group render`). Adjust it per machine.
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    volumes:
+      - ~/jellyfin/config:/config
+      - ~/jellyfin/cache:/cache
+      - ~/Media:/media:ro
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "991"
