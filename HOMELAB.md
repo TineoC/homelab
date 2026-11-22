@@ -116,6 +116,8 @@ Stateful applications in Kubernetes (like databases, registry storage, and git d
 
 ## Hardware Requirements & Sizing
 
+> The NAS, network and purchase plan lives in [hardware-plan.md](hardware-plan.md).
+
 Running a Kubernetes cluster with a secure supply chain (Harbor, Tekton), IAM (Keycloak), GitOps (Flux CD), and three separate environments (vcluster instances) requires a solid hardware profile, primarily due to the memory footprint of the management tools.
 
 ### 1. Hardware Footprint Breakdown
