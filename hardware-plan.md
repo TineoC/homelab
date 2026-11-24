@@ -44,24 +44,24 @@ buying. RAM, M920q and cable prices are estimates that haven't been verified.
 | A2 | NAS | UGREEN DXP4800 Plus, running TrueNAS | UGREEN refurb, eBay open box, Micro Center open box | 550-620 |
 | A3 | App SSD | 1 TB NVMe, new | Micro Center, Amazon | 70 |
 | A4 | NAS RAM | +8 GB DDR5 SODIMM | Micro Center | 40-50 |
-| A5 | UPS | CyberPower CP1500PFCLCD, refurb | Woot, Verdi (new battery) | 180-220 |
-| | **Phase A subtotal** | | | **1,220-1,560** |
+| A5 | UPS | CyberPower CP1500PFCRM2U, 2U rack-mount, pure sine, 1000 W, 8 outlets | Newegg, Staples, eBay | 290-360 |
+| | **Phase A subtotal** | | | **1,330-1,700** |
 | **Phase B: network** | | | | |
 | B1 | Switch | MikroTik CRS310-8G+2S+IN, used | eBay | 165 |
 | B2 | Firewall | Lenovo M720q (i5-8500T, 8 GB) running OPNsense, router-on-a-stick | eBay, Facebook Marketplace | 160-260 |
-| B3 | Rack | 10" mini rack, 12U (e.g. Tecmojo 12U, 10.23" deep) + shelves | Amazon | ~140 |
+| B3 | Rack | 19" 4-post open frame, 15U, adjustable depth, floor-standing (e.g. NavePoint 15U, StarTech 4POSTRACK15U) | Amazon, Walmart | 300-400 |
 | B4 | Cabling | Cat6 patch cables | Micro Center | ~30 |
-| B5 | Rack PDU | 10" rack power strip (no daisy-chained power strips) | Amazon | 30-50 |
+| B5 | Mounting | 2x 1U vented shelves (Tiny PCs), 1 shelf for the NAS, MS-S1 MAX 19" 2U kit, MikroTik RMK-2/10 ($9), 1U patch panel, blanking panels. No PDU: the UPS has 8 outlets. | Amazon, Newegg | 150-220 |
 | B6 | 10G modules | 2x SFP+ to 10GBASE-T RJ45 (MikroTik S+RJ10 or similar), for the NAS and MS-S1 MAX | Amazon, eBay | 80-120 |
-| | **Phase B subtotal** | | | **605-765** |
+| | **Phase B subtotal** | | | **885-1,195** |
 | **Phase C: k8s HA** | | | | |
 | C1 | HP RAM | 2x 16 GB DDR4 SODIMM (HP 800 G3 to 32 GB) | Micro Center, eBay | 50-60 |
 | C2 | k8s node 2 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
 | C3 | k8s node 3 | The Phase D MS-S1 MAX doubles as node 3 | — | 0 |
 | | **Phase C subtotal** | | | **250-310** |
-| | **Phases A-C** | | | **~2,075-2,635** |
+| | **Phases A-C** | | | **~2,465-3,205** |
 | | **Phase D (Minisforum MS-S1 MAX 128GB / 2TB, see below)** | | | **~3,959** |
-| | **Grand total** | | | **~6,034-6,594** |
+| | **Grand total** | | | **~6,424-7,164** |
 
 Already owned: HP EliteDesk 800 G3, ISP router (used as the Wi-Fi access point), TV.
 
@@ -99,7 +99,7 @@ UPS, boot test on mini PCs. All inside the return window.
 | 12 TB drive (recertified) | $200 each |
 | 16 TB drive (recertified) | $260 each |
 | MikroTik CRS310 | $185 |
-| CyberPower CP1500PFCLCD | $200 |
+| CyberPower CP1500PFCRM2U | $300 |
 | Lenovo Tiny (M720q or newer) | $160 |
 | 1 TB NVMe | $60 |
 
@@ -263,31 +263,35 @@ Growth path: a 2nd Strix Halo, or an NVIDIA box later (DGX Spark / GB10 if it dr
 
 Visual pros/cons: https://claude.ai/artifact/K6GGkXrZ6WjnfA69XM1mNG (private).
 
-### Rack layout (10" mini rack, ~11U)
+### Rack layout (19" open frame, 15U)
 
-Everything is compact now, so the deep 19" floor rack isn't needed.
+Decision 2026-11-24: everything goes in the rack, UPS included. A 10" rack can't do that: no 10"
+UPS exists (the GOLDENMATE 1000VA is 330 mm deep vs ~260 mm), the MS-S1 MAX is 222 mm wide
+(0 mm clearance), two Tiny PCs side by side are ~358 mm, and no 10" rack is both ~18U tall and deep
+enough.
 
 ```
-1U  patch panel (10")
-1U  MikroTik CRS310
-1U  shelf: Tiny OPNsense | M920q node 2
-1U  shelf: HP EliteDesk node 1
-2U  shelf: Strix Halo node 3 (AI)
-6U  shelf: UGREEN DXP4800 Plus (check it fits a 10" shelf; otherwise beside the rack)
-1U  PDU (10")
---  UPS beside the rack
+U15     1U patch panel
+U14     1U MikroTik CRS310 (RMK-2/10 kit)
+U13     1U blank: airflow for the hot 10G SFP+ modules
+U12     1U shelf: M720q OPNsense | M920q node 2
+U11     1U shelf: HP EliteDesk node 1 | free slot for a 4th Tiny PC
+U9-10   2U MS-S1 MAX node 3 (AI), 19" 2U kit
+U8      1U spare
+U3-7    5U shelf: UGREEN DXP4800 Plus (178 mm tall = 4U + shelf)
+U1-2    2U CyberPower CP1500PFCRM2U UPS (heaviest item at the bottom)
 ```
 
-About 10" wide x ~12" deep. It fits on a desk, a shelf or the closet floor. Load: ~250-300 W peak.
+About 60 cm wide x 60-100 cm deep (adjustable) x ~80 cm tall, on the floor. Load: ~360 W peak.
+Interactive view: https://claude.ai/artifact/Uyve3XgR7BdtcXPi5bbKyX (private).
 
 ### Safety requirements
 
 - Every board inside its own closed case. No open-air frames.
-- Shelves rated for the NAS with drives (~6-8 kg). The rack sits on the floor or a sturdy desk.
+- Shelves rated for the NAS with drives (~6-8 kg). The rack sits on the floor; the UPS goes at the bottom.
 - Leave the rack's back open for airflow and keep its vents clear. Clean the dust every 1-3 months.
-  The closet needs some ventilation: ~250-300 W of heat under load.
-- UPS + rack PDU. No daisy-chained power strips.
-- The Strix Halo's 330 W power brick goes on a shelf, not hanging from the cable.
+  The closet needs some ventilation: ~360 W of heat under load.
+- Everything plugs straight into the UPS (8 outlets). No daisy-chained power strips.
 
 Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
 [RTX 3090 history](https://gpudojo.com/rtx-3090),
@@ -307,6 +311,6 @@ Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
 - [x] Go with the full HA plan (3 k8s nodes).
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
-- [x] GPU/AI node: Strix Halo 128GB in a 10" mini rack.
+- [x] GPU/AI node: Strix Halo 128GB (MS-S1 MAX) in a 19" 15U rack.
 - [x] Pick the Strix Halo model: Minisforum MS-S1 MAX.
-- [ ] Pick a 10" rack. Check the NAS and the MS-S1 MAX fit a 10" shelf.
+- [ ] Pick the 19" 15U rack and confirm its minimum depth fits the room.
