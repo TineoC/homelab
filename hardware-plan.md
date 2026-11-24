@@ -138,6 +138,7 @@ ONT -- ISP router (Wi-Fi for the house and the TV)
 | Photos | Immich |
 | Files | Nextcloud (or Seafile) |
 | Media | Jellyfin (hardware transcoding with Intel QuickSync) |
+| Media, interim | Jellyfin on the laptop via [local/jellyfin/compose.yaml](local/jellyfin/compose.yaml) until the NAS arrives |
 | Blog | Ghost or Hugo |
 | Social media scheduling | Postiz or Mixpost |
 | k8s storage | NFS from TrueNAS via `nfs-subdir-external-provisioner` or `democratic-csi` |

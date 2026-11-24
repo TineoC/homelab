@@ -1,0 +1,81 @@
+# Interim Jellyfin server on the laptop, until the NAS arrives (see hardware-plan.md).
+#
+# Run:   docker compose -f local/jellyfin/compose.yaml up -d
+# Open:  http://localhost:8096  (TV app: http://<laptop-lan-ip>:8096)
+#
+# Library layout. ~/Media is filled with hardlinks from ~/Downloads (`ln -f src dst`), so it takes no
+# extra disk space and the downloads stay untouched:
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>).mkv
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>).en.srt       external subtitles
+#   ~/Media/Movies/<Title> (<Year>)/<Title> (<Year>) - <label>.mkv  multiple versions
+#   ~/Media/Movies/<Title> (<Year>)/featurettes/*.mkv               extras
+#
+# Gotchas:
+#   - A VPN (Surfshark) blocks LAN access from the TV. Enable "Allow LAN" in the VPN.
+#   - Set Dashboard > Playback > Transcoding to Intel QuickSync (QSV).
+#   - Google login: SSO-Auth plugin (repo https://raw.githubusercontent.com/9p4/jellyfin-plugin-sso/manifest-release/manifest.json),
+#     provider "google", endpoint https://accounts.google.com, scopes email+profile, username claim "email",
+#     scheme override https. DoNotValidateEndpoints=true is required because Google serves endpoints from
+#     several hosts. Redirect URI: https://jellyfin.home.tineochristopher.com/sso/OID/redirect/google.
+#     The login button lives in Dashboard > General > Branding > Login disclaimer. The TV uses Quick Connect.
+#   - Jellyfin 12.x rejects the X-Emby-Token header. Use `Authorization: MediaBrowser Token="<key>"`.
+#   - group_add is the host `render` group GID (`getent group render`). Adjust it per machine.
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    restart: unless-stopped
+    ports:
+      - "8096:8096"
+    volumes:
+      - ~/jellyfin/config:/config
+      - ~/jellyfin/cache:/cache
+      - ~/Media:/media:ro
+    devices:
+      - /dev/dri:/dev/dri
+    group_add:
+      - "991"
+
+  # HTTPS for https://jellyfin.home.tineochristopher.com (Cloudflare A record -> laptop LAN IP, DNS only).
+  # The certificate comes from Let's Encrypt via the DNS-01 challenge, so no ports are opened to the
+  # internet. Needs ~/jellyfin/.env with CF_API_TOKEN (Zone:DNS:Edit on tineochristopher.com only).
+  caddy:
+    build:
+      network: host
+      dockerfile_inline: |
+        FROM caddy:2-builder AS build
+        RUN xcaddy build --with github.com/caddy-dns/cloudflare
+        FROM caddy:2
+        COPY --from=build /usr/bin/caddy /usr/bin/caddy
+    container_name: jellyfin-caddy
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    env_file: ~/jellyfin/.env
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    volumes:
+      - ~/jellyfin/caddy:/data
+    depends_on:
+      - jellyfin
+
+configs:
+  caddyfile:
+    content: |
+      jellyfin.home.tineochristopher.com {
+        tls {
+          dns cloudflare {env.CF_API_TOKEN}
+          # The VPN blocks DNS from containers, so skip the local propagation check and just wait.
+          propagation_delay 60s
+          propagation_timeout -1
+        }
+        reverse_proxy jellyfin:8096
+      }
+
+# The Surfshark VPN interface has MTU 1280. With Docker's default MTU of 1500, TLS handshakes from
+# containers time out (Let's Encrypt, Cloudflare API). Match the VPN MTU.
+networks:
+  default:
+    driver_opts:
+      com.docker.network.driver.mtu: "1280"
