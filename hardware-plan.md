@@ -52,15 +52,16 @@ buying. RAM, M920q and cable prices are estimates that haven't been verified.
 | B3 | Rack | 10" mini rack, 12U (e.g. Tecmojo 12U, 10.23" deep) + shelves | Amazon | ~140 |
 | B4 | Cabling | Cat6 patch cables | Micro Center | ~30 |
 | B5 | Rack PDU | 10" rack power strip (no daisy-chained power strips) | Amazon | 30-50 |
-| | **Phase B subtotal** | | | **525-645** |
+| B6 | 10G modules | 2x SFP+ to 10GBASE-T RJ45 (MikroTik S+RJ10 or similar), for the NAS and MS-S1 MAX | Amazon, eBay | 80-120 |
+| | **Phase B subtotal** | | | **605-765** |
 | **Phase C: k8s HA** | | | | |
 | C1 | HP RAM | 2x 16 GB DDR4 SODIMM (HP 800 G3 to 32 GB) | Micro Center, eBay | 50-60 |
 | C2 | k8s node 2 | Lenovo M920q (i5-8500T, 6 cores), 32 GB | eBay, Facebook Marketplace | 200-250 |
-| C3 | k8s node 3 | The Phase D Strix Halo doubles as node 3 | — | 0 |
+| C3 | k8s node 3 | The Phase D MS-S1 MAX doubles as node 3 | — | 0 |
 | | **Phase C subtotal** | | | **250-310** |
-| | **Phases A-C** | | | **~1,995-2,515** |
-| | **Phase D (Strix Halo 128GB, see below)** | | | **~3,324-3,959** |
-| | **Grand total** | | | **~5,319-6,474** |
+| | **Phases A-C** | | | **~2,075-2,635** |
+| | **Phase D (Minisforum MS-S1 MAX 128GB / 2TB, see below)** | | | **~3,959** |
+| | **Grand total** | | | **~6,034-6,594** |
 
 Already owned: HP EliteDesk 800 G3, ISP router (used as the Wi-Fi access point), TV.
 
@@ -232,7 +233,7 @@ so Proxmox, Talos and x86-only images like Harbor still work).
 | Framework Desktop 128GB | ~$3,449 (often out of stock); mainboard only $3,149 | Modular; repairable |
 | NIMO AI Mini PC 128GB / 1TB | $3,514.99 on Amazon (Black Friday, list $4,299.99) | Small brand; few reviews |
 | GMKtec EVO-X2 ("X3") 128GB / 2TB | $3,949.99 on Amazon | 2.5GbE only. 1-year warranty. Some dead-on-arrival reviews: test it inside Amazon's 30-day return window. |
-| Minisforum MS-S1 MAX 128GB / 2TB | $3,959 on Amazon | 2x 10GbE RJ45, USB4 v2. Best networking of the list. |
+| **Minisforum MS-S1 MAX 128GB / 2TB (picked)** | $3,959 on Amazon | 2x 10GbE RJ45, USB4 v2, internal PSU. Best networking and cooling of the list. |
 
 Performance (qwen3-coder 30B, llama.cpp Vulkan): ~1,400 tok/s prompt, ~95-100 tok/s replies.
 opencode's ~19,500-token prompt takes about 15-30 s. Prompt speed drops on long contexts.
@@ -240,6 +241,11 @@ opencode's ~19,500-token prompt takes about 15-30 s. Prompt speed drops on long 
 What it gives up: memory is soldered (no upgrades), and it's slower than a CUDA card on long prompts.
 The AMD GPU stack (ROCm/Vulkan) is less common in k8s than the NVIDIA GPU Operator. Use the AMD GPU
 device plugin, or run Ollama/llama.cpp with Vulkan on the host.
+
+Picked 2026-11-24: **Minisforum MS-S1 MAX**. Most reliable of the compact Strix Halo boxes that are in stock
+(Framework is more repairable but sold out), and its 10GbE reaches the NAS at full speed. Test it in the
+first week while the return window is open (BIOS shows 128 GB, `stress-ng` 2 h, `memtest86+`,
+`smartctl`, a 30-minute model run).
 
 Growth path: a 2nd Strix Halo, or an NVIDIA box later (DGX Spark / GB10 if it drops to ~$4,000).
 
@@ -301,4 +307,5 @@ Sources: [RTX 3090 sold prices](https://gpusold.com/gpu/rtx-3090-24),
 - [ ] Set up price alerts.
 - [ ] Choose backup option.
 - [x] GPU/AI node: Strix Halo 128GB in a 10" mini rack.
-- [ ] Pick the Strix Halo model (Bosgame M5, Framework, EVO-X2, MS-S1 MAX) and a 10" rack. Check the NAS fits a 10" shelf.
+- [x] Pick the Strix Halo model: Minisforum MS-S1 MAX.
+- [ ] Pick a 10" rack. Check the NAS and the MS-S1 MAX fit a 10" shelf.
